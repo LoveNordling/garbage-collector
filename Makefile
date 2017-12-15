@@ -6,7 +6,7 @@ SRC := $(wildcard *.c)
 HDR := $(wildcard *.h);
 OBJ = $(SRC:.c=.o)
 
-full: $(OBJ)
+all: $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 %.o: %.c %.h
@@ -15,7 +15,7 @@ full: $(OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) $< -c
 
-run: full
+run: all
 	./$(NAME)
 
 valgrind: full
