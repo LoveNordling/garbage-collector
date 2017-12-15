@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -ggdb
+CFLAGS = -std=c99 -ggdb -Wall
 NAME = gc
 
 SRC := $(wildcard *.c)
@@ -18,7 +18,7 @@ all: $(OBJ)
 run: all
 	./$(NAME)
 
-valgrind: full
+valgrind: all
 	valgrind --leak-check=yes ./$(NAME)
 
 clean:
