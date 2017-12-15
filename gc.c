@@ -1,8 +1,20 @@
 #include "gc.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <malloc.h>
+#include <windows.h>
+#include <math.h>
+#include <string.h>
+
+#define MIN_HEAP_SIZE 0
+#define MAX_HEAP_SIZE pow(2, 24)
+
 /// The opaque data type holding all the heap data
 typedef struct heap
 {
+	bool unsafe_stack;
+	float gc_threshold;
 	void* data;
 } heap_t;
 
@@ -16,7 +28,58 @@ typedef struct heap
 /// \return the new heap
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 {
-	return NULL;	
+	//wrong argument checks
+	if (bytes < MIN_HEAP_SIZE)
+	{
+		bytes = MIN_HEAP_SIZE;
+		printf("minimum heap size is %d\n", MIN_HEAP_SIZE);
+	}
+	if (bytes > MAX_HEAP_SIZE)
+	{
+		bytes = MAX_HEAP_SIZE;
+		printf("maximum heap size is %d\n", MAX_HEAP_SIZE);
+	}
+	if (gc_threshold < 0)
+	{
+		gc_threshold = 0;
+		printf("threshold must be larger than 0%%\n");
+	}
+	if (gc_threshold > 1.0f)
+	{
+		gc_threshold = 1.0f;
+		printf("threshold must be less than 100%%\n");
+	}
+
+	//allocate memory for heap and its metadata
+	int b = bytes + sizeof(heap_t);
+	void* p = (void*) 1;
+	int result = 0;
+
+	#ifdef _WIN32
+	p = __mingw_aligned_malloc(b, pow(2, 16));
+	#else
+	result = posix_memalign(&p, pow(2, 16), b);
+	#endif
+
+	if (p == NULL || result != 0)
+	{
+		printf("failed to allocate %d bytes\n", b);
+		return NULL;
+	}
+
+	//zero out memory
+	memset(p, 0, b);
+
+	//set struct pointer
+	heap_t* hp = p;
+	hp->unsafe_stack = unsafe_stack;
+	hp->gc_threshold = gc_threshold;
+	//set heap pointer
+	hp->data = hp + sizeof(heap_t);
+
+	printf("allocated %d bytes of memory at: %d\n", b, hp);
+
+	return hp;
 }
 
 /// Delete a heap.
@@ -24,7 +87,11 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 /// \param h the heap
 void h_delete(heap_t* h)
 {
-	
+	#ifdef _WIN32
+	__mingw_aligned_free(h);
+	#else
+	free(h);
+	#endif
 }
 
 /// Delete a heap and trace, killing off stack pointers.
