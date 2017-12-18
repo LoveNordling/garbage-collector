@@ -24,6 +24,9 @@ valgrind: all
 clean:
 	rm -f *.o
 	rm -f *~
-	rm -f *# 
+	rm -f *#
+
+docs:
+	doxygen  Doxyfile
 
 .PHONY = valgrind clean run
