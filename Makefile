@@ -17,6 +17,9 @@ all: $(OBJ)
 
 run: all
 	./$(NAME)
+	
+test:
+	$(CC) $(CFLAGS) $(SRC) "test/test.c" -lcunit
 
 valgrind: all
 	valgrind --leak-check=yes ./$(NAME)
@@ -27,6 +30,6 @@ clean:
 	rm -f *#
 
 docs:
-	doxygen  Doxyfile
+	doxygen Doxyfile
 
 .PHONY = valgrind clean run
