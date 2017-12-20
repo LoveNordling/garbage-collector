@@ -13,6 +13,7 @@ typedef struct heap
 {
 	bool unsafe_stack;
 	float gc_threshold;
+	size_t bytes;
 	void* data;
 } heap_t;
 
@@ -69,6 +70,9 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	char* bp = p;
 	hp->data = bp + sizeof(heap_t);
 
+	//store heap size
+	hp->bytes = b;
+
 	printf("allocated %d bytes of memory at: %d\n", b, hp);
 
 	return hp;
@@ -99,15 +103,84 @@ void* h_alloc_data(heap_t* h, size_t bytes)
 	return NULL;
 }
 
+/*
+- traversera stacken
+- printa möjliga pekare till vår heap
+- lagra dem
+*/
+
+
+#ifdef _WIN32
+#define STACK_GROWS_DOWNWARDS 1
+//TODO: kolla åt vilket håll stackminnet växer på linux
+#else
+#define STACK_GROWS_DOWNWARDS 0
+#define STACK_GROWS_UPWARDS 1       //rätt?
+#endif
+
+
+#include <setjmp.h>
+
+#define Dump_registers()                        \
+  jmp_buf env;                                  \
+  if (setjmp(env)) abort();                     \
+
+
+
+extern char** environ;
+
 
 size_t h_gc(heap_t* h)
 {
+	printf("garbage collection triggered!\n");
+	printf("scanning roots...\n");
+
+	printf("%d\n", environ);
+	Dump_registers();
+
+	int a = 1;
+	char ff = -20;
+	int b = 2;
+	int c = 3;
+	int* q = 4;
+	int o = 5;
+	float qu = 6;
+	short ss = -145;
+	int aa = 7;
+	int bb = 8;
+	int cc = 9;
+	int dd = 10;
+
+	int end;
+	int* sp = &end;
+
+	printf("stack pointer address: %d\n", sp);
+
+	printf("SHORT   address: %d    value: %d\n", &ss, (int)ss);
+	printf("CHAR   address: %d    value: %d\n", &ff, (int)ff);
+
+	for (int i = 0; i < 35; ++i) 
+	{
+
+		printf("address: %d    value: %d\n", sp, (int)*sp);
+
+		if (STACK_GROWS_DOWNWARDS)
+		{
+			++sp;
+		}
+		else
+		{
+			--sp;
+		}
+	}
+	
 	return 0;
 }
 
 size_t h_gc_dbg(heap_t* h, bool unsafe_stack)
 {
-	return 0;
+	h->unsafe_stack = unsafe_stack;
+	return h_gc(h);
 }
 
 size_t h_avail(heap_t* h)
