@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "gc.h"
 #include <math.h>
-#include "stack_traversal.h"
+#include "root.h"
 int main(int argc, char** argv)
 {
 	#ifdef _WIN32
