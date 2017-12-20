@@ -1,13 +1,15 @@
 #include "gc.h"
+#include "object.h"
 
 #define MIN_HEAP_SIZE sizeof(heap_t) + 4 
 #define MAX_HEAP_SIZE pow(2, 24)
 
 typedef struct heap
 {
-	bool unsafe_stack;
-	float gc_threshold;
-	void* data;
+    bool unsafe_stack;
+    float gc_threshold;
+    void* data;
+    void *front;
 } heap_t;
 
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
@@ -37,7 +39,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	//allocate memory for heap and its metadata
 	void* p = NULL;
 	int result = 0;
-
+        
 	#ifdef _WIN32
 	p = __mingw_aligned_malloc(bytes, pow(2, 16));
 	#else
@@ -61,6 +63,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	//set heap pointer
 	char* bp = p;
 	hp->data = bp + sizeof(heap_t);
+        hp->front = hp->data;
 
 	printf("allocated %lu bytes of memory at: %p\n", bytes, hp);
 
@@ -84,12 +87,20 @@ void h_delete_dbg(heap_t* h, void* dbg_value)
 
 void* h_alloc_struct(heap_t* h, char* layout)
 {
-	return NULL;
+    size_t bytes = format_string_parser(layout);
+    return h_alloc_data(h, bytes);
 }
 
 void* h_alloc_data(heap_t* h, size_t bytes)
 {
-	return NULL;
+    //TODO check if heap got bytes bytes available
+    //TODO check if there is bytes available memory in current
+    //cell, go to next if not
+    
+    void *ptr = NULL;
+    //ptr = front pointer in cell
+    //front pointer in cell += bytes
+    return ptr;
 }
 
 
