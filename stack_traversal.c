@@ -7,26 +7,40 @@
   if(setjmp(env)) abort(); \
 */
 
+#ifdef _WIN32
+#define STACK_GROWS_DOWNWARDS 1
+//TODO: kolla åt vilket håll stackminnet växer på linux
+#else
+#define STACK_GROWS_DOWNWARDS 1       //rätt?
+#endif
+
 extern char **environ;
 
-void *stack_get_top()
+void *stack_get_end()
 {
   return __builtin_frame_address(0);
 }
 
-void *stack_get_bottom()
+void *stack_get_start()
 {
   return environ;
 }
 
-int stack_size()
+unsigned int stack_size()
 {
-  return stack_get_bottom() - stack_get_top();
+  return stack_get_start() - stack_get_end();
 }
 
-bool is_valid_pointer(bool map, void *p)
+bool is_valid_pointer(heap_t *heap, int size, void *p)
 {
-  return true;
+  if(p > (void*)heap && (char*)p < (char*)heap + size)
+    {
+      return true;
+    }
+  else
+    {
+      return false;
+    }
 }
 
 struct header
@@ -62,13 +76,23 @@ void heap_traverse(heap_t *heap, void *p)
   object_copy(heap, p);
 }
 
+
+
 void stack_traverse(heap_t *heap, bool *map)
 {
-  void *top = stack_get_top();
-  for(int i = 0; i < stack_size(); i += sizeof(void*))
+  void *top = stack_get_end();
+  void *p;
+  for(int i = 0; i*sizeof(void*) < stack_size(); i += 1)
     {
-      void *p = top + i;
-      if(is_valid_pointer(map, p))
+      if (STACK_GROWS_DOWNWARDS)
+        {
+          p = top + i;
+        }
+        else
+        {
+          p = top - i;
+        }
+      if(is_valid_pointer(heap, h_size(heap), p))
         {
           heap_traverse(heap, p + i);
         }

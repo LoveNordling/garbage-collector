@@ -94,4 +94,6 @@ size_t h_avail(heap_t* h);
 /// \return the bytes currently in use by user structures. 
 size_t h_used(heap_t* h);
 
+
+size_t h_size(heap_t *h);
 #endif /* GC_H */

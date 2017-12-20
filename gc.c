@@ -14,6 +14,7 @@ typedef struct heap
 	bool unsafe_stack;
 	float gc_threshold;
 	void* data;
+  size_t size;
 } heap_t;
 
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
@@ -44,7 +45,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	int b = bytes + sizeof(heap_t);
 	void* p = NULL;
 	int result = 0;
-
+        size_t size = b;
 	#ifdef _WIN32
 	p = __mingw_aligned_malloc(b, pow(2, 16));
 	#else
@@ -68,6 +69,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	//set heap pointer
 	char* bp = p;
 	hp->data = bp + sizeof(heap_t);
+        hp->size = size;
 
 	printf("allocated %d bytes of memory at: %d\n", b, hp);
 
@@ -118,4 +120,9 @@ size_t h_avail(heap_t* h)
 size_t h_used(heap_t* h)
 {
 	return 0;
+}
+
+size_t h_size(heap_t *h)
+{
+  return h->size;
 }
