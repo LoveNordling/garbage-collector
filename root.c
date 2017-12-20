@@ -54,7 +54,7 @@ typedef struct header header_t;
 
 void object_copy(heap_t *heap, void* p)
 {
-
+  
 }
 
 void heap_traverse(heap_t *heap, void *p)
