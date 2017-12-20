@@ -1,11 +1,11 @@
 #include <setjmp.h>
 #include <stdlib.h>
 #include "gc.h"
-/*
+
 #define Dump_registers()   \
   jmp_buf env;             \
   if(setjmp(env)) abort(); \
-*/
+
 
 #ifdef _WIN32
 #define STACK_GROWS_DOWNWARDS 1
