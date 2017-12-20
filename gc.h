@@ -4,6 +4,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
+#include <stdio.h>
+#include <malloc.h>
+#include <math.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 /// The opaque data type holding all the heap data
 typedef struct heap heap_t;

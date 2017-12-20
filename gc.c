@@ -1,12 +1,6 @@
 #include "gc.h"
-#include <stdio.h>
-#include <malloc.h>
-#include <math.h>
-#ifdef _WIN32
-#include <windows.h>
-#endif
 
-#define MIN_HEAP_SIZE 1
+#define MIN_HEAP_SIZE sizeof(heap_t) + 4 
 #define MAX_HEAP_SIZE pow(2, 24)
 
 typedef struct heap
@@ -22,12 +16,12 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	if (bytes < MIN_HEAP_SIZE)
 	{
 		bytes = MIN_HEAP_SIZE;
-		printf("minimum heap size is %d\n", MIN_HEAP_SIZE);
+		printf("minimum heap size is %lu\n", MIN_HEAP_SIZE);
 	}
 	if (bytes > MAX_HEAP_SIZE)
 	{
 		bytes = MAX_HEAP_SIZE;
-		printf("maximum heap size is %d\n", MAX_HEAP_SIZE);
+		printf("maximum heap size is %f\n", MAX_HEAP_SIZE);
 	}
 	if (gc_threshold < 0)
 	{
