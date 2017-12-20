@@ -18,7 +18,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 		bytes = MIN_HEAP_SIZE;
 		printf("minimum heap size is %lu\n", MIN_HEAP_SIZE);
 	}
-	if (bytes > MAX_HEAP_SIZE)
+	else if (bytes > MAX_HEAP_SIZE)
 	{
 		bytes = MAX_HEAP_SIZE;
 		printf("maximum heap size is %f\n", MAX_HEAP_SIZE);
@@ -35,24 +35,23 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	}
 
 	//allocate memory for heap and its metadata
-	int b = bytes + sizeof(heap_t);
 	void* p = NULL;
 	int result = 0;
 
 	#ifdef _WIN32
-	p = __mingw_aligned_malloc(b, pow(2, 16));
+	p = __mingw_aligned_malloc(bytes, pow(2, 16));
 	#else
-	result = posix_memalign(&p, pow(2, 16), b);
+	result = posix_memalign(&p, pow(2, 16), bytes);
 	#endif
 
 	if (p == NULL || result != 0)
 	{
-		printf("failed to allocate %d bytes\n", b);
+		printf("failed to allocate %lu bytes\n", bytes);
 		return NULL;
 	}
 
 	//zero out memory
-	memset(p, 0, b);
+	memset(p, 0, bytes);
 
 	//set struct pointer
 	heap_t* hp = p;
@@ -63,7 +62,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	char* bp = p;
 	hp->data = bp + sizeof(heap_t);
 
-	printf("allocated %d bytes of memory at: %d\n", b, hp);
+	printf("allocated %lu bytes of memory at: %p\n", bytes, hp);
 
 	return hp;
 }
