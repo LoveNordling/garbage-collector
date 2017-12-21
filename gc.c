@@ -5,75 +5,75 @@
 
 typedef struct heap
 {
-	bool unsafe_stack;
-	float gc_threshold;
-	void* data;
+    bool unsafe_stack;
+    float gc_threshold;
+    void* data;
 } heap_t;
 
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 {
-	//wrong argument checks
-	if (bytes < MIN_HEAP_SIZE)
-	{
-		bytes = MIN_HEAP_SIZE;
-		printf("minimum heap size is %lu\n", MIN_HEAP_SIZE);
-	}
-	else if (bytes > MAX_HEAP_SIZE)
-	{
-		bytes = MAX_HEAP_SIZE;
-		printf("maximum heap size is %f\n", MAX_HEAP_SIZE);
-	}
-	if (gc_threshold < 0)
-	{
-		gc_threshold = 0;
-		printf("threshold must be larger than 0%%\n");
-	}
-	else if (gc_threshold > 1.0f)
-	{
-		gc_threshold = 1.0f;
-		printf("threshold must be less than 100%%\n");
-	}
+    //wrong argument checks
+    if (bytes < MIN_HEAP_SIZE)
+    {
+        bytes = MIN_HEAP_SIZE;
+        printf("minimum heap size is %lu\n", MIN_HEAP_SIZE);
+    }
+    else if (bytes > MAX_HEAP_SIZE)
+    {
+        bytes = MAX_HEAP_SIZE;
+        printf("maximum heap size is %f\n", MAX_HEAP_SIZE);
+    }
+    if (gc_threshold < 0)
+    {
+        gc_threshold = 0;
+        printf("threshold must be larger than 0%%\n");
+    }
+    else if (gc_threshold > 1.0f)
+    {
+        gc_threshold = 1.0f;
+        printf("threshold must be less than 100%%\n");
+    }
 
-	//allocate memory for heap and its metadata
-	void* p = NULL;
-	int result = 0;
+    //allocate memory for heap and its metadata
+    void* p = NULL;
+    int result = 0;
 
-	#ifdef _WIN32
-	p = __mingw_aligned_malloc(bytes, pow(2, 16));
-	#else
-	result = posix_memalign(&p, pow(2, 16), bytes);
-	#endif
+    #ifdef _WIN32
+    p = __mingw_aligned_malloc(bytes, pow(2, 16));
+    #else
+    result = posix_memalign(&p, pow(2, 16), bytes);
+    #endif
 
-	if (p == NULL || result != 0)
-	{
-		printf("failed to allocate %lu bytes\n", bytes);
-		return NULL;
-	}
+    if (p == NULL || result != 0)
+    {
+        printf("failed to allocate %lu bytes\n", bytes);
+        return NULL;
+    }
 
-	//zero out memory
-	memset(p, 0, bytes);
+    //zero out memory
+    memset(p, 0, bytes);
 
-	//set struct pointer
-	heap_t* hp = p;
-	hp->unsafe_stack = unsafe_stack;
-	hp->gc_threshold = gc_threshold;
+    //set struct pointer
+    heap_t* hp = p;
+    hp->unsafe_stack = unsafe_stack;
+    hp->gc_threshold = gc_threshold;
 
-	//set heap pointer
-	char* bp = p;
-	hp->data = bp + sizeof(heap_t);
+    //set heap pointer
+    char* bp = p;
+    hp->data = bp + sizeof(heap_t);
 
-	printf("allocated %lu bytes of memory at: %p\n", bytes, hp);
+    printf("allocated %lu bytes of memory at: %p\n", bytes, hp);
 
-	return hp;
+    return hp;
 }
 
 void h_delete(heap_t* h)
 {
-	#ifdef _WIN32
-	__mingw_aligned_free(h);
-	#else
-	free(h);
-	#endif
+    #ifdef _WIN32
+    __mingw_aligned_free(h);
+    #else
+    free(h);
+    #endif
 }
 
 void h_delete_dbg(heap_t* h, void* dbg_value)
@@ -84,31 +84,31 @@ void h_delete_dbg(heap_t* h, void* dbg_value)
 
 void* h_alloc_struct(heap_t* h, char* layout)
 {
-	return NULL;
+    return NULL;
 }
 
 void* h_alloc_data(heap_t* h, size_t bytes)
 {
-	return NULL;
+    return NULL;
 }
 
 
 size_t h_gc(heap_t* h)
 {
-	return 0;
+    return 0;
 }
 
 size_t h_gc_dbg(heap_t* h, bool unsafe_stack)
 {
-	return 0;
+    return 0;
 }
 
 size_t h_avail(heap_t* h)
 {
-	return 0;
+    return 0;
 }
 
 size_t h_used(heap_t* h)
 {
-	return 0;
+    return 0;
 }
