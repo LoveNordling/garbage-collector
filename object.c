@@ -1,13 +1,23 @@
 #include "object.h"
 
+typedef struct object {
+    void *data; //forward adress efter objektet flyttats
+} object_t;
+        
+typedef struct header {
+    void *ptr; //TODO bitvektor  
+} header_t;
 
+//TODO
+//#define TO READ AND EDIT LAST TWO BITS
+
+// #define LAST TO BITS TO 0, shift right 2, shift left 2
 
 /** Ligga i egen modul Parser? Kanske lite onödigt. 
  **/
 
 size_t char_value(char c)
 {
-
     switch(c)
     {
     case 'i':
@@ -25,7 +35,6 @@ size_t char_value(char c)
     default:
         return 0;
     }
-  
 }
 
 size_t format_string_parser(char* layout)

@@ -9,7 +9,7 @@ typedef struct heap
     bool unsafe_stack;
     float gc_threshold;
     void* data;
-    void *front;
+    size_t size;
 } heap_t;
 
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
@@ -30,7 +30,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 		gc_threshold = 0;
 		printf("threshold must be larger than 0%%\n");
 	}
-	if (gc_threshold > 1.0f)
+	else if (gc_threshold > 1.0f)
 	{
 		gc_threshold = 1.0f;
 		printf("threshold must be less than 100%%\n");
@@ -59,11 +59,11 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	heap_t* hp = p;
 	hp->unsafe_stack = unsafe_stack;
 	hp->gc_threshold = gc_threshold;
+        hp->size = bytes - sizeof(heap_t);
 
 	//set heap pointer
 	char* bp = p;
 	hp->data = bp + sizeof(heap_t);
-        hp->front = hp->data;
 
 	printf("allocated %lu bytes of memory at: %p\n", bytes, hp);
 
@@ -88,6 +88,7 @@ void h_delete_dbg(heap_t* h, void* dbg_value)
 void* h_alloc_struct(heap_t* h, char* layout)
 {
     size_t bytes = format_string_parser(layout);
+    //TODO
     return h_alloc_data(h, bytes);
 }
 
