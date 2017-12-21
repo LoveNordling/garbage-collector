@@ -1,6 +1,12 @@
 #include "gc.h"
+#include <stdio.h>
+#include <malloc.h>
+#include <math.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
-#define MIN_HEAP_SIZE sizeof(heap_t) + 4 //TODO FIX
+#define MIN_HEAP_SIZE sizeof(heap_t) + 1 //TODO FIX
 #define MAX_HEAP_SIZE pow(2, 24)
 
 typedef struct heap
