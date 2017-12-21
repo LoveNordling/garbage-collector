@@ -3,16 +3,14 @@
 #include "root.h"
 
 #ifdef _WIN32
-#define STACK_GROWTH_DIRECTION 1
 extern void* STACK_START_P;
 #else
-#define STACK_GROWTH_DIRECTION 1
 extern char** environ;
 #endif
 
-#define dump_registers()   \
-	jmp_buf env;             \
-	if(setjmp(env)) abort(); \
+#define dump_registers()      \
+	jmp_buf env;              \
+	if(setjmp(env)) abort();  \
 
 void* stack_get_end()
 {
@@ -38,7 +36,8 @@ bool is_pointer_to_heap(heap_t* h, int* p)
 	return (void*)p >= (void*)h && (char*)p <= ((char*)h) + h_size(h);
 }
 
-//TODO: (sprint 3)
+//these three functions should perhaps be moved to another source file
+//TODO: (sprint 3)   
 bool is_secure_pointer(heap_t* h, int* p, bool* alloc_map)
 {
     return false;
@@ -61,13 +60,17 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 	printf("traversing stack of size %d...\n\n", stack_size());
 
 	int* sp = stack_get_end();
+	int* s_start = stack_get_start();
 
-	for(int i = 0; sp < (int*) stack_get_start(); ++i)
+	for(int i = 0; sp < s_start; ++i)
 	{
-		sp += STACK_GROWTH_DIRECTION;
+		++sp;
 
 		if(is_pointer_to_heap(h, (int*) *sp))
 		{
+			printf("found possible pointer at address: %d    value: %d\n", (int) sp, (int) *sp);
+
+			//TODO: (sprint 3)
 			if (is_secure_pointer(h, (int*) *sp, alloc_map))
 			{
 				traverse_root(h, (int**) sp);

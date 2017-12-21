@@ -21,7 +21,7 @@ typedef struct heap
 
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 {
-    //store start of stack
+    //store start of stack (inte superrobust jag vet)
     #ifdef _WIN32
     STACK_START_P = __builtin_frame_address(0);
     #endif
@@ -109,7 +109,6 @@ void* h_alloc_data(heap_t* h, size_t bytes)
 
 size_t h_gc(heap_t* h)
 {
-    //TODO: pass in allocation map
     return scan_roots(h, NULL);
 }
 
