@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 	puts("unix");
 	#endif
         
-
+        h_init(1000, false, 0.5f);
         printf("stack size: %i\n\n", stack_size());
 	return 0;
 }

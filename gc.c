@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <math.h>
+#include "cell.h"
+
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -11,10 +13,11 @@
 
 typedef struct heap
 {
-	bool unsafe_stack;
-	float gc_threshold;
-	void* data;
+  bool unsafe_stack;
+  float gc_threshold;
+  void* data;
   size_t size;
+  size_t cell_size;
 } heap_t;
 
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
@@ -71,6 +74,17 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	hp->data = bp + sizeof(heap_t);
         hp->size = size;
 
+        //init cells
+        hp->cell_size = 200;
+        
+        for( void* cell = hp->data; cell < (void*)(hp + size); cell += (hp->cell_size + sizeof(cell)))
+          {
+            cell_new(cell);
+          }
+        for( void* cell = hp->data; cell < (void*)(hp + size); cell += (hp->cell_size + sizeof(cell)))
+          {
+            printf("%s ", cell_is_active(cell) ? "true" : "false");
+          }
 	printf("allocated %d bytes of memory at: %d\n", b, hp);
 
 	return hp;

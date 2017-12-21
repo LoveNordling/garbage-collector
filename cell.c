@@ -8,10 +8,10 @@ typedef struct cell
   void* bump_pointer;
 } cell_t;
 
-cell_t cell_new(void* start)
+void cell_new(void* start)
 {
   cell_t cell = {.state = PASSIVE, .bump_pointer = start + sizeof(cell_t)};
-  return cell;
+  *(cell_t*)start = cell;
 }
 
 void cell_activate(cell_t *c)
