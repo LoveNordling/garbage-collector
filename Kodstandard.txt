@@ -55,3 +55,5 @@ struct foo
 void bar(void);
 
 #endif /* FILE_NAME_H */
+
+7) Indentering ska göras med fyra(4) stycken mellanslag.

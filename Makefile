@@ -17,8 +17,8 @@ all: $(OBJ)
 
 run: all
 	./$(NAME)
-	
-test:
+
+test_run:
 	$(CC) $(CFLAGS) $(SRC) "test/test.c" -lcunit
 
 valgrind: all
@@ -28,6 +28,8 @@ clean:
 	rm -f *.o
 	rm -f *~
 	rm -f *#
+	rm -f *.*.*
+	rm -f gc
 
 docs:
 	doxygen Doxyfile
