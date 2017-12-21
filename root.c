@@ -1,101 +1,93 @@
+#include <stdio.h>
 #include <setjmp.h>
-#include <stdlib.h>
-#include "gc.h"
-
-#define Dump_registers()   \
-  jmp_buf env;             \
-  if(setjmp(env)) abort(); \
-
+#include "root.h"
 
 #ifdef _WIN32
-#define STACK_GROWS_DOWNWARDS 1
-//TODO: kolla åt vilket håll stackminnet växer på linux
+#define STACK_GROWTH_DIRECTION 1
+extern void* STACK_START_P;
 #else
-#define STACK_GROWS_DOWNWARDS 1       //rätt?
+#define STACK_GROWTH_DIRECTION 1
+extern char** environ;
 #endif
 
-extern char **environ;
+#define dump_registers()   \
+	jmp_buf env;             \
+	if(setjmp(env)) abort(); \
 
-void *stack_get_end()
+void* stack_get_end()
 {
-  return __builtin_frame_address(0);
+	return __builtin_frame_address(0);
 }
 
-void *stack_get_start()
+void* stack_get_start()
 {
-  return environ;
+	#ifdef _WIN32
+	return STACK_START_P;
+	#else
+	return &environ;
+	#endif
 }
 
-unsigned int stack_size()
+size_t stack_size()
 {
-  return stack_get_start() - stack_get_end();
+	return stack_get_start() - stack_get_end();
 }
 
-bool is_valid_pointer(heap_t *heap, int size, void *p)
+bool is_pointer_to_heap(heap_t* h, int* p)
 {
-  if(p > (void*)heap && (char*)p < (char*)heap + size)
-    {
-      return true;
-    }
-  else
-    {
-      return false;
-    }
+	return (void*)p >= (void*)h && (char*)p <= ((char*)h) + h_size(h);
 }
 
-struct header
+//TODO: (sprint 3)
+bool is_secure_pointer(heap_t* h, int* p, bool* alloc_map)
 {
-  bool is_copied;
-  char *format_string;
-};
+    return false;
+}
 
-typedef struct header header_t;
-
-
-void object_copy(heap_t *heap, void* p)
+//TODO: (sprint 3)
+void deactivate_cell(heap_t* h, int* p)
 {
 
 }
 
-void heap_traverse(heap_t *heap, void *p)
+//TODO: traverse the heap starting from a root (sprint 3)
+void traverse_root(heap_t* h, int** p)
 {
-  
-  header_t *header = p - sizeof(header_t);
-  if(header->is_copied){
-    return;
-  }
-  char *string = header->format_string;
-  while(string)
-    {
-      p += sizeof(void*);
-      if(*string == '*')
-        {
-          heap_traverse(heap, p);
-        }
-    }
-  object_copy(heap, p);
+	
 }
 
-
-
-void stack_traverse(heap_t *heap, bool *map)
+size_t scan_stack(heap_t* h, bool* alloc_map)
 {
-  void *top = stack_get_end();
-  void *p;
-  for(int i = 0; i*sizeof(void*) < stack_size(); i += 1)
-    {
-      if (STACK_GROWS_DOWNWARDS)
-        {
-          p = top + i;
-        }
-        else
-        {
-          p = top - i;
-        }
-      if(is_valid_pointer(heap, h_size(heap), p))
-        {
-          heap_traverse(heap, p + i);
-        }
-    }
+	printf("traversing stack of size %d...\n\n", stack_size());
+
+	int* sp = stack_get_end();
+
+	for(int i = 0; sp < (int*) stack_get_start(); ++i)
+	{
+		sp += STACK_GROWTH_DIRECTION;
+
+		if(is_pointer_to_heap(h, (int*) *sp))
+		{
+			if (is_secure_pointer(h, (int*) *sp, alloc_map))
+			{
+				traverse_root(h, (int**) sp);
+			}
+			else
+			{
+				deactivate_cell(h, (int*) *sp);
+			}
+		}
+	}
+
+	return 0;
 }
 
+size_t scan_roots(heap_t* h, bool* alloc_map)
+{
+	size_t freed_memory = 0;
+
+	dump_registers();
+	freed_memory += scan_stack(h, alloc_map);
+
+	return freed_memory;
+}
