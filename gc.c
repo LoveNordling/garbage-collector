@@ -16,7 +16,7 @@ typedef struct heap
     void* data;
 } heap_t;
 
-#define MIN_HEAP_SIZE sizeof(heap_t)
+#define MIN_HEAP_SIZE sizeof(heap_t) + 1 //TODO FIX
 #define MAX_HEAP_SIZE pow(2, 24)
 
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
@@ -30,19 +30,19 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
     if (bytes < MIN_HEAP_SIZE)
     {
         bytes = MIN_HEAP_SIZE;
-        printf("minimum heap size is %d\n", MIN_HEAP_SIZE);
+        printf("minimum heap size is %lu\n", MIN_HEAP_SIZE);
     }
-    if (bytes > MAX_HEAP_SIZE)
+    else if (bytes > MAX_HEAP_SIZE)
     {
         bytes = MAX_HEAP_SIZE;
-        printf("maximum heap size is %d\n", MAX_HEAP_SIZE);
+        printf("maximum heap size is %f\n", MAX_HEAP_SIZE);
     }
     if (gc_threshold < 0)
     {
         gc_threshold = 0;
         printf("threshold must be larger than 0%%\n");
     }
-    if (gc_threshold > 1.0f)
+    else if (gc_threshold > 1.0f)
     {
         gc_threshold = 1.0f;
         printf("threshold must be less than 100%%\n");
@@ -60,7 +60,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 
     if (p == NULL || result != 0)
     {
-        printf("failed to allocate %d bytes\n", bytes);
+        printf("failed to allocate %lu bytes\n", bytes);
         return NULL;
     }
 
@@ -77,7 +77,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
     char* bp = p;
     hp->data = bp + sizeof(heap_t);
 
-    printf("allocated %d bytes of memory at: %d\n", bytes, hp);
+    printf("allocated %lu bytes of memory at: %p\n", bytes, hp);
 
     return hp;
 }
