@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "gc.h"
 #include <math.h>
-#include "root.h"
+
 int main(int argc, char** argv)
 {
 	#ifdef _WIN32
@@ -15,8 +15,6 @@ int main(int argc, char** argv)
 	#ifdef __unix__
 	puts("unix");
 	#endif
-        
 
-        printf("stack size: %i\n\n", stack_size());
 	return 0;
 }
