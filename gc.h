@@ -1,9 +1,12 @@
 #ifndef GC_H
 #define GC_H
 
+#define _POSIX_C_SOURCE 200112L
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 /// The opaque data type holding all the heap data
 typedef struct heap heap_t;
@@ -97,4 +100,5 @@ size_t h_used(heap_t *h);
 /// Returns the size of the heap
 /// 
 size_t h_size(heap_t *h);
+
 #endif /* GC_H */
