@@ -2,12 +2,29 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <math.h>
+
+#ifdef _WIN32
+STACK_START_P = __builtin_frame_address(0);
+#endif
+
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+#define MIN_HEAP_SIZE sizeof(heap_t) + 1 //TODO FIX
+#define MAX_HEAP_SIZE pow(2, 24)
+
+typedef struct heap
+{
+  bool unsafe_stack;
+  float gc_threshold;
+  void* data;
+  size_t size;
+} heap_t;
+
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 {
-    #ifdef _WIN32
-    STACK_START_P = __builtin_frame_address(0);
-    #endif
-
     //wrong argument checks
     if (bytes < MIN_HEAP_SIZE)
     {
@@ -62,7 +79,6 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
     printf("allocated %lu bytes of memory at: %p\n", bytes, hp);
 
     return hp;
->>>>>>> manuel-root
 }
 
 void h_delete(heap_t* h)
@@ -115,3 +131,4 @@ size_t h_size(heap_t *h)
 {
     return h->size;
 }
+
