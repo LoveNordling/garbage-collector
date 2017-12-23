@@ -4,17 +4,9 @@
 #include <stdint.h>
 
 typedef struct object {
-    void *data; //forward adress efter objektet flyttats
+    uintptr_t header; //forward adress efter objektet flyttats
 } object_t;
         
-typedef struct header {
-    void *ptr; //TODO bitvektor  
-} header_t;
-
-typedef struct object {
-    void *data; //forward adress efter objektet flyttats
-} object_t;
-
 
 /* 
  * det skall vara en bit som avger om layoutspecifikationen är en storlek i bytes, eller 
@@ -24,6 +16,8 @@ typedef struct object {
 typedef struct header {
     uintptr_t ptr; 
 } header_t;
+
+
 
 //TODO
 //#define TO READ AND EDIT LAST TWO BITS
@@ -47,6 +41,8 @@ header_t *new_header(size_t bytes){
     return NULL;
 }
 
+#define point_object(p) (((object_t *)p) + 1)
+#define point_headert(p) (((object_t *)p) -1)
 
 object_t* new_object(void* ptr, size_t bytes){
 
@@ -59,7 +55,7 @@ object_t* new_object(void* ptr, size_t bytes){
      * 
      */
 
-    
+
     
     if(ptr != NULL){
         size_t b = format_string_parser(ptr);
@@ -70,6 +66,8 @@ object_t* new_object(void* ptr, size_t bytes){
   
     return NULL;
 }
+
+
 
 
 
@@ -137,7 +135,8 @@ size_t char_value(char c)
     }
 }
 
-bool is_number(char c){
+bool is_number(char c)
+{
   return ('0' <= c && c <= '9');
 }
 
