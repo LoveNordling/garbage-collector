@@ -18,6 +18,10 @@ all: $(OBJ)
 run: all
 	./$(NAME)
 
+cleanrun: 
+	make clean
+	make run
+
 test_run:
 	$(CC) $(CFLAGS) $(SRC) "test/test.c" -lcunit
 
