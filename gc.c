@@ -2,22 +2,30 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <math.h>
+#include "root.h"
 #ifdef _WIN32
 #include <windows.h>
+void* STACK_START_P;
 #endif
-
-#define MIN_HEAP_SIZE sizeof(heap_t) + 1 //TODO FIX
-#define MAX_HEAP_SIZE pow(2, 24)
 
 typedef struct heap
 {
     bool unsafe_stack;
     float gc_threshold;
+    size_t size;
     void* data;
 } heap_t;
 
+#define MIN_HEAP_SIZE sizeof(heap_t) + 1 //TODO FIX
+#define MAX_HEAP_SIZE pow(2, 24)
+
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 {
+    //store start of stack (inte superrobust jag vet)
+    #ifdef _WIN32
+    STACK_START_P = __builtin_frame_address(0);
+    #endif
+
     //wrong argument checks
     if (bytes < MIN_HEAP_SIZE)
     {
@@ -59,12 +67,13 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
     //zero out memory
     memset(p, 0, bytes);
 
-    //set struct pointer
+    //set metadata
     heap_t* hp = p;
     hp->unsafe_stack = unsafe_stack;
     hp->gc_threshold = gc_threshold;
+    hp->size = bytes;
 
-    //set heap pointer
+    //set data pointer
     char* bp = p;
     hp->data = bp + sizeof(heap_t);
 
@@ -84,7 +93,7 @@ void h_delete(heap_t* h)
 
 void h_delete_dbg(heap_t* h, void* dbg_value)
 {
-	
+    
 }
 
 
@@ -98,15 +107,15 @@ void* h_alloc_data(heap_t* h, size_t bytes)
     return NULL;
 }
 
-
 size_t h_gc(heap_t* h)
 {
-    return 0;
+    return scan_roots(h, NULL);
 }
 
 size_t h_gc_dbg(heap_t* h, bool unsafe_stack)
 {
-    return 0;
+    h->unsafe_stack = unsafe_stack;
+    return h_gc(h);
 }
 
 size_t h_avail(heap_t* h)
@@ -117,4 +126,9 @@ size_t h_avail(heap_t* h)
 size_t h_used(heap_t* h)
 {
     return 0;
+}
+
+size_t h_size(heap_t *h)
+{
+    return h->size;
 }

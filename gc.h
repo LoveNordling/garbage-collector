@@ -95,6 +95,12 @@ size_t h_avail(heap_t* h);
 /// 
 /// \param h the heap
 /// \return the bytes currently in use by user structures. 
-size_t h_used(heap_t* h);
+size_t h_used(heap_t *h);
+
+/// Returns the size of the heap
+/// 
+/// \param h the heap
+/// \return the size in bytes
+size_t h_size(heap_t *h);
 
 #endif /* GC_H */
