@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "root.h"
+
 /// The opaque data type holding all the heap data
 typedef struct heap heap_t;
 

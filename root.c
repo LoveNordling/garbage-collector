@@ -31,33 +31,33 @@ size_t stack_size()
 	return stack_get_start() - stack_get_end();
 }
 
-bool is_pointer_to_heap(heap_t* h, int* p)
+bool is_pointer_to_heap(void* h, int* p)
 {
 	return (void*)p >= (void*)h && (char*)p <= ((char*)h) + h_size(h);
 }
 
 //these three functions should perhaps be moved to another source file
 //TODO: (sprint 3)   
-bool is_secure_pointer(heap_t* h, int* p, bool* alloc_map)
+bool is_secure_pointer(void* h, int* p, bool* alloc_map)
 {
     return false;
 }
 
 //TODO: (sprint 3)
-void deactivate_cell(heap_t* h, int* p)
+void deactivate_cell(void* h, int* p)
 {
 
 }
 
 //TODO: traverse the heap starting from a root (sprint 3)
-void traverse_root(heap_t* h, int** p)
+void traverse_root(void* h, int** p)
 {
 
 }
 
-size_t scan_stack(heap_t* h, bool* alloc_map)
+size_t scan_stack(void* h, bool* alloc_map)
 {
-	printf("traversing stack of size %d...\n\n", stack_size());
+	printf("traversing stack of size %lu ...\n\n", stack_size());
 
 	int* sp = stack_get_end();
 	int* s_start = stack_get_start();
@@ -66,18 +66,18 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 	{
 		++sp;
 
-		if(is_pointer_to_heap(h, (int*) *sp))
+		if(is_pointer_to_heap(h, (int*) sp))
 		{
-			printf("found possible pointer at address: %d    value: %d\n", (int) sp, (int) *sp);
+			printf("found possible pointer at address: %p    value: %d\n", sp, (int) *sp);
 
 			//TODO: (sprint 3)
-			if (is_secure_pointer(h, (int*) *sp, alloc_map))
+			if (is_secure_pointer(h, (int*) sp, alloc_map))
 			{
-				traverse_root(h, (int**) sp);
+				traverse_root(h, (int**) &sp);
 			}
 			else
 			{
-				deactivate_cell(h, (int*) *sp);
+				deactivate_cell(h, (int*) sp);
 			}
 		}
 	}
@@ -85,7 +85,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 	return 0;
 }
 
-size_t scan_roots(heap_t* h, bool* alloc_map)
+size_t scan_roots(void* h, bool* alloc_map)
 {
 	size_t freed_memory = 0;
 
