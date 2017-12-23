@@ -8,70 +8,47 @@ typedef struct object {
 } object_t;
         
 
+#define point_object(p) (((object_t *)p) + 1) //get pointer from header to object
+#define point_header(p) (((object_t *)p) - 1) //get pointer from object to header
+
 /* 
  * det skall vara en bit som avger om layoutspecifikationen är en storlek i bytes, eller 
  * om det är en vektor med mer precis layoutinformation.
  * 
  */
-typedef struct header {
-    uintptr_t ptr; 
-} header_t;
-
-
-
-//TODO
-//#define TO READ AND EDIT LAST TWO BITS
-
-// #define LAST TO BITS TO 0, shift right 2, shift left 2
-
-/** Ligga i egen modul Parser? Kanske lite onödigt. 
- **/
 
 /** OBJECT STUFF **/
 
-header_t* header_ptr(object_t* object){
-    return NULL;
-}
-
-object_t* object_ptr(header_t* header){
-    return NULL;
-}
-
-header_t *new_header(size_t bytes){
-    return NULL;
-}
-
-#define point_object(p) (((object_t *)p) + 1)
-#define point_headert(p) (((object_t *)p) -1)
-
-object_t* new_object(void* ptr, size_t bytes){
+object_t* new_object(void* ptr, size_t bytes)
+{
 
     /*TODO
      * GET POINTER TO AVAILABLE MEMORY (From where? heap-function?)
-     * CREATE HEADER 
-     * ASSIGN IT TO PTR
-     * OBJECT PTR = HEADER PTR + SIZEOF(HEADER_T) 
+     * (in the meantime just allocate on stack)
+     * PTR FROM ^ SETS TO HEADER
      * BUMP POINTER IN CELL? 
      * 
      */
 
+    if(ptr != NULL){
+        //create new bit-vector with ptr-layout (first bit is 1)
+        //change headers metadata pointer to correct bitvector
+    } else {
+        //create new bit-vector with bytes size (first bit i 0)
+        //change headers metadata-ptr to correct ptr/value
+    }
+
+    //set last 2 bits in header metadata-ptr to 11
 
     
-    if(ptr != NULL){
-        size_t b = format_string_parser(ptr);
-        new_header(b);
-    } else {
-        new_header(bytes);
-    }
-  
+     
     return NULL;
 }
 
 
+/** BIT OPERATIONS TODO: bit_operations module **/
 
 
-
-/** BIT OPERATIONS TODO: bit_operations **/
 
 //returns the last two bits in a pointer
 int lsbs_of_ptr(uintptr_t pointer)
@@ -149,10 +126,10 @@ size_t format_string_parser(char* layout)
           if(is_number(*current)) //checks if *current is number
           {
             int repeats = atoi(current);
-            while(is_number(*current)) // we have to move the ptr if number is bigger than 1 digit.
-              {
+            do // we have to move the ptr if number is bigger than 1 digit.
+            {
                 current++;
-              }
+            } while(is_number(*current));
             //If *current is '\0' we assume user wants to allocate chars
             char c = *current != '\0' ? *current : 'c'; 
             sum += repeats * char_value(c);
