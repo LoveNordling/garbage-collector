@@ -2,14 +2,17 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <math.h>
 
 
-typedef struct object {
+struct object {
     uintptr_t header; //forward adress efter objektet flyttats
-} object_t;
+};
 
 #define point_object(p) (((object_t *)p) + 1) //get pointer from header to object
 #define point_header(p) (((object_t *)p) - 1) //get pointer from object to header
+
+const size_t MAX_OBJECT_SIZE = 240;
 
 /* 
  * det skall vara en bit som avger om layoutspecifikationen är en storlek i bytes, eller 
@@ -19,30 +22,49 @@ typedef struct object {
 
 /** OBJECT STUFF **/
 
-object_t* new_object(void* ptr, size_t bytes)
+//Create bitvector by from a string (first bit is 1)
+uintptr_t new_bv_layout(char *layout)
+{
+    return 0;
+}
+
+//Create bitvector from size (first bit is 0)
+uintptr_t new_bv_size(size_t bytes)
+{
+    
+    return 0;
+}
+
+void* new_object(void* memory_ptr, void* layout, size_t bytes)
 {
 
     /*TODO
      * GET POINTER TO AVAILABLE MEMORY (From where? heap-function?)
      * (in the meantime just allocate on stack)
      * PTR FROM ^ SETS TO HEADER
-     * BUMP POINTER IN CELL? 
+     * BUMP POINTER IN CELL?
      * 
      */
 
-    if(ptr != NULL){
+    object_t *object = memory_ptr;
+
+    //SET object->header
+    if(layout != NULL)
+    {
         //create new bit-vector with ptr-layout (first bit is 1)
         //change headers metadata pointer to correct bitvector
-    } else {
-        //create new bit-vector with bytes size (first bit i 0)
+        object->header = new_bv_layout(layout);
+    }
+    else
+    {
+        //create new bit-vector with bytes size (first bit is 0)
         //change headers metadata-ptr to correct ptr/value
+        object->header = new_bv_size(bytes);
     }
 
     //set last 2 bits in header metadata-ptr to 11
-
-    
-     
-    return NULL;
+ 
+    return point_object(object);
 }
 
 
@@ -145,15 +167,21 @@ size_t format_string_parser(char* layout)
 }
 
 
-
+void printbits(unsigned int v) {
+    printf("%*s", (int)ceil(log2(v)) + 1, ""); 
+    for (; v; v >>= 1) printf("\x1b[2D%c",'0' + (v & 1));
+}
 
 int main()
 {
     
-    char layout[] = "32";
+    char layout[] = "***";
+    uintptr_t ptr = (uintptr_t) layout;
     printf("lsbs of ptr %p is %d\n", layout, lsbs_of_ptr((uintptr_t)layout));
     printf("Amount of bytes that need allocating: %lu \n", format_string_parser(layout));
     //printf("Storage size for : %d \n", sizeof(double));
+
+    printbits(ptr);
 
     // Sizeof operator is used to evaluate the size of a variable
     printf("Size of int: %lu bytes\n"
@@ -161,9 +189,11 @@ int main()
            "Size of float: %lu bytes\n"
            "Size of char: %lu bytes\n"
            "Size of double: %lu bytes\n"
-           "Size of void *: %lu bytes\n",
+           "Size of void *: %lu bytes\n"
+           "Size of object_t: %lu bytes\n",
            sizeof(int),sizeof(long),sizeof(float),
-           sizeof(char), sizeof(double), sizeof(void*));
+           sizeof(char), sizeof(double), sizeof(void*),
+           sizeof(object_t));
 
     return 0;
 }

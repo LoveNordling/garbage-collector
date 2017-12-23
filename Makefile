@@ -5,6 +5,7 @@ NAME = gc
 SRC := $(wildcard *.c)
 HDR := $(wildcard *.h);
 OBJ = $(SRC:.c=.o)
+
 SRCTEST := $(wildcard test/*.c)
 HDRTEST := $(wildcard test/*.h)
 OBJTEST = $(SRCTEST:.c=.o)
@@ -33,11 +34,11 @@ test: test_main test_root
 
 
 test_main: $(OBJ)
-	$(CC) $(CFLAGS) "tests/test.c" -lcunit -c
+	$(CC) $(CFLAGS) "test/test.c" -lcunit -c
 
 
 test_root: $(OBJ)
-	$(CC) $(CFLAGS) "tests/test_root.c" -lcunit -c
+	$(CC) $(CFLAGS) "test/test_root.c" -lcunit -c
 
 valgrind: all
 	valgrind --leak-check=yes ./$(NAME)
@@ -52,4 +53,4 @@ clean:
 docs:
 	doxygen Doxyfile
 
-.PHONY = valgrind clean run
+.PHONY = valgrind clean run run_test
