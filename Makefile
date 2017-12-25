@@ -6,8 +6,12 @@ SRC := $(wildcard *.c)
 HDR := $(wildcard *.h);
 OBJ = $(SRC:.c=.o)
 
+SRCTEST := $(wildcard test/*.c)
+HDRTEST := $(wildcard test/*.h)
+OBJTEST = $(SRCTEST:.c=.o)
+
 all: $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) 
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) $*.c $*.h -c
@@ -22,8 +26,19 @@ cleanrun:
 	make clean
 	make run
 
-test_run:
-	$(CC) $(CFLAGS) $(SRC) "test/test.c" -lcunit
+run_test: test
+	./test
+
+test: test_main test_root
+	$(CC) $(CFLAGS) $(OBJ) $(OBJTEST) -lcunit -o test
+
+
+test_main: $(OBJ)
+	$(CC) $(CFLAGS) "test/test.c" -lcunit -c
+
+
+test_root: $(OBJ)
+	$(CC) $(CFLAGS) "test/test_root.c" -lcunit -c
 
 valgrind: all
 	valgrind --leak-check=yes ./$(NAME)
@@ -38,4 +53,4 @@ clean:
 docs:
 	doxygen Doxyfile
 
-.PHONY = valgrind clean run
+.PHONY = valgrind clean run run_test

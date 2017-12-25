@@ -1,20 +1,18 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#define _POSIX_C_SOURCE 200112L
-
 #include <stdio.h>
-#include <malloc.h>
-#include <math.h>
 
-/// Create a new heap with bytes total size (including both spaces
-/// and metadata), meaning strictly less than bytes will be
-/// available for allocation.
+typedef struct object object_t;
+
+/// Creates a new object
+/// with either a layout string
+/// or just a byte-size.
 ///
-/// \param bytes the total size of the heap in bytes
-/// \param unsafe_stack true if pointers on the stack are to be considered unsafe pointers
-/// \param gc_threshold the memory pressure at which gc should be triggered (1.0 = full memory)
+/// \param memory_ptr pointer to available place to store object
+/// \param layout pointer to layout-string (CAN BE NULL if no layout)
+/// \param bytes size of object (IF LAYOUT IS NULL)
 /// \return the size of the formatstring
-size_t format_string_parser(char* layout);
+void* new_object(void* memory_ptr, void* layout, size_t bytes);
 
 #endif /* OBJECT_H */
