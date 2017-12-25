@@ -15,7 +15,8 @@ void test_test() //This function should be placed in another file.
   CU_ASSERT_EQUAL(strcmp("hej", "hej"), 0);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   
   CU_initialize_registry(); //Boilerplate
 

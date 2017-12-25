@@ -4,7 +4,8 @@
 #include "gc.h"
 #include "test_gc.h"
 
-void test_gc_init_delete(){
+void test_gc_init_delete()
+{
 
   
   heap_t * h= h_init(500, true, 20);
