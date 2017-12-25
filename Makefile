@@ -17,9 +17,9 @@ all: $(OBJ)
 
 run: all
 	./$(NAME)
-	
 test:
-	$(CC) $(CFLAGS) $(SRC) "test/test.c" -lcunit
+	gcc -I .  gc.c test/test.c test/test_gc.c -lcunit
+	valgrind --leak-check=yes ./a.out
 
 valgrind: all
 	valgrind --leak-check=yes ./$(NAME)

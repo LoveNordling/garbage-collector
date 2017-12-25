@@ -5,6 +5,7 @@
 #include <CUnit/CUnit.h>
 #include <string.h>
 #include <string.h>
+#include "test_gc.h"
 //Import your test functions here
 
 
@@ -24,6 +25,10 @@ int main(int argc, char **argv) {
 
   //Add your test suits and unit tests here.
   //The test functions should be placed in separate file the best thing would be one per module. Each module can have a seperate test suit to ease debugging.
+  CU_pSuite test_gc = CU_add_suite("Testing gc.c", NULL, NULL);
+
+  CU_add_test(test_gc, "This only makes sense if you run valgrind", test_gc_init_delete);
+
   
   CU_basic_run_tests();//Run the tests
 }
