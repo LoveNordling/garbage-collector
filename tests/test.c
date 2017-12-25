@@ -1,3 +1,4 @@
+
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
 #include <stdlib.h>
@@ -5,7 +6,7 @@
 #include <CUnit/CUnit.h>
 #include <string.h>
 #include <string.h>
-#include "test_root.c"
+#include "test_root.h"
 //Import your test functions here
 
 
@@ -16,7 +17,7 @@ void test_test() //This function should be placed in another file.
 }
 
 int main(int argc, char **argv) {
-  
+  puts("Test main is best main");
   CU_initialize_registry(); //Boilerplate
 
   //New test suit begins
@@ -27,4 +28,5 @@ int main(int argc, char **argv) {
   //The test functions should be placed in separate file the best thing would be one per module. Each module can have a seperate test suit to ease debugging.
   
   CU_basic_run_tests();//Run the tests
+  return 0;
 }
