@@ -31,6 +31,7 @@ object_t* new_object(void* ptr, size_t bytes)
      */
 
     if(ptr != NULL){
+      
         //create new bit-vector with ptr-layout (first bit is 1)
         //change headers metadata pointer to correct bitvector
     } else {
@@ -43,6 +44,23 @@ object_t* new_object(void* ptr, size_t bytes)
     
      
     return NULL;
+}
+
+
+
+int layout_or_sizenumber(uintptr_t value)
+{
+  uintptr_t comparison  = 1;
+  comparison |= 1 << 62;
+  uintptr_t isolated = comparison & value;
+  if(isolated & 1)
+    {
+      return 1; //1 står för layout
+    }
+  else
+    {
+      return 0; //0 står för sizenumber
+    }
 }
 
 
@@ -149,7 +167,8 @@ size_t format_string_parser(char* layout)
 
 int main()
 {
-    
+  uintptr_t bigassbit = 0;
+  bigassbit |= 1UL << 62;
     char layout[] = "32";
     printf("lsbs of ptr %p is %d\n", layout, lsbs_of_ptr((uintptr_t)layout));
     printf("Amount of bytes that need allocating: %lu \n", format_string_parser(layout));
@@ -164,6 +183,8 @@ int main()
            "Size of void *: %lu bytes\n",
            sizeof(int),sizeof(long),sizeof(float),
            sizeof(char), sizeof(double), sizeof(void*));
+
+    printf("First byte is %d\n", layout_or_sizenumber(bigassbit));
 
     return 0;
 }
