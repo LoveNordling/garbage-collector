@@ -31,16 +31,16 @@ size_t stack_size()
 	return stack_get_start() - stack_get_end();
 }
 
-bool is_pointer_to_heap(void* h, int* p)
+bool is_pointer_to_heap(heap_t* h, int* p)
 {
 	return (void*)p >= (void*)h && (char*)p <= ((char*)h) + h_size(h);
 }
 
 //these three functions should perhaps be moved to another source file
 //TODO: (sprint 3)   
-bool is_secure_pointer(void* h, int* p, bool* alloc_map)
+bool is_secure_pointer(heap_t* h, int* p, bool* alloc_map)
 {
-    return false;
+	return false;
 }
 
 //TODO: (sprint 3)
@@ -72,6 +72,7 @@ size_t scan_stack(void* h, bool* alloc_map)
 
 			//TODO: (sprint 3)
 			if (is_secure_pointer(h, (int*) sp, alloc_map))
+
 			{
 				traverse_root(h, (int**) &sp);
 			}

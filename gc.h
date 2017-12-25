@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "root.h"
+
 
 /// The opaque data type holding all the heap data
 typedef struct heap heap_t;
@@ -101,6 +101,8 @@ size_t h_used(heap_t *h);
 
 /// Returns the size of the heap
 /// 
+/// \param h the heap
+/// \return the size in bytes
 size_t h_size(heap_t *h);
 
 #endif /* GC_H */

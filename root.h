@@ -3,6 +3,7 @@
 #include <stdbool.h>
 
 #include "gc.h"
+
 #include "stdio.h"
 /// Scan the roots of the program and perform a garbage collection
 ///
@@ -15,13 +16,14 @@
 /// \return the number of bytes collected
 size_t scan_roots(void* h, bool* alloc_map);
 
+size_t stack_size();
+
+
 /// Determines if a pointer is within the address range of a heap
 ///
 /// \param h the heap
 /// \param p the pointer
 /// \return whether it points to the heap
-bool is_pointer_to_heap(void* h, int* p);
-
-size_t stack_size();
+bool is_pointer_to_heap(heap_t* h, int* p);
 
 #endif /* ROOT_H */

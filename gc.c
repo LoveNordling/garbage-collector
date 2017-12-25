@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <math.h>
+#include "root.h"
 
 #ifdef _WIN32
 STACK_START_P = __builtin_frame_address(0);
@@ -12,19 +13,24 @@ STACK_START_P = __builtin_frame_address(0);
 #include <windows.h>
 #endif
 
+typedef struct heap
+{
+    bool unsafe_stack;
+    float gc_threshold;
+    size_t size;
+    void* data;
+} heap_t;
+
 #define MIN_HEAP_SIZE sizeof(heap_t) + 1 //TODO FIX
 #define MAX_HEAP_SIZE pow(2, 24)
 
-typedef struct heap
-{
-  bool unsafe_stack;
-  float gc_threshold;
-  void* data;
-  size_t size;
-} heap_t;
-
 heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 {
+    //store start of stack (inte superrobust jag vet)
+    #ifdef _WIN32
+    STACK_START_P = __builtin_frame_address(0);
+    #endif
+
     //wrong argument checks
     if (bytes < MIN_HEAP_SIZE)
     {
@@ -131,4 +137,3 @@ size_t h_size(heap_t *h)
 {
     return h->size;
 }
-
