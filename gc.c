@@ -1,4 +1,5 @@
 #include "gc.h"
+#include "gc_utils.h"
 #include <stdio.h>
 #include <malloc.h>
 #include <math.h>
@@ -7,6 +8,7 @@
 #include <windows.h>
 void* STACK_START_P;
 #endif
+#include "cell.h"
 
 typedef struct heap
 {
@@ -14,6 +16,7 @@ typedef struct heap
     float gc_threshold;
     size_t size;
     void* data;
+    cell_t* cell_array;
 } heap_t;
 
 #define MIN_HEAP_SIZE sizeof(heap_t) + 1 //TODO FIX
@@ -131,4 +134,9 @@ size_t h_used(heap_t* h)
 size_t h_size(heap_t *h)
 {
     return h->size;
+}
+
+void* h_data(heap_t* h)
+{
+    return h->data;
 }
