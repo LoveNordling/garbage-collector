@@ -22,13 +22,41 @@ const size_t MAX_OBJECT_SIZE = 240;
 
 /** OBJECT STUFF **/
 
+//int i = if bit should be 1 or 0
+uintptr_t set_bit(uintptr_t num, int bit_no, int fst)
+{
+    uintptr_t set_num;
+
+    if(fst == 1)
+    {
+        set_num = num | ( 1 << (bit_no));
+    }
+    else
+    {
+        set_num = num & ~( 1 << (bit_no));
+    }
+
+    return set_num;
+}
+
 //Create bitvector by from a string (first bit is 1)
 uintptr_t new_bv_layout(char *layout)
 {
+    char *current = layout;
+    int index = 63;
+
+    while(*current)
+    {
+        if(*current == 'i' || *current == 'f') {
+            
+        }
+    }
     return 0;
 }
 
 //Create bitvector from size (first bit is 0)
+//compare 9 bits?
+// we  can assume that size is smaller than MAX
 uintptr_t new_bv_size(size_t bytes)
 {
     
@@ -166,22 +194,14 @@ size_t format_string_parser(char* layout)
     return sum;
 }
 
-
-void printbits(unsigned int v) {
-    printf("%*s", (int)ceil(log2(v)) + 1, ""); 
-    for (; v; v >>= 1) printf("\x1b[2D%c",'0' + (v & 1));
-}
-
 int main()
 {
     
     char layout[] = "***";
     uintptr_t ptr = (uintptr_t) layout;
-    printf("lsbs of ptr %p is %d\n", layout, lsbs_of_ptr((uintptr_t)layout));
+    printf("lsbs of ptr %p is %d\n", layout, lsbs_of_ptr(ptr));
     printf("Amount of bytes that need allocating: %lu \n", format_string_parser(layout));
     //printf("Storage size for : %d \n", sizeof(double));
-
-    printbits(ptr);
 
     // Sizeof operator is used to evaluate the size of a variable
     printf("Size of int: %lu bytes\n"
