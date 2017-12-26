@@ -2,6 +2,7 @@
 #define ROOT_H
 
 #include "gc.h"
+#include "stdint.h"
 
 /// Scan the roots of the program and perform a garbage collection
 ///
@@ -19,6 +20,6 @@ size_t scan_roots(heap_t* h, bool* alloc_map);
 /// \param h the heap
 /// \param p the pointer
 /// \return whether it points to the heap
-bool is_pointer_to_heap(heap_t* h, int* p);
+bool is_pointer_to_heap(heap_t* h, void* p);
 
 #endif /* ROOT_H */
