@@ -59,26 +59,25 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 {
 	printf("traversing stack of size %lu ...\n\n", stack_size());
 
-	int* sp = stack_get_end();
-	int* s_start = stack_get_start();
+	int** sp = stack_get_end();
+	int** s_start = stack_get_start();
 
 	for(int i = 0; sp < s_start; ++i)
 	{
 		++sp;
 
-		if(is_pointer_to_heap(h, (int*) sp))
+		if(is_pointer_to_heap(h, (int*) *sp))
 		{
-			printf("found possible pointer at address: %p    value: %d\n", sp, (int) *sp);
+			printf("found possible pointer at address: %p    value: %p\n", sp, (int*) *sp);
 
 			//TODO: (sprint 3)
-			if (is_secure_pointer(h, (int*) sp, alloc_map))
-
+			if (is_secure_pointer(h, (int*) *sp, alloc_map))
 			{
-				traverse_root(h, (int**) &sp);
+				traverse_root(h, (int**) sp);
 			}
 			else
 			{
-				deactivate_cell(h, (int*) sp);
+				deactivate_cell(h, (int*) *sp);
 			}
 		}
 	}
