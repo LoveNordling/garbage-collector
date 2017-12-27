@@ -23,7 +23,7 @@ char* stack_get_start()
 	#ifdef _WIN32
 	return STACK_START_P;
 	#else
-	return &environ;
+	return (char*)&environ;
 	#endif
 }
 
@@ -54,13 +54,36 @@ void deactivate_cell(heap_t* h, void* p)
 //TODO: traverse the heap starting from a root (sprint 3)
 void traverse_root(heap_t* h, void* p, uintptr_t* rp)
 {
-
+  
+  /*
+  if(object_is_copied(p))
+    {
+    }
+  else
+    {
+      char* op = p;
+      char* s = object_get_format_string(p);
+      while(*s)
+        {
+          if(*s == '*')
+            {
+              traverse_root(h, (void*)*(void**)op, (uintptr_t*)op);
+            }
+          s++;
+        }
+      void* new_object = h_alloc_struct(h, s);
+      object_copy(p, new_object);
+      object_set_forwarding_address(p, new_object);
+    }
+  
+  *rp = object_get_forwarding_address(p);
+  */
 }
 
 
 size_t scan_stack(heap_t* h, bool* alloc_map)
 {
-	printf("traversing stack of size %d...\n\n", stack_size());
+	printf("traversing stack of size %lu...\n\n", stack_size());
 
 	char* sp = stack_get_end();
 	char* s_start = stack_get_start();
@@ -72,7 +95,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 
 		if(is_pointer_to_heap(h, p))
 		{
-			printf("found possible pointer at address: %d\tvalue: %d\n", (int) sp, (int) p);
+			printf("found possible pointer at address: %lu\tvalue: %lu\n", (uintptr_t) sp, (uintptr_t) p);
 
 			//TODO: (sprint 3)
 			if (is_secure_pointer(h, p, alloc_map))
