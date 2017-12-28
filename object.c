@@ -1,8 +1,5 @@
 #include "object.h"
-#include <stdlib.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <math.h>
+#include "bits.h"
 
 
 struct object {
@@ -21,47 +18,6 @@ const size_t MAX_OBJECT_SIZE = 240;
  */
 
 /** OBJECT STUFF **/
-
-//int i = if bit should be 1 or 0
-uintptr_t set_bit(uintptr_t num, int bit_no, int fst)
-{
-    uintptr_t set_num;
-
-    if(fst == 1)
-    {
-        set_num = num | ( 1 << (bit_no));
-    }
-    else
-    {
-        set_num = num & ~( 1 << (bit_no));
-    }
-
-    return set_num;
-}
-
-//Create bitvector by from a string (first bit is 1)
-uintptr_t new_bv_layout(char *layout)
-{
-    char *current = layout;
-    int index = 63;
-
-    while(*current)
-    {
-        if(*current == 'i' || *current == 'f') {
-            
-        }
-    }
-    return 0;
-}
-
-//Create bitvector from size (first bit is 0)
-//compare 9 bits?
-// we  can assume that size is smaller than MAX
-uintptr_t new_bv_size(size_t bytes)
-{
-    
-    return 0;
-}
 
 void* new_object(void* memory_ptr, void* layout, size_t bytes)
 {
@@ -95,51 +51,19 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes)
     return point_object(object);
 }
 
-
-/** BIT OPERATIONS TODO: bit_operations module **/
-
-
-
-//returns the last two bits in a pointer
-int lsbs_of_ptr(uintptr_t pointer)
-{
-  if((pointer & (size_t)3) == (size_t)0)
-    {
-      return 0;
-    }
-  else if((pointer & (size_t)2) == (size_t)1)
-    {
-      return 1;
-    }
-  else if((pointer & (size_t)1) == (size_t)2)
-    {
-      return 2;
-    }
-  else
-    {
-      return 3;
-    }
-}
-
-bool lsbs_are_zero(uintptr_t pointer)
-{
-  size_t integer = 3;
-  return !(pointer & integer); 
-}
-
-
-uintptr_t lsbs_to_zero(uintptr_t pointer)
-{
-  return pointer & ~((size_t)3);
-}
-
-uintptr_t set_lsbs(uintptr_t pointer, size_t bits)
-{
-  uintptr_t ptr = lsbs_to_zero(pointer);
-  return ptr ^ bits;
-}
-
 /** PARSER FUNCTIONS **/
+
+/*
+  object_copy(p, new_object);  kopierar från p till new_object
+  object_set_forwarding_address(p, new_object); 
+  Skulle behöva de här funktionerna till kompakteringen
+  bool object_is_copied(p)
+  char* object_get_format_string(p);
+
+  void object_copy(p, new_object);  kopierar från p till new_object
+  void object_set_forwarding_address(p, new_object);
+  get_format_string ger en sträng t.ex. "uu"
+ */
 
 size_t char_value(char c)
 {
@@ -167,25 +91,59 @@ bool is_number(char c)
   return ('0' <= c && c <= '9');
 }
 
-size_t format_string_parser(char* layout)
+size_t format_string_to_layout(char* format_str)
 {
-    char* current = layout;
+    uintptr_t layout = 0; 
+    char* current = format_str;
     size_t sum = 0;
+    size_t tracker = 0;
     while(*current)
       {
           if(is_number(*current)) //checks if *current is number
           {
+            //check what comes after and write the necessary number of 11's or 01's
             int repeats = atoi(current);
             do // we have to move the ptr if number is bigger than 1 digit.
             {
+                
                 current++;
             } while(is_number(*current));
+            //If *current is '\0' we assume user wants to allocate chars
+            char c = *current != '\0' ? *current : 'c'; 
+            current++;  //måste göra så att den har stöd för tex "23*i"
+          }
+        else
+          {
+            //Bygger en layoutbitvektor om man bara har chars.
+           layout = pointer_or_not(layout, *current);
+          }
+        current++;
+      }
+    //den måste, när den är klar, flytta talen längst till vänster mha tracker
+    //och flippa de sista bitarna.
+    return layout;
+}
+
+size_t format_string_parser(char* layout)
+{
+    char* current = layout;
+    size_t sum = 0;
+    while(*current) //*current != '\0' 
+      {
+          if(is_number(*current)) //checks if *current is number
+          {
+              int repeats = atoi(current); //number at current pointer
+            do // we have to move the ptr if number is more than 1 digit.
+            {
+                current++;
+            } while(is_number(*current));
+            
             //If *current is '\0' we assume user wants to allocate chars
             char c = *current != '\0' ? *current : 'c'; 
             sum += repeats * char_value(c);
             current++; 
           }
-        else
+          else 
           {
             sum += char_value(*current);
           }
