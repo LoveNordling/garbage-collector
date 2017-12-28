@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -ggdb -Wall
+CFLAGS = -I ../ -c -std=c99 -ggdb -Wall
 LDFLAGS = -lcunit
 TEST = test
 
