@@ -2,8 +2,6 @@
 #include <CUnit/Basic.h>
 #include <stdlib.h>
 #include <math.h>
-#include <CUnit/CUnit.h>
-#include <string.h>
 #include <string.h>
 #include "test_gc.h"
 //Import your test functions here
