@@ -22,6 +22,17 @@ const size_t MAX_OBJECT_SIZE = 240;
 
 /** OBJECT STUFF **/
 
+bool lsbs_are_zero(uintptr_t pointer)
+{
+  size_t integer = 3;
+  return !(pointer & integer); 
+}
+
+
+uintptr_t lsbs_to_zero(uintptr_t pointer)
+{
+  return pointer & ~((size_t)3);
+}
 
 
 uintptr_t set_lsbs(uintptr_t pointer, size_t bits)
@@ -54,22 +65,22 @@ uintptr_t pointer_or_not(uintptr_t vector, char c)
   switch(c)
     {
     case '*':
-      vector << 2;
+      vector = vector << 2;
       return set_lsbs(vector, 3);
     case 'i':
-      vector << 2;
+      vector = vector << 2;
       return set_lsbs(vector,1);
     case 'l':
-      vector << 2;
+      vector = vector << 2;
       return set_lsbs(vector,1);
     case 'f':
-      vector << 2;
+      vector = vector << 2;
       return set_lsbs(vector,1);
     case 'c':
-      vector << 2;
+      vector = vector << 2;
       return set_lsbs(vector,1);
     case 'd':
-      vector << 2;
+      vector = vector << 2;
       return set_lsbs(vector,1);
     default:
       return vector;
@@ -81,23 +92,30 @@ size_t format_string_to_layout(char* format_str)
 {
     uintptr_t layout = 0; 
     char* current = format_str;
-    size_t sum = 0;
+    //size_t sum = 0;
     size_t tracker = 0;
     while(*current)
       {
           if(is_number(*current)) //checks if *current is number
-          {/*
+          {
             //check what comes after and write the necessary number of 11's or 01's
             int repeats = atoi(current);
             do // we have to move the ptr if number is bigger than 1 digit.
-            {
-                
+            {                
                 current++;
             } while(is_number(*current));
             //If *current is '\0' we assume user wants to allocate chars
-            char c = *current != '\0' ? *current : 'c'; 
+            char c = *current != '\0' ? *current : 'c';
+            //
 
-            current++; */ //måste göra så att den har stöd för tex "23*i"
+
+            
+            // if int/float
+            // x = repeats / 2 + repeats%2
+            //for( 1= 0, i < x)
+            // pointer or not( layout, 
+
+            current++; //måste göra så att den har stöd för tex "23*i"
           }
         else
           {
@@ -193,17 +211,6 @@ int lsbs_of_ptr(uintptr_t pointer)
     }
 }
 
-bool lsbs_are_zero(uintptr_t pointer)
-{
-  size_t integer = 3;
-  return !(pointer & integer); 
-}
-
-
-uintptr_t lsbs_to_zero(uintptr_t pointer)
-{
-  return pointer & ~((size_t)3);
-}
 
 
 
@@ -261,12 +268,13 @@ size_t format_string_parser(char* layout)
     return sum;
 }
 
-/*
-void printbits(unsigned int v) {
-    printf("%*s", (int)ceil(log2(v)) + 1, ""); 
-    for (; v; v >>= 1) printf("\x1b[2D%c",'0' + (v & 1));
+bool object_is_copied(void *p)
+{
+   
+  return(lsbs_of_ptr((uintptr_t)p) == 2);
+
 }
-*/
+
 int main()
 {
     
