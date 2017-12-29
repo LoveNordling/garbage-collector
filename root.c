@@ -48,7 +48,7 @@ bool is_secure_pointer(heap_t* h, void* p, bool* alloc_map)
 //TODO: (sprint 3)
 void deactivate_cell(heap_t* h, void* p)
 {
-
+  
 }
 
 //TODO: traverse the heap starting from a root (sprint 3)
