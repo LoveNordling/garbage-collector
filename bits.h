@@ -19,7 +19,7 @@ uintptr_t lsbs_to_zero(uintptr_t pointer);
 uintptr_t set_lsbs(uintptr_t pointer, size_t bits);
 
 //Create bitvector by from a string (first bit is 1)
-uintptr_t new_bv_layout(char *layout);
+uintptr_t new_bv_layout(char *layout, size_t bytes);
 
 //Create bitvector from size (first bit is 0)
 //compare 9 bits?
@@ -30,6 +30,10 @@ uintptr_t new_bv_size(size_t bytes);
 int lsbs_of_ptr(uintptr_t pointer);
 
 uintptr_t pointer_or_not(uintptr_t vector, char c);
+
+int layout_or_sizenumber(uintptr_t value);
+
+char* bv_to_str(void *ptr);
 
 
 #endif /* BITS_H */
