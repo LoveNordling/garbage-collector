@@ -1,14 +1,18 @@
 #ifndef CELL_H
 #define CELL_H
 
-#include "stdbool.h"
+#include <stdbool.h>
 
 #define CELL_SIZE 2048
 
-typedef struct cell cell_t;
+typedef struct cell
+{
+	bool is_active;
+	unsigned short front_offset;
+} cell_t;
 
 void cell_initialize(cell_t* c);
-void* cell_front_ptr(cell_t* c);
+void* cell_front_ptr(cell_t* c, void* start);
 
 bool cell_is_active(cell_t* c);
 unsigned short cell_front_offset(cell_t* c);

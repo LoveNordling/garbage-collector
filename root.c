@@ -54,7 +54,7 @@ void deactivate_cell(heap_t* h, void* p)
 //TODO: traverse the heap starting from a root (sprint 3)
 void traverse_root(heap_t* h, void* p, uintptr_t* rp)
 {
-
+	
 }
 
 
@@ -72,7 +72,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 
 		if(is_pointer_to_heap(h, p))
 		{
-			printf("found possible pointer at address: %d\tvalue: %d\n", (int) sp, (int) p);
+			printf("found possible pointer at address: %lu\tvalue: %lu\n", (uintptr_t) sp, (uintptr_t) p);
 
 			//TODO: (sprint 3)
 			if (is_secure_pointer(h, p, alloc_map))

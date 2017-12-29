@@ -1,22 +1,15 @@
 #include "cell.h"
 #include <stdio.h>
 
-struct cell
-{
-	bool is_active;
-	unsigned short front_offset;
-};
-
-
 void cell_initialize(cell_t* c)
 {
 	cell_deactivate(c);
 	cell_set_front_offset(c, 0);
 }
 
-void* cell_front_ptr(cell_t* c)
+void* cell_front_ptr(cell_t* c, void* start)
 {
-	return (void*) (((char*)c) + c->front_offset);
+	return (void*) (((char*)start) + c->front_offset);
 }
 
 
@@ -45,9 +38,8 @@ void cell_set_front_offset(cell_t* c, unsigned short fo)
 {
 	c->front_offset = fo;
 
-	if (c->front_offset > CELL_SIZE)
+	if (c->front_offset >= CELL_SIZE)
 	{
-		c->front_offset = CELL_SIZE;
-		puts("clamped");
+		c->front_offset = CELL_SIZE - 1;
 	}
 }
