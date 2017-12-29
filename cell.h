@@ -22,3 +22,5 @@ void cell_deactivate(cell_t* c);
 void cell_set_front_offset(cell_t* c, unsigned short fo);
 
 #endif /* CELL_H */
+
+

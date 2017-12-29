@@ -116,6 +116,26 @@ void h_delete_dbg(heap_t* h, void* dbg_value)
 	
 }
 
+bool cell_has_space(cell_t* cell, size_t size)
+{
+  return cell_front_offset(cell) + size < CELL_SIZE;
+}
+
+
+void* h_get_available_space(heap_t* hp, size_t size)
+{
+  for(unsigned int i = 0; i < hp->size; i++)
+    {
+      cell_t* cell = &hp->cell_array[i];
+      if(cell_has_space(cell, size))
+        {
+          cell_set_front_offset(cell, cell_front_offset(cell) + size);
+          return cell;
+        }
+      
+    }
+  return NULL;
+}
 
 void* h_alloc_struct(heap_t* h, char* layout)
 {
