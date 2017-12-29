@@ -11,13 +11,13 @@ extern void* STACK_START_P;
 extern char** environ;
 #endif
 
-#define dump_registers()      \
-	jmp_buf env;              \
-	if(setjmp(env)) abort();  \
+#define dump_registers()                        \
+    jmp_buf env;                                \
+    if(setjmp(env)) abort();                    \
 
 char* stack_get_end()
 {
-	return __builtin_frame_address(0);
+    return __builtin_frame_address(0);
 }
 
 
@@ -33,7 +33,7 @@ char* stack_get_start()
 
 size_t stack_size()
 {
-	return stack_get_start() - stack_get_end();
+    return stack_get_start() - stack_get_end();
 }
 
 
@@ -91,10 +91,10 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 
 size_t scan_roots(heap_t* h, bool* alloc_map)
 {
-	size_t freed_memory = 0;
+    size_t freed_memory = 0;
 
-	dump_registers();
-	freed_memory += scan_stack(h, alloc_map);
+    dump_registers();
+    freed_memory += scan_stack(h, alloc_map);
 
-	return freed_memory;
+    return freed_memory;
 }

@@ -145,6 +145,7 @@ size_t h_gc_dbg(heap_t* h, bool unsafe_stack)
 	return h_gc(h);
 }
 
+//TTODO
 size_t h_avail(heap_t* h)
 {
 	return 0;
