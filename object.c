@@ -1,8 +1,10 @@
 #include "object.h"
+#include "bits.h"
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <math.h>
+#include <string.h>
 
 
 struct object {
@@ -21,111 +23,34 @@ const size_t MAX_OBJECT_SIZE = 240;
  */
 
 /** OBJECT STUFF **/
-
-bool lsbs_are_zero(uintptr_t pointer)
-{
-  size_t integer = 3;
-  return !(pointer & integer); 
+bool object_is_copied(void *p)
+{   
+    return(lsbs_of_ptr((uintptr_t)p) == 2);
 }
 
 
-uintptr_t lsbs_to_zero(uintptr_t pointer)
+void set_forwarding_address(object_t *current, void *address)
 {
-  return pointer & ~((size_t)3);
+    uintptr_t faddress = set_lsbs((uintptr_t)address,2);
+    current->header = faddress;
 }
 
 
-uintptr_t set_lsbs(uintptr_t pointer, size_t bits)
+void object_copy(object_t *p, object_t *new_p)
 {
-  uintptr_t ptr = lsbs_to_zero(pointer);
-  return ptr ^ bits;
-}
-
-//Create bitvector by from a string (first bit is 1)
-uintptr_t new_bv_layout(char *layout)
-{
+    object_t *header = point_header(p);
+    uintptr_t obj_size = bv_size((uintptr_t)header);                          
   
-    return 0;
+    uintptr_t size = sizeof(header)+obj_size;
+    memcpy(new_p, header, size);
+    header = point_object(header);
+    set_forwarding_address(header , new_p );
+ 
 }
 
-//Create bitvector from size (first bit is 0)
-uintptr_t new_bv_size(size_t bytes)
-{
-    uintptr_t leftshifted = bytes << 2;
-    return set_lsbs(leftshifted, 3);
-     
-}
 bool is_number(char c)
 {
   return ('0' <= c && c <= '9');
-}
-
-uintptr_t pointer_or_not(uintptr_t vector, char c)
-{
-  switch(c)
-    {
-    case '*':
-      vector = vector << 2;
-      return set_lsbs(vector, 3);
-    case 'i':
-      vector = vector << 2;
-      return set_lsbs(vector,1);
-    case 'l':
-      vector = vector << 2;
-      return set_lsbs(vector,1);
-    case 'f':
-      vector = vector << 2;
-      return set_lsbs(vector,1);
-    case 'c':
-      vector = vector << 2;
-      return set_lsbs(vector,1);
-    case 'd':
-      vector = vector << 2;
-      return set_lsbs(vector,1);
-    default:
-      return vector;
-    }
-}
-
-
-size_t format_string_to_layout(char* format_str)
-{
-    uintptr_t layout = 0; 
-    char* current = format_str;
-    //size_t sum = 0;
-    size_t tracker = 0;
-    while(*current)
-      {
-          if(is_number(*current)) //checks if *current is number
-          {
-            //check what comes after and write the necessary number of 11's or 01's
-            int repeats = atoi(current);
-            do // we have to move the ptr if number is bigger than 1 digit.
-            {                
-                current++;
-            } while(is_number(*current));
-            //If *current is '\0' we assume user wants to allocate chars
-            char c = *current != '\0' ? *current : 'c';
-            //
-
-
-            
-            // if int/float
-            // x = repeats / 2 + repeats%2
-            //for( 1= 0, i < x)
-            // pointer or not( layout, 
-
-            current++; //måste göra så att den har stöd för tex "23*i"
-          }
-        else
-          {
-            //Bygger en layoutbitvektor om man bara har chars.
-           layout = pointer_or_not(layout, *current);
-          }
-        current++;
-      }
-    //den måste, när den är klar, flytta talen längst till vänster mha tracker och flippa de sista bitarna.
-    return layout;
 }
 
 void* new_object(void* memory_ptr, void* layout, size_t bytes)
@@ -161,62 +86,6 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes)
     return point_object(object);
 }
 
-
-
-void set_forwarding_address(object_t *current, void *address)
-{
-  current->header = (uintptr_t)address;
-    
-}
-
-
-int layout_or_sizenumber(uintptr_t value)
-{
-  uintptr_t comparison  = 1;
-  comparison |= 1 << 62;
-  uintptr_t isolated = comparison & value;
-  if(isolated & 1)
-    {
-      return 1; //1 står för layout
-    }
-  else
-    {
-      return 0; //0 står för sizenumber
-    }
-}
-
-
-/** BIT OPERATIONS TODO: bit_operations module **/
-
-
-
-//returns the last two bits in a pointer
-int lsbs_of_ptr(uintptr_t pointer)
-{
-  if((pointer & (size_t)3) == (size_t)0)
-    {
-      return 0;
-    }
-  else if((pointer & (size_t)2) == (size_t)1)
-    {
-      return 1;
-    }
-  else if((pointer & (size_t)1) == (size_t)2)
-    {
-      return 2;
-    }
-  else
-    {
-      return 3;
-    }
-}
-
-
-
-
-
-/** PARSER FUNCTIONS **/
-
 size_t char_value(char c)
 {
     switch(c)
@@ -237,8 +106,6 @@ size_t char_value(char c)
         return 0;
     }
 }
-
-
 
 //Returns a number wich represents the size of the object.
 size_t format_string_parser(char* layout)
@@ -268,12 +135,8 @@ size_t format_string_parser(char* layout)
     return sum;
 }
 
-bool object_is_copied(void *p)
-{
-   
-  return(lsbs_of_ptr((uintptr_t)p) == 2);
 
-}
+
 
 int main()
 {
@@ -281,7 +144,7 @@ int main()
   char layout[] = "***";
   uintptr_t ptr = (uintptr_t) layout;
   uintptr_t bigassbit = 1;
-  bigassbit |= 1UL << 62;
+  bigassbit |= 1UL << 63;
   printf("lsbs of ptr %p is %d\n", layout, lsbs_of_ptr((uintptr_t)layout));
   printf("Amount of bytes that need allocating: %lu \n", format_string_parser(layout));
   //printf("Storage size for : %d \n", sizeof(double));
