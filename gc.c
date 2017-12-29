@@ -1,9 +1,11 @@
 #include "gc.h"
+
 #include "gc_utils.h"
 #include <stdio.h>
 #include <malloc.h>
 #include <math.h>
 #include "root.h"
+#include "object.h"
 #ifdef _WIN32
 #include <windows.h>
 void* STACK_START_P;
@@ -55,7 +57,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	//allocate memory for heap and its metadata
 	void* p = NULL;
 	int result = 0;
-
+        
 	#ifdef _WIN32
 	p = __mingw_aligned_malloc(bytes, pow(2, 16));
 	#else
@@ -75,7 +77,9 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	heap_t* hp = p;
 	hp->unsafe_stack = unsafe_stack;
 	hp->gc_threshold = gc_threshold;
+
 	hp->size = bytes;
+
 
 	//set data pointer
 	char* bp = p;
@@ -115,12 +119,19 @@ void h_delete_dbg(heap_t* h, void* dbg_value)
 
 void* h_alloc_struct(heap_t* h, char* layout)
 {
-	return NULL;
+    //FIND AVAILABLE MEMORY LOCATION
+    void *cell_ptr = NULL;
+    return new_object(cell_ptr, layout, 0);
 }
 
 void* h_alloc_data(heap_t* h, size_t bytes)
 {
-	return NULL;
+    //TODO check if heap got bytes bytes available
+    //TODO check if there is bytes available memory in current
+    //cell, go to next if not
+    
+    void *cell_ptr = NULL;
+    return new_object(cell_ptr, NULL, bytes);
 }
 
 size_t h_gc(heap_t* h)
@@ -184,3 +195,4 @@ void h_print_cells(heap_t* h)
 		printf("bump ptr: %u.%u\n", h_get_cell_front_ptr(h, &h->cell_array[i]), cell_front_offset(&h->cell_array[i]));
 	}
 }
+

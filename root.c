@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <setjmp.h>
 #include "root.h"
+#include "compact.h"
 #include "gc_utils.h"
+
 
 #ifdef _WIN32
 extern void* STACK_START_P;
@@ -18,7 +20,9 @@ char* stack_get_end()
 	return __builtin_frame_address(0);
 }
 
+
 char* stack_get_start()
+
 {
 	#ifdef _WIN32
 	return STACK_START_P;
@@ -31,6 +35,7 @@ size_t stack_size()
 {
 	return stack_get_start() - stack_get_end();
 }
+
 
 bool is_pointer_to_heap(heap_t* h, void* p)
 {
@@ -51,33 +56,6 @@ void deactivate_cell(heap_t* h, void* p)
   
 }
 
-//TODO: traverse the heap starting from a root (sprint 3)
-void traverse_root(heap_t* h, void* p, uintptr_t* rp)
-{
-  /*
-  if(object_is_copied(p))
-    {
-    }
-  else
-    {
-      char* op = p;
-      char* s = object_get_format_string(p);
-      while(*s)
-        {
-          if(*s == '*')
-            {
-              traverse_root(h, (void*)*(void**)op, (uintptr_t*)op);
-            }
-          s++;
-        }
-      void* new_object = h_alloc_struct(h, s);
-      object_copy(p, new_object);
-      object_set_forwarding_address(p, new_object);
-    }
-  
-  *rp = object_get_forwarding_address(p);
-  */
-}
 
 
 size_t scan_stack(heap_t* h, bool* alloc_map)

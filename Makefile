@@ -6,7 +6,14 @@ SRC := $(wildcard *.c)
 HDR := $(wildcard *.h);
 OBJ = $(SRC:.c=.o)
 
-all: $(OBJ)
+#TODO FIX THESE (Do tests need .o files? Dunno I don't know cunit)
+SRC_TEST := $(wildcard tests/*.c)
+HDR_TEST := $(wildcard tests/*.h);
+OBJ_TEST = $(SRC_TEST:.c=.o)
+
+all: gc test
+
+gc: $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 %.o: %.c %.h
@@ -15,11 +22,22 @@ all: $(OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) $< -c
 
-run: all
+tests/%.o: %.c %.h
+	@echo $< 
+	$(CC) $(CFLAGS) $*.c $*.h -c
+
+tests/%.o: %.c
+	@echo $< 
+	$(CC) $(CFLAGS) $< -c
+
+run: gc
 	./$(NAME)
-	
-test:
-	$(CC) $(CFLAGS) $(SRC) "test/test.c" -lcunit
+
+run_test: test
+	./test
+
+test:	$(SRC_TEST)
+	$(CC) $(CFLAGS) $(SRC_TEST) -lcunit -o test
 
 valgrind: all
 	valgrind --leak-check=yes ./$(NAME)
@@ -28,6 +46,9 @@ clean:
 	rm -f *.o
 	rm -f *~
 	rm -f *#
+	rm -f *.gch
+	rm -f test
+	rm -f gc
 
 docs:
 	doxygen Doxyfile
