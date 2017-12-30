@@ -15,7 +15,7 @@ void test_memorymap()
     int min_allocsize = 5;
 
   
-    memorymap_t * mem = memorymap_new(start_of_heap, heap_size, min_allocsize);
+    memorymap_t* mem = memorymap_new(start_of_heap, heap_size, min_allocsize);
     puts("2");
     memorymap_adress_change(mem, start_of_heap);
 

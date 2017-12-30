@@ -5,17 +5,17 @@
 #include <math.h>
 
 struct memorymap {
-  void * start_of_heap;
+  void* start_of_heap;
   int heap_size;
   int min_allocsize;
-  bool *mem_array;
+  bool* mem_array;
 };
 
 
-memorymap_t* memorymap_new(void * start_of_heap, int heap_size, int min_allocsize)
+memorymap_t* memorymap_new(void* start_of_heap, int heap_size, int min_allocsize)
 {
 
-  memorymap_t * mem = (memorymap_t*) malloc(sizeof(memorymap_t));
+  memorymap_t* mem = (memorymap_t*) malloc(sizeof(memorymap_t));
   mem -> start_of_heap = start_of_heap;
   mem -> heap_size = heap_size;
   mem -> min_allocsize = min_allocsize;
@@ -32,7 +32,7 @@ memorymap_t* memorymap_new(void * start_of_heap, int heap_size, int min_allocsiz
   
 }
 
-bool memorymap_adress_is_taken(memorymap_t* mem, void * adress)
+bool memorymap_adress_is_taken(memorymap_t* mem, void* adress)
 {
   int offset = adress - mem -> start_of_heap;
   return mem-> mem_array[offset];
@@ -65,7 +65,7 @@ void memorymap_print(memorymap_t *mem){
   int min_allocsize = mem -> min_allocsize;
   int heap_size = mem->heap_size;
 
-  bool * bool_array;
+  bool* bool_array;
   for(int i = 0; i != (heap_size/min_allocsize); i++){
     bool_array = (mem -> mem_array) + i;
     
