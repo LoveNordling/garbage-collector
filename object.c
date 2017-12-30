@@ -41,7 +41,7 @@ void object_copy(object_t *p, object_t *new_p)
     object_t *header = point_header(p);
     uintptr_t obj_size = bv_size((uintptr_t)header);                          
   
-    uintptr_t size = sizeof(header)+obj_size;
+    uintptr_t size = sizeof(header)+obj_size;Funct
     memcpy(new_p, header, size);
     header = point_object(header);
     set_forwarding_address(header , new_p );
@@ -136,7 +136,7 @@ size_t format_string_parser(char* layout)
 }
 
 
-
+/*
 
 int main()
 {
@@ -167,3 +167,4 @@ int main()
 
   return 0;
 }
+*/
