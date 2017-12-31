@@ -2,16 +2,19 @@
 #include <CUnit/Basic.h>
 #include <stdlib.h>
 #include <math.h>
+
 #include <CUnit/CUnit.h>
 #include <string.h>
 #include "test_memorymap.h"
 #include <string.h>
+
 //Import your test functions here
 
 
 void test_test() //This function should be placed in another file.
 {
   
+
     CU_ASSERT_EQUAL(strcmp("hej", "hej"), 0);
 }
 
@@ -29,6 +32,7 @@ int main(int argc, char** argv) {
     CU_pSuite memmap = CU_add_suite("Testing memmap", NULL, NULL);
     CU_add_test(memmap, "", test_memorymap);
   
+
   
     CU_basic_run_tests();//Run the tests
 }
