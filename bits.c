@@ -1,3 +1,8 @@
+#define _GNU_SOURCE
+//needed because of strdup and std=c99
+//Solution found at: https://gist.github.com/emilisto/9620134
+#include "bits.h"
+
 /**
  * @file bits.c
  * @author Elwira Johansson
@@ -5,13 +10,6 @@
  * @date 1 January 2018
  * 
  */
-
-
-//needed because of strdup and std=c99
-//Solution found at: https://gist.github.com/emilisto/9620134
-#define _GNU_SOURCE
-
-#include "bits.h"
 
 /**
 *********************************************************************************
