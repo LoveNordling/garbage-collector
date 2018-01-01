@@ -1,127 +1,176 @@
+/**
+ * @file bits.c
+ * @author Elwira Johansson
+ * @author Ricardo Danza
+ * @date 1 January 2018
+ * 
+ */
+
+
+//needed because of strdup and std=c99
+//Solution found at: https://gist.github.com/emilisto/9620134
+#define _GNU_SOURCE
+
 #include "bits.h"
 
-#define PTR_SIZE (sizeof(uintptr_t) == (size_t)4) ? 4 : 8
-#define SYS_BIT (PTR_SIZE == 4) ? 32 : 64
-#define SIZE_BIT_LENGTH 10 //TODO MAYBE HAVE IND SIZES IF 32 OR 64 BIT SYS ?
+/**
+*********************************************************************************
+*************************** BIT-VECTOR FUNCTIONS ********************************
+*********************************************************************************
+*/
+
+//Create bitvector layout from a string 
+uintptr_t new_bv_layout(char *layout, size_t bytes)
+{
+    char *current = layout;
+    int index = SYS_BIT - SIZE_BIT_LENGTH - 2;
+    uintptr_t bv = bytes;
+
+    //Shift it left so the second msb is the start of bv_size.
+    bv = bv << (SYS_BIT - SIZE_BIT_LENGTH - 1);
+
+    while(*current && index > 0)
+    {
+        //How many of next char is going to be written in bv
+        int repeats = 1;
+
+        //Check if *current is a number EX if str "4*if"
+        if('0' <= *current && *current <= '9') 
+        {
+            
+            //number at current pointer
+            repeats = atoi(current); 
+
+            // we have to move the ptr current if number is more than 1 digit.
+            //EX the str "32c"
+            do 
+            {
+                current++;
+            } while('0' <= *current && *current <= '9');
+        }
+
+        //If it's a '*' we have to add 'repeats' nr of 1's in bv
+        if(*current == '*'){
+            do
+            {
+                bv = set_bit(bv, index, 1);
+                index--;
+                repeats--;
+            }while(repeats > 0);
+        }
+        //Else we have to skip 'repeats' nr of 0's if *current =! '*'
+        else
+        {
+            index -= repeats;
+        }
+    }
+
+    //MSB shall be 1 if bv is a layout
+    bv = set_msb(bv,1);
+
+    //Return it with lsbs set to 11 since it's a bitvector.
+    return set_lsbs(bv, 3);
+}
+
+//Create bitvector from size
+//we can assume that size is smaller than MAX
+uintptr_t new_bv_size(size_t bytes)
+{
+    //Shift it to left by 2 so we can fits 2 lsbs as metadata.
+    uintptr_t leftshifted = bytes << 2;
+    
+     //Return it with lsbs set to 11 since it's a bitvector.
+    return set_lsbs(leftshifted, 3);
+}
 
 uintptr_t bv_size(uintptr_t bv)
 {
+    //TODO check if bitvektor ??
+    
     uintptr_t size = bv;
-    /* uintptr_t size;
-     * IF BV-BIT == 0
-     * size = bv >> 2
-     * ELSE 
-     * set_msb(bv, 0);
-     * size = bv >> (SYS_BIT - SIZE_BIT_LENGTH - 1);
-     *return size;
-     */
+
+    if(get_msb(bv) == 1)
+    {
+        size = set_msb(size,0);
+        size = size >> (SYS_BIT - SIZE_BIT_LENGTH - 1);
+    }
+    else
+    {
+        size = bv >> 2;
+    }
     return size;
 }
 
-bool object_is_copied(void *ptr)
-{    
-    return lsbs_of_ptr((uintptr_t)ptr) == 2;
+//Function to create a simplified format-str from a bv
+//1 = pointer, 0 = non-pointer
+char *bv_to_str(uintptr_t bv){
+
+    if(get_msb(bv) == 1)
+    {
+        int ptr_size = PTR_SIZE;
+        int layout_bits = bv_size(bv) / ptr_size; //Why can I not divide by a defined?
+        
+        char str[layout_bits + 1];
+        uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 1);
+
+        //loop to create the string.
+        for(int i = 0; i < layout_bits; i++, comp = comp << 1)
+        {
+            if(bv & comp)
+            {
+                str[i] = '*';
+            }
+            else
+            {
+                str[i] = 'r';
+            }
+        }
+        str[layout_bits] = '\0';
+        return strdup(str);
+    }
+    else
+    {
+        return strdup("r");
+    }
 }
 
-bool lsbs_are_zero(uintptr_t pointer)
-{
-  return !(pointer & (size_t)3);
-}
+/**
+*********************************************************************************
+************************ BIT-MANIPULATION FUNCTIONS *****************************
+*********************************************************************************
+*/
 
-
-//int bit = if bit should be 1 or 0
-uintptr_t set_bit(uintptr_t num, int bit_indx, int bit)
+// Function to set a bit in uintptr_t num
+// Returns num with the new value bit at index bit_indx
+uintptr_t set_bit(uintptr_t num, int bit_index, int bit)
 {
     uintptr_t set_num;
 
     if(bit == 1)
     {
-        set_num = num | ( 1 << (bit_indx));
+        set_num = num | ( 1 << (bit_index));
     }
     else
     {
-        set_num = num & ~( 1 << (bit_indx));
+        set_num = num & ~( 1 << (bit_index));
     }
     return set_num;
 }
 
-uintptr_t set_msb(uintptr_t num, int bit)
-{
-    return set_bit(num, 63, bit); //TODO depends if 32-bit or 64-bit
-}
-
-uintptr_t lsbs_to_zero(uintptr_t pointer)
-{
-  return pointer & ~((size_t)3);
-}
-
+//Function to set lsbs to given bit-pair
+// bits can be called with:
+// - (size_t) 0 (sets lsbs to bits 00)
+// - (size_t) 1 (sets lsbs to bits 01)
+// - (size_t) 2 (sets lsbs to bits 10)
+// - (size_t) 3 (sets lsbs to bits 11)
 uintptr_t set_lsbs(uintptr_t pointer, size_t bits)
 {
   uintptr_t ptr = lsbs_to_zero(pointer);
   return ptr ^ bits;
 }
 
-//Create bitvector by from a string (first bit is 1)
-uintptr_t new_bv_layout(char *layout, size_t bytes)
-{
-    char *current = layout;
-    int index = SYS_BIT - SIZE_BIT_LENGTH - 2; //todo 52 if 64-bit, 20 if 32-bit
-    uintptr_t bv = bytes;
-
-    //Depends if 32 or 64 cmp
-    // shift so the 10 bits that represents size
-    // are at index 62-53(63-bit cmp), alt 30-21(32-bit cmp)
-
-    //TODO depends if 32 or 64-bit
-    bv = bv << (SYS_BIT - SIZE_BIT_LENGTH - 1);
-
-    //TODO
-    //Support ex 4* (4 pointers)
-    while(*current && index > 0)
-    {
-        if(*current == '*')
-        {
-            bv = set_bit(bv, index, 1);
-        }
-        /*else
-        {
-            //bv = set_bit(bv, index, 0); //maybe not needed 
-            }*/
-        index--;
-    }
-
-    bv = set_msb(bv,1);
-    
-    return bv;
-}
-
-//Create bitvector from size (first bit is 0)
-//compare 9 bits?
-// we  can assume that size is smaller than MAX
-uintptr_t new_bv_size(size_t bytes)
-{
-    uintptr_t leftshifted = bytes << 2;
-    return set_lsbs(leftshifted, 3);
-     
-}
-
-
-int layout_or_sizenumber(uintptr_t value)
-{
-    uintptr_t comparison = 1UL << (SYS_BIT - 1);
-    
-    if(comparison & value)
-    {
-        return 1; //1 står för layout
-    }
-    else
-    {
-        return 0; //0 står för sizenumber
-    }
-}
-
-//returns the last two bits in a pointer
-int lsbs_of_ptr(uintptr_t pointer)
+//returns the value of the last two bits in a pointer
+int get_lsbs(uintptr_t pointer)
 {
     if((pointer & (size_t)3) == (size_t)0) // 
     {
@@ -141,22 +190,51 @@ int lsbs_of_ptr(uintptr_t pointer)
     }
 }
 
-char *bv_to_str(void *ptr){
-    uintptr_t bv = (uintptr_t) ptr;
+// Function to set lsbs to zero
+uintptr_t lsbs_to_zero(uintptr_t pointer)
+{
+  return pointer & ~((size_t)3);
+}
 
-    if(layout_or_sizenumber(bv))
+//Function to check if lsbs are zero
+bool lsbs_are_zero(uintptr_t pointer)
+{
+  return !(pointer & (size_t)3);
+}
+
+//Function to set msb to bit (IF 1, SETS TO 0, ELSE SETS TO 0)
+uintptr_t set_msb(uintptr_t num, int bit)
+{
+    return set_bit(num, SYS_BIT-1, bit); 
+}
+
+//Checks if bv is a layout or just a size
+//This function shall always be called with a checked-bv
+int get_msb(uintptr_t value)
+{
+    uintptr_t comparison = 1UL << (SYS_BIT - 1);
+    
+    if(comparison & value)
     {
-        //int layout_bits = bv_size(bv) / PTR_SIZE;
-        //char *str;
+        return 1; 
     }
     else
     {
-        return "r";
+        return 0; 
     }
-
-    return "";
 }
 
+
+/**
+************************ TODO CHECK IF NEEDED ****************************
+*/
+//If header's lsbs are 10 the header is a forward adress 
+bool is_frw_adress(uintptr_t header)
+{    
+    return get_lsbs(header) == 2;
+}
+
+//TODO ASK
 uintptr_t pointer_or_not(uintptr_t vector, char c)
 {
   switch(c)
