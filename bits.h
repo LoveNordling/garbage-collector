@@ -26,7 +26,12 @@
 
 #define PTR_SIZE (sizeof(uintptr_t) == (size_t)4) ? 4 : 8
 #define SYS_BIT (PTR_SIZE == 4) ? 32 : 64
-#define SIZE_BIT_LENGTH (PTR_SIZE == 4) ? 5 : 10 //TODO CALCULATE APPROPRIATE BIT FOR 32-BIT SYS
+#define SIZE_BIT_LENGTH  10 //TODO CALCULATE APPROPRIATE BIT FOR 32-BIT SYS
+
+
+
+
+void print_bits(uintptr_t uintbits);
 
 /**
 *********************************************************************************

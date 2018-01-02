@@ -17,6 +17,29 @@
 *********************************************************************************
 */
 
+
+
+
+void print_bits(uintptr_t uintbits)
+{
+    printf("%lu in bits are: ", uintbits);
+    for(int i = SYS_BIT; i > 0; i--){
+
+        uintptr_t comparison = 1UL << (i-1);
+
+        if(comparison & uintbits)
+        {
+            printf("1"); 
+        }
+        else
+        {
+            printf("0");
+        }
+
+    }
+    printf("\n\n");
+}
+
 //Create bitvector layout from a string 
 uintptr_t new_bv_layout(char *layout, size_t bytes)
 {

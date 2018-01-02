@@ -15,7 +15,7 @@ gc: $(OBJ)
 run: gc
 	./$(NAME)
 
-test:
+test: $(OBJ)
 	$(MAKE) -C tests test
 
 run_test: test
