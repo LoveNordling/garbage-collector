@@ -1,11 +1,7 @@
-#include <CUnit/CUnit.h>
-#include <CUnit/Basic.h>
 #include <stdlib.h>
 #include <math.h>
-#include <CUnit/CUnit.h>
 #include <string.h>
-#include <string.h>
-#include "test_root.c"
+#include "test_root.h"
 //Import your test functions here
 
 

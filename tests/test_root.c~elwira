@@ -2,8 +2,6 @@
 #include <CUnit/Basic.h>
 #include <stdlib.h>
 #include <math.h>
-#include <CUnit/CUnit.h>
-#include "../gc.h"
 #include "../root.h"
 
 
