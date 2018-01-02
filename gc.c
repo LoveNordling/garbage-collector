@@ -140,8 +140,8 @@ void* h_get_available_space(heap_t* hp, size_t size)
 void* h_alloc_struct(heap_t* h, char* layout)
 {
     //FIND AVAILABLE MEMORY LOCATION
-    void *cell_ptr = NULL;
-    return new_object(cell_ptr, layout, 0);
+  void *cell_ptr = h_get_available_space(h, format_string_parser(layout));
+  return new_object(cell_ptr, layout, 0);
 }
 
 void* h_alloc_data(heap_t* h, size_t bytes)
@@ -150,8 +150,8 @@ void* h_alloc_data(heap_t* h, size_t bytes)
     //TODO check if there is bytes available memory in current
     //cell, go to next if not
     
-    void *cell_ptr = NULL;
-    return new_object(cell_ptr, NULL, bytes);
+  void *cell_ptr = h_get_available_space(h, bytes);
+  return new_object(cell_ptr, NULL, bytes);
 }
 
 size_t h_gc(heap_t* h)
