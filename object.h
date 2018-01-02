@@ -57,7 +57,7 @@ void object_copy(object_t *p, object_t *new_p);
  * object struct.
  *
  * @param p Pointer to the object
- * @return bool 
+ * @return void
  */
 bool object_is_copied(void *p);
 
@@ -90,6 +90,12 @@ void* get_forwarding_address(object_t *current);
  * @return size_t The size in bytes
  */
 size_t get_object_size(void *obj);
+
+//COMMENTS NEEDED
+bool object_is_layout(void *obj);
+
+//COMMENTS NEEDED
+char* get_format_string(void *obj);
 
 /**
  * @brief Reads a format string and calculates the amount of byte the object requires 

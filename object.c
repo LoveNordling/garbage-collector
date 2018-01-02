@@ -26,7 +26,7 @@ struct object {
 
 //Maximum size on objects(header not included) is set by how big chunk a bit-vector
 //can represent
-const size_t MAX_OBJECT_SIZE = (SYS_BIT - SIZE_BIT_LENGTH - 3) * PTR_SIZE; //[[WIP]]
+const size_t MAX_OBJECT_SIZE = 240;//(SYS_BIT - SIZE_BIT_LENGTH - 3) * PTR_SIZE; //[[WIP]]
 
 /**
 *****************************************************************************
@@ -104,6 +104,18 @@ uintptr_t get_header(void* obj)
 {
     object_t *object = point_header(obj);
     return object->header;
+}
+
+
+//NEED COMMENTS
+bool object_is_layout(void *obj){
+    return get_msb(get_header(obj));
+}
+
+char* get_format_string(void *obj){
+    uintptr_t bv = get_header(obj);
+
+    return bv_to_str(bv);
 }
 
 /**
