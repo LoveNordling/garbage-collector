@@ -108,7 +108,7 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
 }
 
 //Create bitvector from size
-//we can assume that size is smaller than MAX 2048 bytes
+//we can assume that size is smaller than MAX 2048 bytes (inkl. header)
 uintptr_t new_bv_size(size_t bytes)
 {
     //Shift it to left by 2 so we can fits 2 lsbs as metadata.
@@ -143,15 +143,20 @@ char *bv_to_str(uintptr_t bv)
 
     if(get_msb(bv) == 1)
     {
-        int ptr_size = PTR_SIZE;
-        int layout_bits = bv_size(bv) / ptr_size; //TODO
+        uintptr_t size = bv_size(bv);
+        int layout_bits = bv_size(bv) / PTR_SIZE; //TODO
+
+        int sol = size / PTR_SIZE;
+
+        printf("size: %lu, sol: %d\n", size, sol);
         
         char* str = calloc(layout_bits + 1, sizeof(char));
-        uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 1);
+        uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 2);
 
         //loop to create the string.
-        for(int i = 0; i < layout_bits; i++, comp = comp << 1)
+        for(int i = 0; i < layout_bits; i++, comp = comp >> 1)
         {
+            printf(" ");
             if(bv & comp)
             {
                 str[i] = '*';
