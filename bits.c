@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
 //needed because of strdup and std=c99
 //Solution found at: https://gist.github.com/emilisto/9620134
+
 #include "bits.h"
 #include <stdio.h>
 
@@ -11,6 +12,33 @@
  * @date 1 January 2018
  * 
  */
+
+/**
+*********************************************************************************
+*************************** PRINT UINTPTR_T FUNC ********************************
+*********************************************************************************
+*/
+
+void print_bits(uintptr_t uintbits)
+{
+    printf("%lu in bits are: ", uintbits);
+    for(int i = SYS_BIT; i > 0; i--){
+
+        uintptr_t comparison = 1UL << (i-1);
+    
+        if(comparison & uintbits)
+        {
+            printf("1"); 
+        }
+        else
+        {
+            printf("0");
+        }
+        
+    }
+    printf("\n\n");
+}
+
 
 /**
 *********************************************************************************
@@ -45,10 +73,11 @@ void print_bits(uintptr_t uintbits)
 uintptr_t new_bv_layout(char *layout, size_t bytes)
 {
     char *current = layout;
-    int index = SYS_BIT - SIZE_BIT_LENGTH - 2;
+    int index = SYS_BIT- SIZE_BIT_LENGTH- 2;
     uintptr_t bv = bytes;
-
+    
     //Shift it left so the second msb is the start of bv_size.
+    
     bv = bv << (SYS_BIT - SIZE_BIT_LENGTH - 1);
 
     while(*current && index > 0)
@@ -71,7 +100,7 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
             } while('0' <= *current && *current <= '9');
         }
 
-        //If it's a '*' we have to add 'repeats' nr of 1's in bv
+         //If it's a '*' we have to add 'repeats' nr of 1's in bv
         if(*current == '*'){
             do
             {
@@ -85,17 +114,22 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
         {
             index -= repeats;
         }
+        
+        current++;
     }
 
     //MSB shall be 1 if bv is a layout
     bv = set_msb(bv,1);
+    print_bits(bv);
 
     //Return it with lsbs set to 11 since it's a bitvector.
-    return set_lsbs(bv, 3);
+    bv = set_lsbs(bv, 3);
+    print_bits(bv);
+    return bv;
 }
 
 //Create bitvector from size
-//we can assume that size is smaller than MAX
+//we can assume that size is smaller than MAX 2048 bytes
 uintptr_t new_bv_size(size_t bytes)
 {
     //Shift it to left by 2 so we can fits 2 lsbs as metadata.
@@ -125,12 +159,13 @@ uintptr_t bv_size(uintptr_t bv)
 
 //Function to create a simplified format-str from a bv
 //1 = pointer, 0 = non-pointer
-char *bv_to_str(uintptr_t bv){
+char *bv_to_str(uintptr_t bv)
+{
 
     if(get_msb(bv) == 1)
     {
         int ptr_size = PTR_SIZE;
-        int layout_bits = bv_size(bv) / ptr_size; //Why can I not divide by a defined?
+        int layout_bits = bv_size(bv) / ptr_size; //TODO
         
         char *str = calloc(layout_bits +1, sizeof(char));
         uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 1);
@@ -147,8 +182,9 @@ char *bv_to_str(uintptr_t bv){
                 str[i] = 'r';
             }
         }
+        
         str[layout_bits] = '\0';
-        return strdup(str);
+        return str;
     }
     else
     {
@@ -173,11 +209,11 @@ uintptr_t set_bit(uintptr_t num, int bit_index, int bit)
 
     if(bit == 1)
     {
-        set_num = num | ( 1 << (bit_index));
+        set_num = num | ( 1UL << (bit_index));
     }
     else
     {
-        set_num = num & ~( 1 << (bit_index));
+        set_num = num & ~( 1UL << (bit_index));
     }
     return set_num;
 }
@@ -253,7 +289,7 @@ int get_msb(uintptr_t value)
 /**
 ************************ TODO CHECK IF NEEDED ****************************
 */
-//If header's lsbs are 10 the header is a forward adress 
+//If header's 2 lsbs are 10 the header is a forward adress 
 bool is_frw_adress(uintptr_t header)
 {    
     return get_lsbs(header) == 2;

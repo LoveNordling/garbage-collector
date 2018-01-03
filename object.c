@@ -26,7 +26,7 @@ struct object {
 
 //Maximum size on objects(header not included) is set by how big chunk a bit-vector
 //can represent
-const size_t MAX_OBJECT_SIZE = (SYS_BIT - SIZE_BIT_LENGTH - 3) * PTR_SIZE; //[[WIP]]
+const size_t MAX_OBJECT_SIZE = 240;//(SYS_BIT - SIZE_BIT_LENGTH - 3) * PTR_SIZE; //[[WIP]]
 
 /**
 *****************************************************************************
@@ -63,7 +63,7 @@ void object_copy(object_t *p, object_t *new_p)
     uintptr_t size = sizeof(obj_struct)+obj_size;
     memcpy(new_p, obj_struct, size);
     obj_struct = point_object(obj_struct);
-    set_forwarding_address(obj_struct, new_p );
+    set_forward_address(obj_struct, new_p );
  
 }
 
@@ -74,7 +74,7 @@ bool object_is_copied(void *p)
     return(get_lsbs(obj->header) == 2);
 }
 
-void set_forwarding_address(object_t *current, void *address)
+void set_forward_address(object_t *current, void *address)
 {
     uintptr_t frw_address = set_lsbs((uintptr_t)address,2);
     object_t *obj = point_header(current);
@@ -104,6 +104,18 @@ uintptr_t get_header(void* obj)
 {
     object_t *object = point_header(obj);
     return object->header;
+}
+
+
+//NEED COMMENTS
+bool object_is_layout(void *obj){
+    return get_msb(get_header(obj));
+}
+
+char* get_format_string(void *obj){
+    uintptr_t bv = get_header(obj);
+
+    return bv_to_str(bv);
 }
 
 /**

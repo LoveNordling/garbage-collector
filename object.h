@@ -70,7 +70,7 @@ bool object_is_copied(void *p);
  * @param address The destination address where the object is to be copied to.
  * @return void
  */
-void set_forwarding_address(object_t *current, void *address);
+void set_forward_address(object_t *current, void *address);
 
 /**
  * @brief Creates a copy of the object at another place in the memory
@@ -79,7 +79,7 @@ void set_forwarding_address(object_t *current, void *address);
  * @param new_p Pointer to the location in memory where the object should be moved to.
  * @return void
  */
-void* get_forwarding_address(object_t *current);
+void* get_forward_address(object_t *current);
 
 /**
  * @brief Gets the size of an object
@@ -90,6 +90,12 @@ void* get_forwarding_address(object_t *current);
  * @return size_t The size in bytes
  */
 size_t get_object_size(void *obj);
+
+//COMMENTS NEEDED
+bool object_is_layout(void *obj);
+
+//COMMENTS NEEDED
+char* get_format_string(void *obj);
 
 /**
  * @brief Reads a format string and calculates the amount of byte the object requires 
