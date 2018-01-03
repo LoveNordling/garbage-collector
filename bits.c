@@ -5,15 +5,6 @@
 #include "bits.h"
 #include <stdio.h>
 
-#define PTR_SIZE (sizeof(uintptr_t) == (size_t)4) ? 4 : 8
-#define SYS_BIT (sizeof(uintptr_t) == (size_t)4) ? 32 : 64
-#define SIZE_BIT_LENGTH (sizeof(uintptr_t) == (size_t)4) ? 5 : 10 //TODO CALCULATE APPROPRIATE BIT FOR 32-BIT SYS
-
-/* #define PTR_SIZE 8 */
-/* #define SYS_BIT 64 */
-/* #define SIZE_BIT_LENGTH 10 //TODO CALCULATE APPROPRIATE BIT FOR 32-BIT SYS */
-
-
 /**
  * @file bits.c
  * @author Elwira Johansson
@@ -60,25 +51,13 @@ void print_bits(uintptr_t uintbits)
 //Create bitvector layout from a string 
 uintptr_t new_bv_layout(char *layout, size_t bytes)
 {
-    int test = SYS_BIT;
-    test-=SIZE_BIT_LENGTH;
     char *current = layout;
-    int index = test- 2;
+    int index = SYS_BIT- SIZE_BIT_LENGTH- 2;
     uintptr_t bv = bytes;
-
-    printf("bv before shifting:");
-    print_bits(bv);
+    
     //Shift it left so the second msb is the start of bv_size.
     
-    //bv = bv << (SYS_BIT - SIZE_BIT_LENGTH - 1);
-    bv = bv << test;
-    
-    printf("SYS_BIT: %d, SIZE_BIT_LENGTH: %d, test: %d \n\n", SYS_BIT, SIZE_BIT_LENGTH, test);
-
-    test = SYS_BIT - SIZE_BIT_LENGTH;
-    printf("SYS_BIT: %d, SIZE_BIT_LENGTH: %d, test: %d \n\n", SYS_BIT, SIZE_BIT_LENGTH, test);
-    printf("bv after shifting %d:", test);
-    print_bits(bv);
+    bv = bv << (SYS_BIT - SIZE_BIT_LENGTH - 1);
 
     while(*current && index > 0)
     {
@@ -105,8 +84,6 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
             do
             {
                 bv = set_bit(bv, index, 1);
-                printf("Set bit at index %d to 1 with %d repeats!\n", index, repeats);
-                print_bits(bv);
                 index--;
                 repeats--;
             }while(repeats > 0);
@@ -131,7 +108,7 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
 }
 
 //Create bitvector from size
-//we can assume that size is smaller than MAX
+//we can assume that size is smaller than MAX 2048 bytes
 uintptr_t new_bv_size(size_t bytes)
 {
     //Shift it to left by 2 so we can fits 2 lsbs as metadata.
@@ -161,14 +138,15 @@ uintptr_t bv_size(uintptr_t bv)
 
 //Function to create a simplified format-str from a bv
 //1 = pointer, 0 = non-pointer
-char *bv_to_str(uintptr_t bv){
+char *bv_to_str(uintptr_t bv)
+{
 
     if(get_msb(bv) == 1)
     {
         int ptr_size = PTR_SIZE;
-        int layout_bits = bv_size(bv) / ptr_size; //Why can I not divide by a defined?
+        int layout_bits = bv_size(bv) / ptr_size; //TODO
         
-        char str[layout_bits + 1];
+        char* str = calloc(layout_bits + 1, sizeof(char));
         uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 1);
 
         //loop to create the string.
@@ -183,12 +161,16 @@ char *bv_to_str(uintptr_t bv){
                 str[i] = 'r';
             }
         }
+        
         str[layout_bits] = '\0';
-        return strdup(str);
+        return str;
     }
     else
     {
-        return strdup("r");
+        char *str = calloc(2, sizeof(char));
+        str[0] = 'r';
+        str[1] = '\0';
+        return str;
     }
 }
 
@@ -207,12 +189,10 @@ uintptr_t set_bit(uintptr_t num, int bit_index, int bit)
     if(bit == 1)
     {
         set_num = num | ( 1UL << (bit_index));
-        print_bits(set_num);
     }
     else
     {
         set_num = num & ~( 1UL << (bit_index));
-        print_bits(set_num);
     }
     return set_num;
 }
