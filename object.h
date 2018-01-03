@@ -70,7 +70,7 @@ bool object_is_copied(void *p);
  * @param address The destination address where the object is to be copied to.
  * @return void
  */
-void set_forwarding_address(object_t *current, void *address);
+void set_forward_address(object_t *current, void *address);
 
 /**
  * @brief Creates a copy of the object at another place in the memory

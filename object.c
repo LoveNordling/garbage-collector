@@ -63,7 +63,7 @@ void object_copy(object_t *p, object_t *new_p)
     uintptr_t size = sizeof(obj_struct)+obj_size;
     memcpy(new_p, obj_struct, size);
     obj_struct = point_object(obj_struct);
-    set_forwarding_address(obj_struct, new_p );
+    set_forward_address(obj_struct, new_p );
  
 }
 
@@ -74,7 +74,7 @@ bool object_is_copied(void *p)
     return(get_lsbs(obj->header) == 2);
 }
 
-void set_forwarding_address(object_t *current, void *address)
+void set_forward_address(object_t *current, void *address)
 {
     uintptr_t frw_address = set_lsbs((uintptr_t)address,2);
     object_t *obj = point_header(current);
@@ -182,7 +182,7 @@ size_t format_string_parser(char* layout)
           }
         current++;
       }
-    return sum;
+    return sum + sizeof(object_t);
 }
 
 /*
