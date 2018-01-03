@@ -39,9 +39,13 @@ void test_new_bv_layout()
 
 void test_new_bv_size()
 {
-
-
+  uintptr_t bv = new_bv_size(1000);
   
+  uintptr_t bv_raw = 4003;
+
+  CU_ASSERT_EQUAL(bv, bv_raw);
+  print_bits(bv);
+  print_bits(bv_raw);
 
 }
 

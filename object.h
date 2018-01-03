@@ -101,7 +101,7 @@ char* get_format_string(void *obj);
  * @brief Reads a format string and calculates the amount of byte the object requires 
  *
  * @param   layout The format string.
- * @return  unsigned int with the size required for the object.
+ * @return  unsigned int with the size required for the object plus the header.
  */
 size_t format_string_parser(char* layout);
 

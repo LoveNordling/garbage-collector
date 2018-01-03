@@ -55,13 +55,14 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes)
 }
 
 //Modified var-name on object_t "header" to "obj_struct"
+//TODO these should be void pointers (void*)
 void object_copy(object_t *p, object_t *new_p)
 {
     object_t *obj_struct = point_header(p);
     uintptr_t obj_size = bv_size((uintptr_t)obj_struct->header);                          
   
     uintptr_t size = sizeof(obj_struct)+obj_size;
-    memcpy(new_p, obj_struct, size);
+    memcpy(point_header(new_p), obj_struct, size);
     obj_struct = point_object(obj_struct);
     set_forward_address(obj_struct, new_p );
  
@@ -182,7 +183,7 @@ size_t format_string_parser(char* layout)
           }
         current++;
       }
-    return sum;
+    return sum + sizeof(object_t);
 }
 
 /*

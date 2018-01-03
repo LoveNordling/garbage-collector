@@ -19,34 +19,6 @@
 *********************************************************************************
 */
 
-void print_bits(uintptr_t uintbits)
-{
-    printf("%lu in bits are: ", uintbits);
-    for(int i = SYS_BIT; i > 0; i--){
-
-        uintptr_t comparison = 1UL << (i-1);
-    
-        if(comparison & uintbits)
-        {
-            printf("1"); 
-        }
-        else
-        {
-            printf("0");
-        }
-        
-    }
-    printf("\n\n");
-}
-
-
-/**
-*********************************************************************************
-*************************** BIT-VECTOR FUNCTIONS ********************************
-*********************************************************************************
-*/
-
-
 
 
 void print_bits(uintptr_t uintbits)
@@ -168,10 +140,10 @@ char *bv_to_str(uintptr_t bv)
         int layout_bits = bv_size(bv) / ptr_size; //TODO
         
         char *str = calloc(layout_bits +1, sizeof(char));
-        uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 1);
+        uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 2);
 
         //loop to create the string.
-        for(int i = 0; i < layout_bits; i++, comp = comp << 1)
+        for(int i = 0; i < layout_bits; i++, comp = comp >> 1)
         {
             if(bv & comp)
             {
