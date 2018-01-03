@@ -37,7 +37,7 @@ const size_t MAX_OBJECT_SIZE = 240;//(SYS_BIT - SIZE_BIT_LENGTH - 3) * PTR_SIZE;
 void* new_object(void* memory_ptr, void* layout, size_t bytes)
 {
 
-    object_t *object = memory_ptr;
+  object_t *object = memory_ptr;
 
     //IF layout is not NULL the function is called from h_alloc_struct
     if(layout != NULL)

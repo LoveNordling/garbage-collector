@@ -34,7 +34,7 @@ int main(int argc, char** argv)
         obj->y = (int*)h_alloc_struct(h, "i");
         *(obj->x) = 1;
         *(obj->y) = 2;
-        printf("Heap uses %lu\n", h_data(h));
+        h_gc(h);
         printf("x = %i, y = %i \n", *(obj->x), *(obj->y));
         obj = NULL;
         size_t bytes = h_gc(h);

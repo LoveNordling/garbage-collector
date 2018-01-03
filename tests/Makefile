@@ -20,6 +20,9 @@ objsrc:
 run_test: test
 	./$(TEST)
 
+debug: test
+	gdb ./$(TEST)
+
 %.o: %.c %.h
 	$(CC) $(CFLAGS) $*.c $*.h -c
 
