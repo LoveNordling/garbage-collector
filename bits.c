@@ -163,12 +163,13 @@ uintptr_t bv_size(uintptr_t bv)
 //1 = pointer, 0 = non-pointer
 char *bv_to_str(uintptr_t bv){
 
+  char* str;
     if(get_msb(bv) == 1)
     {
         int ptr_size = PTR_SIZE;
         int layout_bits = bv_size(bv) / ptr_size; //Why can I not divide by a defined?
         
-        char str[layout_bits + 1];
+        str = calloc(layout_bits + 1, sizeof(char));
         uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 1);
 
         //loop to create the string.
@@ -184,12 +185,14 @@ char *bv_to_str(uintptr_t bv){
             }
         }
         str[layout_bits] = '\0';
-        return strdup(str);
     }
     else
     {
-        return strdup("r");
+      str = calloc(2, sizeof(char));
+      str[0] = 'r';
+      str[1] = '\0';
     }
+    return str;
 }
 
 /**

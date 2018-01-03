@@ -5,6 +5,8 @@
 
 #define CELL_SIZE 2048
 
+
+
 typedef struct cell
 {
 	bool is_active;

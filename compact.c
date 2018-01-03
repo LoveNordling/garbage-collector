@@ -16,7 +16,7 @@ void traverse_root(heap_t* h, void* p, uintptr_t* rp)
       if(object_is_layout(p))
         {
           char* op = p;
-          char* s = object_get_format_string(p);
+          char* s = get_format_string(p);
           while(*s)
             {
               if(*s == '*')
@@ -25,6 +25,7 @@ void traverse_root(heap_t* h, void* p, uintptr_t* rp)
                 }
               s++;
             }
+          free(s);
           new_object = h_alloc_struct(h, s);
         }
       else
@@ -35,7 +36,6 @@ void traverse_root(heap_t* h, void* p, uintptr_t* rp)
       object_copy(p, new_object);
       set_forwarding_address(p, new_object);
     }
-  
-  *rp = (uintptr_t)get_forwarding_address(p);
+  *rp = (uintptr_t)get_forward_address(p); 
   
 }

@@ -124,15 +124,19 @@ bool cell_has_space(cell_t* cell, size_t size)
 
 void* h_get_available_space(heap_t* hp, size_t size)
 {
-  for(unsigned int i = 0; i < hp->size; i++)
+  if(h_used(hp) + size < h_size(hp)/2)
+    {
+      return NULL;
+    }
+  for(unsigned int i = 0; i < (unsigned int)hp->cell_count; i++)
     {
       cell_t* cell = &hp->cell_array[i];
       if(cell_has_space(cell, size))
         {
+          cell_activate(cell);
           cell_set_front_offset(cell, cell_front_offset(cell) + size);
           return cell;
         }
-      
     }
   return NULL;
 }
