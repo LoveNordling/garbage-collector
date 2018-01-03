@@ -7,7 +7,7 @@
 #include "../bits.h"
 
 void test_print_bits();
-void test_new_bv_layout();
+void test_new_bv_layout(); //done
 void test_new_bv_size();
 void test_bv_size();
 

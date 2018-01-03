@@ -57,7 +57,7 @@ void object_copy(object_t *p, object_t *new_p);
  * object struct.
  *
  * @param p Pointer to the object
- * @return bool 
+ * @return bool TRUE if object has been copied, else FALSE
  */
 bool object_is_copied(void *p);
 

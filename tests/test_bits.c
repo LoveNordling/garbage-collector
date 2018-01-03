@@ -22,21 +22,25 @@ void test_new_bv_layout()
   uintptr_t layout = new_bv_layout("**iif", 40);
   uintptr_t layout_3_star = new_bv_layout("***", 24);
   uintptr_t layout_3_r = new_bv_layout("fil", 24);
-  uintptr_t layout_empty = new_bv_layout(" ", 0);
+  //uintptr_t layout_empty = new_bv_layout(" ", 0);
   //bv_to_str = **rrr
  
   char *bv_from_layout = bv_to_str(layout);
+  char *bv_from_layout1 = bv_to_str(layout_3_star);
+  char *bv_from_layout2 = bv_to_str(layout_3_r);
   printf("This is the string:%s\n", bv_from_layout);
 
 
-  CU_ASSERT_STRING_EQUAL("***", layout_3_star );
-  CU_ASSERT_STRING_EQUAL("rrr", layout_3_r );
+  CU_ASSERT_STRING_EQUAL("***", bv_from_layout1 );
+  CU_ASSERT_STRING_EQUAL("rrr", bv_from_layout2 );
   //CU_ASSERT_STRING_EQUAL(" ", layout_empty );
   CU_ASSERT_STRING_EQUAL("**rrr", bv_from_layout);
 }
 
 void test_new_bv_size()
 {
+
+
   
 
 }

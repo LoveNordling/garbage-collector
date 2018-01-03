@@ -2,6 +2,7 @@
 //needed because of strdup and std=c99
 //Solution found at: https://gist.github.com/emilisto/9620134
 #include "bits.h"
+#include <stdio.h>
 
 /**
  * @file bits.c
@@ -131,7 +132,7 @@ char *bv_to_str(uintptr_t bv){
         int ptr_size = PTR_SIZE;
         int layout_bits = bv_size(bv) / ptr_size; //Why can I not divide by a defined?
         
-        char str[layout_bits + 1];
+        char *str = calloc(layout_bits +1, sizeof(char));
         uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 1);
 
         //loop to create the string.
@@ -151,7 +152,10 @@ char *bv_to_str(uintptr_t bv){
     }
     else
     {
-        return strdup("r");
+      char *str = calloc(2, sizeof(char));
+      str[0] ='r';
+      str[1] = '\0';
+      return str;
     }
 }
 

@@ -5,7 +5,7 @@
  * @date 1 January 2018
  * 
  */
-
+//TODO en funktion som returnernar storleken på hela datat + header.  
 #include "object.h"
 #include "bits.h"
 
