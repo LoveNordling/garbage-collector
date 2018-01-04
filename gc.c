@@ -161,9 +161,17 @@ void* h_alloc_data(heap_t* h, size_t bytes)
     //TODO check if heap got bytes bytes available
     //TODO check if there is bytes available memory in current
     //cell, go to next if not
-    
-  void *cell_ptr = h_get_available_space(h, bytes);
-  return new_object(cell_ptr, NULL, bytes);
+
+  void *cell_ptr = h_get_available_space(h, bytes + sizeof(void*));
+  if(cell_ptr)
+    {
+      return new_object(cell_ptr, NULL, bytes);
+    }
+  else
+    {
+      h_gc(h);
+      return h_alloc_data(h, bytes);
+    }
 }
 
 void h_flip_cell_states(heap_t* h)
@@ -173,11 +181,11 @@ void h_flip_cell_states(heap_t* h)
       cell_t* cell = &h->cell_array[i];
       if(cell_is_active(cell))
         {
-          cell_activate(cell);
+          cell_deactivate(cell);
         }
       else
         {
-          cell_deactivate(cell);
+          cell_activate(cell);
         }
     }
 }
