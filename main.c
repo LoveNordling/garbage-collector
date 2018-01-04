@@ -2,8 +2,6 @@
 #include "gc.h"
 #include "gc_utils.h"
 #include <math.h>
-<<<<<<< HEAD
-=======
 
 typedef struct test test_t;
 
@@ -13,6 +11,8 @@ struct test
   int* y;
   int z;
 };
+
+
 
 int main(int argc, char** argv)
 {
@@ -34,12 +34,14 @@ int main(int argc, char** argv)
         obj->y = (int*)h_alloc_struct(h, "i");
         *(obj->x) = 1;
         *(obj->y) = 2;
-        h_gc(h);
         printf("x = %i, y = %i \n", *(obj->x), *(obj->y));
+        int* z = (int*)h_alloc_struct(h, "i");
+        z = obj->x;
+        printf("\nZ=%d\n", *z);
         obj = NULL;
         size_t bytes = h_gc(h);
         printf("released %lu bytes \n", bytes);
         h_delete(h);
         
 	return 0;
-}
+        }
