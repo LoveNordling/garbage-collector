@@ -15,7 +15,7 @@ gc: $(OBJ)
 run: gc
 	./$(NAME)
 
-test:
+test:	$(OBJ)
 	$(MAKE) -C tests test
 
 run_test: test
@@ -33,7 +33,7 @@ valgrind: all
 clean:
 	rm -f $(OBJ) $(NAME) *~
 	$(MAKE) -C tests clean
-	rm -f *#
+	rm -f *#*
 	rm -f *.gch
 
 docs:
