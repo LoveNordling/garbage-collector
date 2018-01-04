@@ -135,7 +135,7 @@ void* h_get_available_space(heap_t* hp, size_t size)
         {
           cell_activate(cell);
           cell_set_front_offset(cell, cell_front_offset(cell) + size);
-          return (void*)cell + cell_front_offset(cell);
+          return h_get_cell_front_ptr(hp, cell);
         }
     }
   return NULL;
@@ -185,7 +185,12 @@ size_t h_avail(heap_t* h)
 
 size_t h_used(heap_t* h)
 {
-	return 0;
+  int sum = 0;
+  for(int i = 0; i < h->cell_count; i++)
+    {
+      sum += cell_front_offset(&(h->cell_array[i]));
+    }
+  return sum;
 }
 
 size_t h_size(heap_t* h)
@@ -211,10 +216,12 @@ cell_t* h_get_cell(heap_t* h, void* ptr)
 
 void* h_get_cell_front_ptr(heap_t* h, cell_t* cell)
 {
+  
 	int i;
 	for (i = 0; cell != &h->cell_array[i] && i < h->cell_count; ++i);
-
-	return cell_front_ptr(&h->cell_array[i], ((char*) h->data) + i * CELL_SIZE);
+        
+        return cell_front_ptr(cell, ((char*) h->data) + i * CELL_SIZE);
+        //	return cell_front_ptr(&h->cell_array[i], ((char*) h->data) + i * CELL_SIZE);
 }
 
 void h_print_cells(heap_t* h)
