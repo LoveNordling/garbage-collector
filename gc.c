@@ -124,15 +124,19 @@ bool cell_has_space(cell_t* cell, size_t size)
 
 void* h_get_available_space(heap_t* hp, size_t size)
 {
-  for(unsigned int i = 0; i < hp->size; i++)
+  if(h_used(hp) + size > h_size(hp)/2)
+    {
+      return NULL;
+    }
+  for(unsigned int i = 0; i < (unsigned int)hp->cell_count; i++)
     {
       cell_t* cell = &hp->cell_array[i];
       if(cell_has_space(cell, size))
         {
+          cell_activate(cell);
           cell_set_front_offset(cell, cell_front_offset(cell) + size);
-          return cell;
+          return (void*)cell + cell_front_offset(cell);
         }
-      
     }
   return NULL;
 }
@@ -140,8 +144,16 @@ void* h_get_available_space(heap_t* hp, size_t size)
 void* h_alloc_struct(heap_t* h, char* layout)
 {
     //FIND AVAILABLE MEMORY LOCATION
-    void *cell_ptr = NULL;
-    return new_object(cell_ptr, layout, 0);
+  void *cell_ptr = h_get_available_space(h, format_string_parser(layout));
+  if(cell_ptr)
+    {
+      return new_object(cell_ptr, layout, 0);
+    }
+  else
+    {
+      h_gc(h);
+      return h_alloc_struct(h, layout);
+    }
 }
 
 void* h_alloc_data(heap_t* h, size_t bytes)
@@ -150,8 +162,8 @@ void* h_alloc_data(heap_t* h, size_t bytes)
     //TODO check if there is bytes available memory in current
     //cell, go to next if not
     
-    void *cell_ptr = NULL;
-    return new_object(cell_ptr, NULL, bytes);
+  void *cell_ptr = h_get_available_space(h, bytes);
+  return new_object(cell_ptr, NULL, bytes);
 }
 
 size_t h_gc(heap_t* h)

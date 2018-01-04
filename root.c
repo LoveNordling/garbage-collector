@@ -15,25 +15,24 @@ extern char** environ;
     jmp_buf env;                                \
     if(setjmp(env)) abort();                    \
 
-char* stack_get_end()
+void* stack_get_end()
 {
     return __builtin_frame_address(0);
 }
 
 
-char* stack_get_start()
-
+void* stack_get_start()
 {
 	#ifdef _WIN32
 	return STACK_START_P;
 	#else
-	return (char*)&environ;
+	return environ;
 	#endif
 }
 
 size_t stack_size()
 {
-    return stack_get_start() - stack_get_end();
+  return (uintptr_t)stack_get_start() - (uintptr_t)stack_get_end();
 }
 
 
@@ -62,8 +61,8 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 {
 	printf("traversing stack of size %lu...\n\n", stack_size());
 
-	char* sp = stack_get_end();
-	char* s_start = stack_get_start();
+	void* sp = stack_get_end();
+	void* s_start = stack_get_start();
 
 	for(int i = 0; sp < s_start; ++i)
 	{
@@ -72,7 +71,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 
 		if(is_pointer_to_heap(h, p))
 		{
-			printf("found possible pointer at address: %lu\tvalue: %lu\n", (uintptr_t) sp, (uintptr_t) p);
+			printf("found possible pointer at address: %lu\tvalue: %lu\n", (uintptr_t) sp, *(int*) p);
 
 			//TODO: (sprint 3)
 			if (is_secure_pointer(h, p, alloc_map))

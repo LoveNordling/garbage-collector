@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -ggdb -Wall
+CFLAGS = -I ../ -std=c99 -ggdb -Wall
 LDFLAGS = -lcunit
 TEST = test
 
@@ -7,11 +7,21 @@ SRC_TEST := $(wildcard *.c)
 HDR_TEST := $(wildcard *.h);
 OBJ_TEST = $(SRC_TEST:.c=.o)
 
-test:	$(OBJ_TEST)
-	$(CC) $(CFLAGS) -o $(TEST) $(OBJ_TEST) $(LDFLAGS)
+ALL_SRCS := $(wildcard ../*.c)
+SRC := $(filter-out ../main%.c, $(ALL_SRCS))
+OBJ_SRC = $(SRC:.c=.o)
+
+test:	$(OBJ_TEST) objsrc
+	$(CC) $(CFLAGS) -o $(TEST) $(OBJ_TEST) $(OBJ_SRC) $(LDFLAGS)
+
+objsrc:	
+	$(MAKE) -C ../ gc
 
 run_test: test
 	./$(TEST)
+
+debug: test
+	gdb ./$(TEST)
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) $*.c $*.h -c
@@ -24,7 +34,7 @@ valgrind: test
 
 clean:
 	rm -f $(OBJ_TEST) $(TEST) *~
-	rm -f *#
+	rm -f *#*
 	rm -f *.gch
 
 docs:
