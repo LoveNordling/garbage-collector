@@ -46,7 +46,7 @@ bool is_pointer_to_heap(heap_t* h, void* p)
 //TODO: (sprint 3)   
 bool is_secure_pointer(heap_t* h, void* p, bool* alloc_map)
 {
-	return false;
+	return true;
 }
 
 //TODO: (sprint 3)
@@ -71,7 +71,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 
 		if(is_pointer_to_heap(h, p))
 		{
-			printf("found possible pointer at address: %lu\tvalue: %lu\n", (uintptr_t) sp, *(int*) p);
+			printf("found possible pointer at address: %lu\tvalue: %lu\n", (uintptr_t) sp, *(uintptr_t*) p);
 
 			//TODO: (sprint 3)
 			if (is_secure_pointer(h, p, alloc_map))

@@ -23,6 +23,7 @@ void traverse_root(heap_t* h, void* p, uintptr_t* rp)
                 {
                   traverse_root(h, (void*)*(void**)op, (uintptr_t*)op);
                 }
+              p++;
               s++;
             }
           free(s);

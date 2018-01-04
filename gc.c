@@ -135,7 +135,7 @@ void* h_get_available_space(heap_t* hp, size_t size)
         {
           cell_activate(cell);
           cell_set_front_offset(cell, cell_front_offset(cell) + size);
-          return (void*)cell + cell_front_offset(cell);
+          return h_get_cell_front_ptr(hp, cell);
         }
     }
   return NULL;
@@ -161,14 +161,39 @@ void* h_alloc_data(heap_t* h, size_t bytes)
     //TODO check if heap got bytes bytes available
     //TODO check if there is bytes available memory in current
     //cell, go to next if not
-    
-  void *cell_ptr = h_get_available_space(h, bytes);
-  return new_object(cell_ptr, NULL, bytes);
+
+  void *cell_ptr = h_get_available_space(h, bytes + sizeof(void*));
+  if(cell_ptr)
+    {
+      return new_object(cell_ptr, NULL, bytes);
+    }
+  else
+    {
+      h_gc(h);
+      return h_alloc_data(h, bytes);
+    }
+}
+
+void h_flip_cell_states(heap_t* h)
+{
+  for(int i = 0; i < h->cell_count; i++)
+    {
+      cell_t* cell = &h->cell_array[i];
+      if(cell_is_active(cell))
+        {
+          cell_deactivate(cell);
+        }
+      else
+        {
+          cell_activate(cell);
+        }
+    }
 }
 
 size_t h_gc(heap_t* h)
 {
-	return scan_roots(h, NULL);
+  h_flip_cell_states(h);
+  return scan_roots(h, NULL);
 }
 
 size_t h_gc_dbg(heap_t* h, bool unsafe_stack)
@@ -185,7 +210,12 @@ size_t h_avail(heap_t* h)
 
 size_t h_used(heap_t* h)
 {
-	return 0;
+  int sum = 0;
+  for(int i = 0; i < h->cell_count; i++)
+    {
+      sum += cell_front_offset(&(h->cell_array[i]));
+    }
+  return sum;
 }
 
 size_t h_size(heap_t* h)
@@ -197,6 +227,8 @@ void* h_data(heap_t* h)
 {
 	return h->data;
 }
+
+
 
 cell_t* h_get_cell(heap_t* h, void* ptr)
 {
@@ -211,10 +243,12 @@ cell_t* h_get_cell(heap_t* h, void* ptr)
 
 void* h_get_cell_front_ptr(heap_t* h, cell_t* cell)
 {
+  
 	int i;
 	for (i = 0; cell != &h->cell_array[i] && i < h->cell_count; ++i);
-
-	return cell_front_ptr(&h->cell_array[i], ((char*) h->data) + i * CELL_SIZE);
+        
+        return cell_front_ptr(cell, ((char*) h->data) + i * CELL_SIZE);
+        //	return cell_front_ptr(&h->cell_array[i], ((char*) h->data) + i * CELL_SIZE);
 }
 
 void h_print_cells(heap_t* h)
