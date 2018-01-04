@@ -55,15 +55,16 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes)
 }
 
 //Modified var-name on object_t "header" to "obj_struct"
+//FRÅGA LOVE OM NEW_P PEKAR PÅ BÖRJAN AV DATAN ELLER CELLEN
 void object_copy(object_t *p, object_t *new_p)
 {
-    object_t *obj_struct = point_header(p);
-    uintptr_t obj_size = bv_size((uintptr_t)obj_struct->header);                          
+    p = point_header(p);
+    uintptr_t obj_size = bv_size(p->header);                          
   
-    uintptr_t size = sizeof(obj_struct)+obj_size;
-    memcpy(new_p, obj_struct, size);
-    obj_struct = point_object(obj_struct);
-    set_forward_address(obj_struct, new_p );
+    uintptr_t size = sizeof(p)+obj_size;
+    memcpy(point_header(new_p), p, size);
+    p = point_object(p);
+    set_forward_address(p, new_p);
  
 }
 
@@ -182,7 +183,7 @@ size_t format_string_parser(char* layout)
           }
         current++;
       }
-    return sum;
+    return sum + sizeof(object_t);
 }
 
 /*
