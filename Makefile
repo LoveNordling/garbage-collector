@@ -21,6 +21,12 @@ test:
 run_test: test
 	$(MAKE) -C tests run_test
 
+debug: gc
+	gdb ./gc
+
+debug_test: test
+	$(MAKE) -C tests debug	
+
 %.o: %.c %.h
 	$(CC) $(CFLAGS) $*.c $*.h -c
 
