@@ -166,9 +166,26 @@ void* h_alloc_data(heap_t* h, size_t bytes)
   return new_object(cell_ptr, NULL, bytes);
 }
 
+void h_flip_cell_states(heap_t* h)
+{
+  for(int i = 0; i < h->cell_count; i++)
+    {
+      cell_t* cell = &h->cell_array[i];
+      if(cell_is_active(cell))
+        {
+          cell_activate(cell);
+        }
+      else
+        {
+          cell_deactivate(cell);
+        }
+    }
+}
+
 size_t h_gc(heap_t* h)
 {
-	return scan_roots(h, NULL);
+  h_flip_cell_states(h);
+  return scan_roots(h, NULL);
 }
 
 size_t h_gc_dbg(heap_t* h, bool unsafe_stack)
@@ -202,6 +219,8 @@ void* h_data(heap_t* h)
 {
 	return h->data;
 }
+
+
 
 cell_t* h_get_cell(heap_t* h, void* ptr)
 {

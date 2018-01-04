@@ -46,7 +46,7 @@ bool is_pointer_to_heap(heap_t* h, void* p)
 //TODO: (sprint 3)   
 bool is_secure_pointer(heap_t* h, void* p, bool* alloc_map)
 {
-	return false;
+	return true;
 }
 
 //TODO: (sprint 3)

@@ -36,6 +36,9 @@ int main(int argc, char** argv)
         *(obj->y) = 2;
         h_gc(h);
         printf("x = %i, y = %i \n", *(obj->x), *(obj->y));
+        int* z = (int*)h_alloc_struct(h, "i");
+        z = obj->x;
+        printf("\nZ=%d\n", *z);
         obj = NULL;
         size_t bytes = h_gc(h);
         printf("released %lu bytes \n", bytes);
