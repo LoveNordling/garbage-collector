@@ -2,37 +2,43 @@
 #include <CUnit/Basic.h>
 #include <stdlib.h>
 #include <math.h>
-
 #include <CUnit/CUnit.h>
 #include <string.h>
-#include "test_memorymap.h"
 #include <string.h>
-
+#include "test_root.h"
+#include "test_bits.h"
+#include "test_object.h"
 //Import your test functions here
 
 
 void test_test() //This function should be placed in another file.
 {
   
-
-    CU_ASSERT_EQUAL(strcmp("hej", "hej"), 0);
+  CU_ASSERT_EQUAL(strcmp("hej", "hej"), 0);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   
-    CU_initialize_registry(); //Boilerplate
+  CU_initialize_registry(); //Boilerplate
 
   //New test suit begins
-    CU_pSuite tests = CU_add_suite("Unit tests sample", NULL, NULL); //Creats a bundle of tests (test suit) called tests.
-    CU_add_test(tests, "First unit test", test_test); // Adds a test to tests
-
+  CU_pSuite tests = CU_add_suite("Unit tests sample", NULL, NULL); //Creats a bundle of tests (test suit) called tests.
+  
+  CU_add_test(tests, "First unit test", test_test); // Adds a test to tests
+  CU_add_test(tests, "testing safe pointer check", test_is_pointer_to_heap);
+  // CU_add_test(tests, "Testing layout or sizenumber", test_layout_sizenumber);
+  CU_add_test(tests, "Testing bv or layout", test_new_bv_layout);
+  CU_add_test(tests, "Testing bv_size", test_new_bv_size);
+  CU_add_test(tests, "Testing new_object", test_new_object);
+  CU_add_test(tests, "Testing object_copy", test_object_copy);
+  CU_add_test(tests, "Testing object_is_copied", test_object_is_copied);
+  CU_add_test(tests, "Testing set_forwarding_address", test_set_forwarding_address);
+  CU_add_test(tests, "Testing get_forwarding_address", test_get_forwarding_address);
+  CU_add_test(tests, "Testing get_object_size", test_get_object_size);
+  CU_add_test(tests, "Testing get_object_size_layout", test_get_object_size_layout);
+  CU_add_test(tests, "Testing format_string_parser", test_format_string_parser);
   //Add your test suits and unit tests here.
   //The test functions should be placed in separate file the best thing would be one per module. Each module can have a seperate test suit to ease debugging.
-
-    CU_pSuite memmap = CU_add_suite("Testing memmap", NULL, NULL);
-    CU_add_test(memmap, "", test_memorymap);
   
-
-  
-    CU_basic_run_tests();//Run the tests
+  CU_basic_run_tests();//Run the tests
 }
