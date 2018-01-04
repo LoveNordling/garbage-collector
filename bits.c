@@ -1,7 +1,3 @@
-#define _GNU_SOURCE
-//needed because of strdup and std=c99
-//Solution found at: https://gist.github.com/emilisto/9620134
-
 #include "bits.h"
 #include <stdio.h>
 
@@ -99,11 +95,9 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
 
     //MSB shall be 1 if bv is a layout
     bv = set_msb(bv,1);
-    print_bits(bv);
 
     //Return it with lsbs set to 11 since it's a bitvector.
     bv = set_lsbs(bv, 3);
-    print_bits(bv);
     return bv;
 }
 
@@ -138,17 +132,13 @@ uintptr_t bv_size(uintptr_t bv)
 
 //Function to create a simplified format-str from a bv
 //1 = pointer, 0 = non-pointer
+//* = pointer, r = non-pointer
 char *bv_to_str(uintptr_t bv)
 {
 
     if(get_msb(bv) == 1)
     {
-        uintptr_t size = bv_size(bv);
         int layout_bits = bv_size(bv) / PTR_SIZE; //TODO
-
-        int sol = size / PTR_SIZE;
-
-        printf("size: %lu, sol: %d\n", size, sol);
         
         char* str = calloc(layout_bits + 1, sizeof(char));
         uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 2);
@@ -211,21 +201,22 @@ uintptr_t set_bit(uintptr_t num, int bit_index, int bit)
 uintptr_t set_lsbs(uintptr_t pointer, size_t bits)
 {
   uintptr_t ptr = lsbs_to_zero(pointer);
-  return ptr ^ bits;
+  return ptr | bits;
 }
 
 //returns the value of the last two bits in a pointer
 int get_lsbs(uintptr_t pointer)
 {
+    
     if((pointer & (size_t)3) == (size_t)0) // 
     {
         return 0;
     }
-  else if((pointer & (size_t)2) == (size_t)1)
+  else if((pointer & (size_t)3) == (size_t)1)
     {
         return 1;
     }
-  else if((pointer & (size_t)1) == (size_t)2)
+  else if((pointer & (size_t)3) == (size_t)2)
     {
         return 2;
     }
