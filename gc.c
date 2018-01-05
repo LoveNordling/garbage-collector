@@ -193,8 +193,10 @@ void h_flip_cell_states(heap_t* h)
 
 size_t h_gc(heap_t* h)
 {
+  size_t uses = h_used(h);
   h_flip_cell_states(h);
-  return scan_roots(h, NULL);
+  scan_roots(h, NULL);
+  return uses - h_used(h);
 }
 
 size_t h_gc_dbg(heap_t* h, bool unsafe_stack)

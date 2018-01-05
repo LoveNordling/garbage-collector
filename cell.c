@@ -32,7 +32,6 @@ void cell_activate(cell_t* c)
 void cell_deactivate(cell_t* c)
 {
 	c->is_active = false;
-        c->front_offset = 0;
 }
 
 void cell_set_front_offset(cell_t* c, unsigned short fo)
