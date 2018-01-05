@@ -16,7 +16,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-
+#include <stdint.h>
 /**
  * @brief Contains the header to the object that is placed in the allocated memory.
  *
@@ -105,4 +105,6 @@ char* get_format_string(void *obj);
  */
 size_t format_string_parser(char* layout);
 
+
+uintptr_t get_header(void* obj);
 #endif /* OBJECT_H */

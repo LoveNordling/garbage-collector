@@ -3,7 +3,7 @@
 
 #include "compact.h"
 #include "object.h"
-
+#include "bits.h"
 //TODO: traverse the heap starting from a root (sprint 3)
 
 size_t traverse_root(heap_t* h, void* p, uintptr_t* rp)
@@ -17,18 +17,20 @@ size_t traverse_root(heap_t* h, void* p, uintptr_t* rp)
         {
           char* op = p;
           char* s = get_format_string(p);
+          char* counter = s;
           freed_memory += get_object_size(p);
-          while(*s)
+          while(*counter)
             {
-              if(*s == '*')
+              if(*counter == '*')
                 {
                   freed_memory += traverse_root(h, (void*)*(void**)op, (uintptr_t*)op);
                 }
               p++;
-              s++;
+              counter++;
             }
-          free(s);
+          
           new_object = h_alloc_struct(h, s);
+          free(s);
         }
       else
         {
