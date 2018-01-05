@@ -19,7 +19,7 @@ struct object {
 //- comment made by dog, slamming her head on my keyboard
 
 //Get pointer from the object struct/header to the "object" aka the actual data.
-#define point_object(p) (((object_t *)p) + 1) 
+#define point_object(p) (((void *)p) + sizeof(object_t)) 
 
 //Get pointer from the actual data/the pointer the user handles to the actual object struct.
 #define point_header(p) (((void *)p) - sizeof(object_t))
@@ -50,7 +50,7 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes)
     {
         object->header = new_bv_size(bytes);
     }
- 
+
     return point_object(object);
 }
 
@@ -58,9 +58,8 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes)
 void object_copy(object_t *p, object_t *new_p)
 {
     object_t *obj_struct = point_header(p);
-    uintptr_t obj_size = bv_size((uintptr_t)obj_struct->header);                          
-  
-    uintptr_t size = sizeof(obj_struct)+obj_size;
+    uintptr_t size = bv_size(obj_struct->header);
+    
     memcpy(new_p, obj_struct, size);
     obj_struct = point_object(obj_struct);
     set_forward_address(obj_struct, new_p );
@@ -71,7 +70,8 @@ void object_copy(object_t *p, object_t *new_p)
 bool object_is_copied(void *p)
 {
     object_t *obj = point_header(p);
-    return(get_lsbs(obj->header) == 2);
+    uintptr_t res = get_lsbs(obj->header);
+    return res == 2;
 }
 
 void set_forward_address(object_t *current, void *address)
@@ -96,7 +96,7 @@ void* get_forward_address(object_t* object){
 //aka the data-part the user has access to. 
 size_t get_object_size(void *obj){
     object_t *object = point_header(obj);
-    return bv_size(object->header);
+    return bv_size(object->header) - sizeof(object_t);
 }
 
 //DO WE NEED THIS?
