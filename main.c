@@ -28,8 +28,8 @@ int main(int argc, char** argv)
 	puts("unix");
 	#endif
         heap_t* h = h_init(1000000, false, 0.5f);
-        test_t* obj = (test_t*)h_alloc_struct(h, "**r");
-        h_print_cells(h);
+        test_t* obj = (test_t*)h_alloc_struct(h, "**i");
+        // h_print_cells(h);
         
         obj->x = (int*)h_alloc_struct(h, "i");
         obj->y = (int*)h_alloc_struct(h, "i");

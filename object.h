@@ -16,6 +16,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdint.h>
 
 /**
  * @brief Contains the header to the object that is placed in the allocated memory.
@@ -91,6 +92,8 @@ void* get_forward_address(object_t *current);
  */
 size_t get_object_size(void *obj);
 
+size_t get_header_size();
+
 //COMMENTS NEEDED
 bool object_is_layout(void *obj);
 
@@ -104,5 +107,7 @@ char* get_format_string(void *obj);
  * @return  unsigned int with the size required for the object.
  */
 size_t format_string_parser(char* layout);
+
+uintptr_t get_header(void *ptr);
 
 #endif /* OBJECT_H */

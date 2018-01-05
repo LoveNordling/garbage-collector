@@ -11,6 +11,7 @@
 void* STACK_START_P;
 #endif
 #include "cell.h"
+#include "bits.h"
 
 typedef struct heap
 {
@@ -145,10 +146,11 @@ void* h_get_available_space(heap_t* hp, size_t size)
 void* h_alloc_struct(heap_t* h, char* layout)
 {
     //FIND AVAILABLE MEMORY LOCATION
-  void *cell_ptr = h_get_available_space(h, format_string_parser(layout));
+    size_t bytes = format_string_parser(layout);
+    void *cell_ptr = h_get_available_space(h, bytes + get_header_size());
   if(cell_ptr)
     {
-      return new_object(cell_ptr, layout, 0);
+      return new_object(cell_ptr, layout, bytes);
     }
   else
     {
@@ -161,9 +163,8 @@ void* h_alloc_data(heap_t* h, size_t bytes)
 {
     //TODO check if heap got bytes bytes available
     //TODO check if there is bytes available memory in current
-    //cell, go to next if not
-
-  void *cell_ptr = h_get_available_space(h, bytes + sizeof(void*));
+    //cell, go to next if not;
+    void *cell_ptr = h_get_available_space(h, bytes + get_header_size());
   if(cell_ptr)
     {
       return new_object(cell_ptr, NULL, bytes);

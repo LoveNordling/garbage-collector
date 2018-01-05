@@ -50,10 +50,16 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
     char *current = layout;
     int index = SYS_BIT- SIZE_BIT_LENGTH- 2;
     uintptr_t bv = bytes;
+    printf("header of bytes in new_bv: ");
+    print_bits(bv);
     
     //Shift it left so the second msb is the start of bv_size.
     
     bv = bv << (SYS_BIT - SIZE_BIT_LENGTH - 1);
+    printf("bv after shifting in new_bv: ");
+    print_bits(bv);
+
+    printf("layout-str = %s\n", layout);
 
     while(*current && index > 0)
     {
@@ -93,8 +99,14 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
         current++;
     }
 
+    printf("bv after setting bits in new_bv: ");
+    print_bits(bv);
+
     //MSB shall be 1 if bv is a layout
     bv = set_msb(bv,1);
+
+    printf("bv after setting msb in new_bv: ");
+    print_bits(bv);
 
     //Return it with lsbs set to 11 since it's a bitvector.
     bv = set_lsbs(bv, 3);
