@@ -63,7 +63,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 
 	void* sp = stack_get_end();
 	void* s_start = stack_get_start();
-
+        size_t freed_memory = 0;
 	for(int i = 0; sp < s_start; ++i)
 	{
 		sp += sizeof(uintptr_t);
@@ -76,7 +76,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 			//TODO: (sprint 3)
 			if (is_secure_pointer(h, p, alloc_map))
 			{
-				traverse_root(h, p, (uintptr_t*) sp);
+				freed_memory += traverse_root(h, p, (uintptr_t*) sp);
 			}
 			else
 			{
@@ -85,7 +85,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 		}
 	}
 
-	return 0;
+	return freed_memory;
 }
 
 size_t scan_roots(heap_t* h, bool* alloc_map)

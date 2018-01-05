@@ -134,8 +134,9 @@ void* h_get_available_space(heap_t* hp, size_t size)
       if(cell_has_space(cell, size))
         {
           cell_activate(cell);
+          void* object_pointer = h_get_cell_front_ptr(hp, cell);
           cell_set_front_offset(cell, cell_front_offset(cell) + size);
-          return h_get_cell_front_ptr(hp, cell);
+          return object_pointer;
         }
     }
   return NULL;
