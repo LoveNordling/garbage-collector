@@ -6,24 +6,22 @@
 
 struct memorymap {
     void* start_of_heap;
-    int heap_size;
-    int min_allocsize;
+    int memoryslots;
     bool* mem_array;
 };
 
 
-memorymap_t* memorymap_new(void* start_of_heap, int heap_size, int min_allocsize)
+memorymap_t* memorymap_new(void* start_of_heap, int memoryslots, void* adress)
 {
 
-    memorymap_t* mem = (memorymap_t*) malloc(sizeof(memorymap_t));
+    memorymap_t* mem = adress;//(memorymap_t*) malloc(sizeof(memorymap_t));
     mem -> start_of_heap = start_of_heap;
-    mem -> heap_size = heap_size;
-    mem -> min_allocsize = min_allocsize;
-    mem -> mem_array = malloc(sizeof(bool)* (heap_size/min_allocsize));//arrays are weird please fix if you know how they work ^_^
-
+    mem -> memoryslots = memoryslots;
+    mem -> mem_array = adress + sizeof(memorymap_t);//malloc(sizeof(bool)* (heap_size/min_allocsize));
+    //adress = adress + memoryslots;
     bool * bool_array;
  
-    for(int i = 0; i != (heap_size/min_allocsize); i++)
+    for(int i = 0; i != memoryslots; i++)
       {
           bool_array = (mem -> mem_array) + i;
           *bool_array = false;

@@ -10,7 +10,7 @@ typedef struct memorymap memorymap_t;
 /// \param heap_size used to determine how big of a stack we are representing.
 /// \param min_alloc_size the lowest amount of memory a user is allowed to allocate. heap_size/min_allocsize = number of bools needed to represent the memory
 /// \returns: a memorymap containing a bool for each possible allocation in the heap.
-memorymap_t* memorymap_new(void* start_of_heap, int heap_size, int min_allocsize);
+memorymap_t* memorymap_new(void* start_of_heap, int memoryslots, void* adress);
 
 /// Used to check if space is empty on stack
 ///

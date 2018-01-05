@@ -3,6 +3,7 @@
 #include <malloc.h>
 #include <math.h>
 #include "root.h"
+#include "memorymap.h"
 #ifdef _WIN32
 #include <windows.h>
 void* STACK_START_P;
@@ -13,6 +14,7 @@ typedef struct heap
     bool unsafe_stack;
     float gc_threshold;
     size_t size;
+    memorymap_t* mem;
     void* data;
 } heap_t;
 
@@ -73,9 +75,14 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
     hp->gc_threshold = gc_threshold;
     hp->size = bytes;
 
+    //init memorymap
+    int memoryslots = bytes/4;
+    void * memorypointer = p + sizeof(heap_t);
+    hp -> mem = memorymap_new(memorypointer + memoryslots,memoryslots ,memorypointer);
+    
     //set data pointer
-    char* bp = p;
-    hp->data = bp + sizeof(heap_t);
+
+    hp->data = memorypointer + memoryslots;
 
     printf("allocated %lu bytes of memory at: %p\n", bytes, hp);
 
@@ -109,7 +116,7 @@ void* h_alloc_data(heap_t* h, size_t bytes)
 
 size_t h_gc(heap_t* h)
 {
-    return scan_roots(h, NULL);
+    return scan_roots(h, h -> mem);
 }
 
 size_t h_gc_dbg(heap_t* h, bool unsafe_stack)

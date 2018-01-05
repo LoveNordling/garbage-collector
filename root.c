@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <setjmp.h>
 #include "root.h"
+#include "memorymap.h"
 
 #ifdef _WIN32
 extern void* STACK_START_P;
@@ -38,9 +39,10 @@ bool is_pointer_to_heap(heap_t* h, int* p)
 
 //these three functions should perhaps be moved to another source file
 //TODO: (sprint 3)   
-bool is_secure_pointer(heap_t* h, int* p, bool* alloc_map)
+bool is_secure_pointer(heap_t* h, int* p, memorymap_t* alloc_map)
 {
-	return false;
+    //return memorymap_adress_is_taken(alloc_map, p);
+    return false;
 }
 
 //TODO: (sprint 3)
@@ -55,7 +57,7 @@ void traverse_root(heap_t* h, int** p)
 	
 }
 
-size_t scan_stack(heap_t* h, bool* alloc_map)
+size_t scan_stack(heap_t* h, memorymap_t* alloc_map)
 {
 	printf("traversing stack of size %d...\n\n", stack_size());
 
@@ -85,7 +87,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 	return 0;
 }
 
-size_t scan_roots(heap_t* h, bool* alloc_map)
+size_t scan_roots(heap_t* h, memorymap_t* alloc_map)
 {
 	size_t freed_memory = 0;
 
