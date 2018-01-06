@@ -129,6 +129,19 @@ void* h_get_available_space(heap_t* hp, size_t size)
     {
       return NULL;
     }
+
+  for(unsigned int i = 0; i < (unsigned int)hp->cell_count; i++)
+    {
+      cell_t* cell = &hp->cell_array[i];
+      if(cell_has_space(cell, size) && cell_is_active(cell))
+        {
+          cell_activate(cell);
+          void* object_pointer = h_get_cell_front_ptr(hp, cell);
+          cell_set_front_offset(cell, cell_front_offset(cell) + size);
+          return object_pointer;
+        }
+    }
+  
   for(unsigned int i = 0; i < (unsigned int)hp->cell_count; i++)
     {
       cell_t* cell = &hp->cell_array[i];
