@@ -160,7 +160,7 @@ void* h_alloc_struct(heap_t* h, char* layout)
   void *cell_ptr = h_get_available_space(h, bytes);
   if(cell_ptr)
     {
-      return new_object(cell_ptr, layout, bytes);
+      return new_object(cell_ptr, layout, 0);
     }
   else
     {
