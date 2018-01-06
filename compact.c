@@ -16,7 +16,7 @@ size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer)
       void* new_object;
       if(object_is_layout(object_pointer))
         {
-          uintptr_t* traverse_pointer = heap_pointer;
+          void* traverse_pointer = object_pointer;
           char* s = get_format_string(object_pointer);
           char *counter = s;
           freed_memory += get_object_size(object_pointer);
@@ -24,9 +24,12 @@ size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer)
             {
               if(*counter == '*')
                 {
-                    freed_memory += traverse_root(h, *(void**)traverse_pointer, traverse_pointer);
+                    
+                    freed_memory += traverse_root(h,(void*)*(void**)traverse_pointer,
+                                                 (uintptr_t*)traverse_pointer);
+                   
                 }
-              traverse_pointer++;
+              traverse_pointer+=sizeof(uintptr_t);
               counter++;
             }
           new_object = h_alloc_struct(h, s);
