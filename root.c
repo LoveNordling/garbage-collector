@@ -67,7 +67,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 	for(int i = 0; sp < s_start; ++i)
 	{
 		sp += sizeof(uintptr_t);
-		void* p = (void*) *(uintptr_t*) sp;
+		void* p = (void *)*(uintptr_t*) sp;
 
 		if(is_pointer_to_heap(h, p))
 		{
