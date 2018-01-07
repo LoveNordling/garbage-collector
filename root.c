@@ -38,15 +38,15 @@ size_t stack_size()
 
 bool is_pointer_to_heap(heap_t* h, void* p)
 {
-	return p >= (void*)h_data(h) && (char*)p <= ((char*)h_data(h)) + h_size(h);
+    return p >= (void*)h_data(h) && (char*)p <= ((char*)h_data(h)) + h_size(h);
 }
 
 
 //these three functions should perhaps be moved to another source file
 //TODO: (sprint 3)   
-bool is_secure_pointer(heap_t* h, void* p, bool* alloc_map)
+bool is_secure_pointer(heap_t* h, void* p, memorymap_t* alloc_map)
 {
-	return true;
+    return memorymap_adress_is_taken(alloc_map, p);
 }
 
 //TODO: (sprint 3)
@@ -57,7 +57,7 @@ void deactivate_cell(heap_t* h, void* p)
 
 
 
-size_t scan_stack(heap_t* h, bool* alloc_map)
+size_t scan_stack(heap_t* h, memorymap_t* alloc_map)
 {
 	printf("traversing stack of size %lu...\n\n", stack_size());
 
@@ -77,7 +77,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 			//TODO: (sprint 3)
 			if (is_secure_pointer(h, p, alloc_map))
 			{
-				freed_memory += traverse_root(h, p, (uintptr_t*) sp);
+                            freed_memory += traverse_root(h, p, (uintptr_t*) sp, alloc_map);
 			}
 			else
 			{
@@ -89,7 +89,7 @@ size_t scan_stack(heap_t* h, bool* alloc_map)
 	return freed_memory;
 }
 
-size_t scan_roots(heap_t* h, bool* alloc_map)
+size_t scan_roots(heap_t* h, memorymap_t* alloc_map)
 {
     size_t freed_memory = 0;
 
