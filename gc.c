@@ -231,8 +231,6 @@ void* h_data(heap_t* h)
 	return h->data;
 }
 
-
-
 cell_t* h_get_cell(heap_t* h, void* ptr)
 {
 	char* start = (char*) h->data;
@@ -246,12 +244,10 @@ cell_t* h_get_cell(heap_t* h, void* ptr)
 
 void* h_get_cell_front_ptr(heap_t* h, cell_t* cell)
 {
-  
 	int i;
 	for (i = 0; cell != &h->cell_array[i] && i < h->cell_count; ++i);
-        
-        return cell_front_ptr(cell, ((char*) h->data) + i * CELL_SIZE);
-        //	return cell_front_ptr(&h->cell_array[i], ((char*) h->data) + i * CELL_SIZE);
+
+	return cell_front_ptr(cell, ((char*) h->data) + i * CELL_SIZE);
 }
 
 void h_print_cells(heap_t* h)
@@ -261,8 +257,7 @@ void h_print_cells(heap_t* h)
 	for (int i = 0; i < h->cell_count; ++i)
 	{
 		printf("cell: %d \tregion: %d-%d\t", i, i * CELL_SIZE + ((char*)h->data-(char*)h), (i+1) * CELL_SIZE + ((char*)h->data-(char*)h));
-		printf("state: %s \t", cell_is_active(&h->cell_array[i])?"active":"passive");
+		printf("state: %s \t", cell_is_active(&h->cell_array[i]) ? "active" : "passive");
 		printf("bump ptr: %u.%u\n", h_get_cell_front_ptr(h, &h->cell_array[i]), cell_front_offset(&h->cell_array[i]));
 	}
 }
-
