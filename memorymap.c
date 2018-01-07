@@ -59,6 +59,12 @@ void memorymap_delete(memorymap_t *mem)
     free(mem); 
 }
 
+void memorymap_set_startofheap(memorymap_t* mem, void* adress)
+{
+    mem -> start_of_heap = adress;
+    return;
+}
+    
 void memorymap_print(memorymap_t *mem){
     int min_allocsize = mem -> min_allocsize;
     int heap_size = mem->heap_size;
