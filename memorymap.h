@@ -29,5 +29,11 @@ bool memorymap_adress_is_taken(memorymap_t* mem, void* adress);
 /// \returns: True if adress is taken
 void memorymap_adreess_change(memorymap_t* mem, void* adress, int size);
 
+/// Sets the start of heap to adress
+///
+/// \param mem the memorymap to be changed
+/// \param adress the adress that we are changing to
+void memorymap_set_startofheap(memorymap_t* mem, void* adress);
+
 void memorymap_print(memorymap_t* mem);
 #endif
