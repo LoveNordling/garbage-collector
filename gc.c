@@ -1,6 +1,7 @@
 #include "gc.h"
 
 #include "gc_utils.h"
+#include "memorymap.h"
 #include <stdio.h>
 #include <malloc.h>
 #include <math.h>
@@ -20,6 +21,7 @@ typedef struct heap
 	size_t size;
 	void* data;
 	cell_t* cell_array;
+        memorymap_t* mem;
 	int cell_count;
 } heap_t;
 
@@ -58,7 +60,7 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	//allocate memory for heap and its metadata
 	void* p = NULL;
 	int result = 0;
-        
+        size_t heap_offset;
 	#ifdef _WIN32
 	p = __mingw_aligned_malloc(bytes, pow(2, 16));
 	#else
@@ -79,25 +81,30 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	hp->unsafe_stack = unsafe_stack;
 	hp->gc_threshold = gc_threshold;
 
-	hp->size = bytes;
+	hp->size = (bytes-memorymap_size())*CELL_SIZE*sizeof(uintptr_t)/(CELL_SIZE*sizeof(uintptr_t) + sizeof(uintptr_t)+ CELL_SIZE);//Must change if bit vectors are used
 
-
+        heap_offset = sizeof(heap_t);
 	//set data pointer
-	char* bp = p;
-	hp->data = (void*) (bp + sizeof(heap_t));
+	hp->data = (void*)hp + sizeof(heap_t);
 
+        //Initialise memmap
+        hp -> mem = memorymap_new(NULL, ((hp -> size) /8), hp -> data);
+        size_t mem_size  = hp->size/sizeof(uintptr_t) + memorymap_size();
+        hp -> data += mem_size;
+        heap_offset += mem_size;
+        //1 cell struct per 2k bytes 16 byt
 	//initialize cell array
-	hp->cell_count = (hp->size - sizeof(heap_t)) / (CELL_SIZE + sizeof(cell_t));
-	hp->cell_array = (cell_t*) hp->data;
+	hp->cell_count = hp->size/CELL_SIZE;
+	hp->cell_array = hp->data;
 	for (int i = 0; i < hp->cell_count; ++i)
 	{
 		cell_initialize(&hp->cell_array[i]);
 	}
 
 	//move data pointer forward
-	bp = hp->data;
-	hp->data = (void*) (bp + hp->cell_count * sizeof(cell_t));
+	hp->data += hp->cell_count * sizeof(cell_t);
 
+        memorymap_set_startofheap(hp -> mem, hp -> data);
 	printf("allocated %lu bytes of memory at: %p\n", bytes, hp);
 
 	return hp;
@@ -163,7 +170,8 @@ void* h_alloc_struct(heap_t* h, char* layout)
     void *cell_ptr = h_get_available_space(h, bytes + get_header_size());
   if(cell_ptr)
     {
-      return new_object(cell_ptr, layout, bytes);
+        //memorymap_adress_change(h->mem, cell_ptr);
+        return new_object(cell_ptr, layout, bytes);
     }
   else
     {
@@ -180,7 +188,8 @@ void* h_alloc_data(heap_t* h, size_t bytes)
     void *cell_ptr = h_get_available_space(h, bytes + get_header_size());
   if(cell_ptr)
     {
-      return new_object(cell_ptr, NULL, bytes);
+        //memorymap_adress_change(h->mem, cell_ptr);
+        return new_object(cell_ptr, NULL, bytes);
     }
   else
     {
@@ -209,7 +218,7 @@ size_t h_gc(heap_t* h)
 {
   size_t uses = h_used(h);
   h_flip_cell_states(h);
-  scan_roots(h, NULL);
+  scan_roots(h, h->mem);
   return uses - h_used(h);
 }
 
