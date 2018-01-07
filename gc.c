@@ -134,8 +134,9 @@ void* h_get_available_space(heap_t* hp, size_t size)
       if(cell_has_space(cell, size))
         {
           cell_activate(cell);
+          void* object_pointer = h_get_cell_front_ptr(hp, cell);
           cell_set_front_offset(cell, cell_front_offset(cell) + size);
-          return h_get_cell_front_ptr(hp, cell);
+          return object_pointer;
         }
     }
   return NULL;
@@ -181,7 +182,7 @@ void h_flip_cell_states(heap_t* h)
       cell_t* cell = &h->cell_array[i];
       if(cell_is_active(cell))
         {
-          cell_deactivate(cell);
+          cell_initialize(cell);
         }
       else
         {
@@ -192,8 +193,10 @@ void h_flip_cell_states(heap_t* h)
 
 size_t h_gc(heap_t* h)
 {
+  size_t uses = h_used(h);
   h_flip_cell_states(h);
-  return scan_roots(h, NULL);
+  scan_roots(h, NULL);
+  return uses - h_used(h);
 }
 
 size_t h_gc_dbg(heap_t* h, bool unsafe_stack)
