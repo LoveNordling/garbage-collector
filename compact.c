@@ -7,6 +7,7 @@
 
 //TODO: traverse the heap starting from a root (sprint 3)
 
+
 size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer, memorymap_t* alloc_map)
 {
   
@@ -23,17 +24,19 @@ size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer, m
           freed_memory += get_object_size(object_pointer);
 
           while(*counter)
+
             {
               if(*counter == '*')
                 {
                     
-                    freed_memory += traverse_root(h,(void*)*(void**)traverse_pointer,
-                                                  (uintptr_t*)traverse_pointer, alloc_map);
+                  freed_memory += traverse_root(h,(void*)*(void**)traverse_pointer,
+                                                (uintptr_t*)traverse_pointer, alloc_map);
                    
                 }
 
               traverse_pointer+=sizeof(uintptr_t);
               counter++;
+
             }
           new_object = h_alloc_struct(h, s);
           free(s);
