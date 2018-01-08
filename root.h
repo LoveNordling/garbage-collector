@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 #include "gc.h"
-
+#include "memorymap.h"
 #include "stdint.h"
 
 /// Scan the roots of the program and perform a garbage collection
@@ -15,7 +15,7 @@
 /// \param h the heap
 /// \param alloc_map the allocation alloc_map
 /// \return the number of bytes collected
-size_t scan_roots(heap_t* h, bool* alloc_map);
+size_t scan_roots(heap_t* h, memorymap_t* alloc_map);
 
 size_t stack_size();
 

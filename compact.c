@@ -7,7 +7,7 @@
 
 //TODO: traverse the heap starting from a root (sprint 3)
 
-size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer)
+size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer, memorymap_t* alloc_map)
 {
   
   size_t freed_memory = 0;
@@ -28,7 +28,7 @@ size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer)
                 {
                     
                     freed_memory += traverse_root(h,(void*)*(void**)traverse_pointer,
-                                                 (uintptr_t*)traverse_pointer);
+                                                  (uintptr_t*)traverse_pointer, alloc_map);
                    
                 }
 
@@ -44,6 +44,7 @@ size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer)
           freed_memory += size;
           new_object = h_alloc_data(h, size);
         }
+      memorymap_adress_change(alloc_map, object_pointer);
       object_copy(object_pointer, new_object);
       set_forward_address(object_pointer, new_object);
     }
