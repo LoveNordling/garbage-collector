@@ -11,6 +11,7 @@
 void* STACK_START_P;
 #endif
 #include "cell.h"
+#include "bits.h"
 
 typedef struct heap
 {
@@ -128,6 +129,19 @@ void* h_get_available_space(heap_t* hp, size_t size)
     {
       return NULL;
     }
+
+  for(unsigned int i = 0; i < (unsigned int)hp->cell_count; i++)
+    {
+      cell_t* cell = &hp->cell_array[i];
+      if(cell_has_space(cell, size) && cell_is_active(cell))
+        {
+          cell_activate(cell);
+          void* object_pointer = h_get_cell_front_ptr(hp, cell);
+          cell_set_front_offset(cell, cell_front_offset(cell) + size);
+          return object_pointer;
+        }
+    }
+  
   for(unsigned int i = 0; i < (unsigned int)hp->cell_count; i++)
     {
       cell_t* cell = &hp->cell_array[i];
@@ -155,12 +169,12 @@ void* h_get_available_space(heap_t* hp, size_t size)
 
 void* h_alloc_struct(heap_t* h, char* layout)
 {
-  size_t bytes = format_string_parser(layout);
-    //FIND AVAILABLE MEMORY LOCATION
-  void *cell_ptr = h_get_available_space(h, bytes);
+
+    size_t bytes = format_string_parser(layout);
+    void *cell_ptr = h_get_available_space(h, bytes + get_header_size());
   if(cell_ptr)
     {
-      return new_object(cell_ptr, layout, 0);
+      return new_object(cell_ptr, layout, bytes);
     }
   else
     {
@@ -173,9 +187,8 @@ void* h_alloc_data(heap_t* h, size_t bytes)
 {
     //TODO check if heap got bytes bytes available
     //TODO check if there is bytes available memory in current
-    //cell, go to next if not
-
-  void *cell_ptr = h_get_available_space(h, bytes + sizeof(void*));
+    //cell, go to next if not;
+    void *cell_ptr = h_get_available_space(h, bytes + get_header_size());
   if(cell_ptr)
     {
       return new_object(cell_ptr, NULL, bytes);

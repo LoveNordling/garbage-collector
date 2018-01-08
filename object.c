@@ -36,10 +36,12 @@ const size_t MAX_OBJECT_SIZE = 240;//(SYS_BIT - SIZE_BIT_LENGTH - 3) * PTR_SIZE;
 *****************************************************************************
 */
 
+//får alltid in obj size
 void* new_object(void* memory_ptr, void* layout, size_t bytes)
 {
 
   object_t *object = memory_ptr;
+ //vi får in obj EXKL header storlek
 
     //IF layout is not NULL the function is called from h_alloc_struct
     if(layout != NULL)
@@ -60,11 +62,11 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes)
 void object_copy(object_t *p, object_t *new_p)
 {
     object_t *obj_struct = point_header(p);
-    uintptr_t size = bv_size(obj_struct->header);
+    uintptr_t size = bv_size(obj_struct->header) + get_header_size();
     
-    memcpy(new_p, obj_struct, size);
+    memcpy(point_header(new_p), obj_struct, size);
     obj_struct = point_object(obj_struct);
-    set_forward_address(obj_struct, new_p );
+    set_forward_address(obj_struct, new_p);
  
 }
 
@@ -99,8 +101,11 @@ void* get_forward_address(object_t* object){
 size_t get_object_size(void *obj){
     object_t *object = point_header(obj);
 
-    return bv_size(object->header) - sizeof(object_t);
+    return bv_size(object->header);
+}
 
+size_t get_header_size(){
+    return sizeof(object_t);
 }
 
 //DO WE NEED THIS?
@@ -186,7 +191,7 @@ size_t format_string_parser(char* layout)
           }
         current++;
       }
-    return sum + sizeof(object_t);
+    return sum;
 }
 
 /*
