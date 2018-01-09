@@ -10,14 +10,14 @@ struct memorymap {
     bool* mem_array;
 };
 
-memorymap_t* memorymap_new(void* start_of_heap, int memoryslots, void* adress)
+memorymap_t* memorymap_new(void* start_of_heap, int memoryslots, void* address)
 {
 
-    memorymap_t* mem = adress;//(memorymap_t*) malloc(sizeof(memorymap_t));
+    memorymap_t* mem = address;//(memorymap_t*) malloc(sizeof(memorymap_t));
     mem -> start_of_heap = start_of_heap;
     mem -> memoryslots = memoryslots;
-    mem -> mem_array = adress + sizeof(memorymap_t);//malloc(sizeof(bool)* (heap_size/min_allocsize));
-    //adress = adress + memoryslots;
+    mem -> mem_array = address + sizeof(memorymap_t);//malloc(sizeof(bool)* (heap_size/min_allocsize));
+    //address = address + memoryslots;
     bool * bool_array;
  
     for(int i = 0; i != memoryslots; 
@@ -29,16 +29,16 @@ memorymap_t* memorymap_new(void* start_of_heap, int memoryslots, void* adress)
   
 }
 
-bool memorymap_adress_is_taken(memorymap_t* mem, void* adress)
+bool memorymap_address_is_taken(memorymap_t* mem, void* address)
 {
-    int offset = adress - mem -> start_of_heap;
+    int offset = address - mem -> start_of_heap;
     return mem-> mem_array[offset];
 }
 
-void memorymap_adress_change(memorymap_t * mem, void * adress)
+void memorymap_address_change(memorymap_t * mem, void * address)
 
 {//sizeof(uintptr_t)
-    int offset = adress - mem->start_of_heap;
+    int offset = address - mem->start_of_heap;
     if(mem-> mem_array[offset])
     {
       
@@ -58,9 +58,9 @@ void memorymap_delete(memorymap_t *mem)
     free(mem); 
 }
 
-memorymap_t* memorymap_set_startofheap(memorymap_t* mem, void* adress)
+memorymap_t* memorymap_set_startofheap(memorymap_t* mem, void* address)
 {
-    mem -> start_of_heap = adress;
+    mem -> start_of_heap = address;
     return mem;
 }
     
