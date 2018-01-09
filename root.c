@@ -53,7 +53,7 @@ bool is_pointer_to_heap(heap_t* h, void* p)
 //TODO: (sprint 3)   
 bool is_secure_pointer(heap_t* h, void* root, memorymap_t* alloc_map)
 {
-    return memorymap_adress_is_taken(alloc_map, root);
+    return memorymap_address_is_taken(alloc_map, root);
 }
 
 //TODO: (sprint 3)
