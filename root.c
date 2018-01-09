@@ -50,9 +50,10 @@ bool is_secure_pointer(heap_t* h, void* p, memorymap_t* alloc_map)
 }
 
 //TODO: (sprint 3)
-void deactivate_cell(heap_t* h, void* p)
+void activate_cell(heap_t* h, void* p)
 {
-  
+  cell_t* cell = h_get_cell(h, p);
+  cell_activate(cell);
 }
 
 
@@ -81,7 +82,7 @@ size_t scan_stack(heap_t* h, memorymap_t* alloc_map)
 			}
 			else
 			{
-				deactivate_cell(h, p);
+				activate_cell(h, p);
 			}
 		}
 	}

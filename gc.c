@@ -205,10 +205,11 @@ void h_flip_cell_states(heap_t* h)
       cell_t* cell = &h->cell_array[i];
       if(cell_is_active(cell))
         {
-          cell_initialize(cell);
+          cell_deactivate(cell);
         }
       else
         {
+          cell_initialize(cell);
           cell_activate(cell);
         }
     }
