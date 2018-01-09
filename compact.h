@@ -4,7 +4,7 @@
 #include "gc.h"
 #include "memorymap.h"
 
-size_t traverse_root(heap_t* h, void* p, uintptr_t* rp, memorymap_t* alloc_map);
+size_t (heap_t* h, void* object_pointer, uintptr_t* heap_pointer, memorymap_t* alloc_map);
 
 
 #endif /* COMPACT_H */
