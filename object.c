@@ -81,7 +81,7 @@ void set_forward_address(object_t *current, void *address)
     obj->header = frw_address;
 }
 
-void* get_forward_adress(object_t* object){
+void* get_forward_address(void* object){
     //TODO
     //CHECK IF FORWARD ADRESS ?
     object_t* obj = point_header(object);

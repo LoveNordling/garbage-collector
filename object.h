@@ -81,7 +81,7 @@ void set_forward_address(object_t *current, void *address);
  * @param new_p Pointer to the location in memory where the object should be moved to.
  * @return void
  */
-void* get_forward_address(object_t *current);
+void* get_forward_address(void *object);
 
 /**
  * @brief Gets the size of an object
