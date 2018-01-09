@@ -67,7 +67,7 @@ void deactivate_cell(heap_t* h, void* root)
 size_t scan_stack(heap_t* h, memorymap_t* alloc_map)
 {
 	printf("traversing stack of size %lu...\n\n", stack_size());
-
+        
     size_t freed_memory = 0;
 
     //get boundary addresses of the stack (sp = stack pointer)

@@ -47,7 +47,6 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes);
  * @param new_p Pointer to the location in memory where the object should be moved to.
  * @return void
  */
-
 void object_copy(object_t *p, object_t *new_p);
 
 /**

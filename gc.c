@@ -173,7 +173,7 @@ void* h_get_available_space(heap_t* hp, size_t size)
   for(unsigned int i = 0; i < (unsigned int)hp->cell_count; i++)
     {
       cell_t* cell = &hp->cell_array[i];
-      if(cell_has_space(cell, size) && cell_is_active(cell))
+      if(cell_is_active(cell) && cell_has_space(cell, size))
         {
           cell_activate(cell);
           void* object_pointer = h_get_cell_front_ptr(hp, cell);
@@ -273,9 +273,10 @@ size_t h_avail(heap_t* h)
 size_t h_used(heap_t* h)
 {
   int sum = 0;
+  cell_t* cell_array = h->cell_array;
   for(int i = 0; i < h->cell_count; i++)
     {
-      sum += cell_front_offset(&(h->cell_array[i]));
+      sum += cell_front_offset(&(cell_array[i]));
     }
   return sum;
 }
@@ -308,7 +309,10 @@ cell_t* h_get_cell(heap_t* h, void* ptr)
 void* h_get_cell_front_ptr(heap_t* h, cell_t* cell)
 {
 	int i;
-	for (i = 0; cell != &h->cell_array[i] && i < h->cell_count; ++i);
+        i = h->cell_count - (((size_t)(h->data))-(size_t)cell)/CELL_SIZE;
+        
+        
+	//For (I = 0; cell != &h->cell_array[i] && i < h->cell_count; ++i);
 
 	return cell_front_ptr(cell, ((char*) h->data) + i * CELL_SIZE);
 }

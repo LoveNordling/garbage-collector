@@ -28,8 +28,13 @@ debug: gc
 	gdb ./gc
 
 debug_test: test
-	$(MAKE) -C tests debug	
+	$(MAKE) -C tests debug
 
+gcov: $(SRC)
+	$(CC) $(CFLAGS) $(SRC)
+
+gcov_test:
+	$(MAKE) -C tests gcov
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) $*.c $*.h -c
