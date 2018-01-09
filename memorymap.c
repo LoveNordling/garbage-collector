@@ -3,12 +3,12 @@
 #include "memorymap.h"
 #include <stdio.h>
 #include <math.h>
+
 struct memorymap {
     void* start_of_heap;
     int memoryslots;
     bool* mem_array;
 };
-
 
 memorymap_t* memorymap_new(void* start_of_heap, int memoryslots, void* adress)
 {
@@ -20,7 +20,7 @@ memorymap_t* memorymap_new(void* start_of_heap, int memoryslots, void* adress)
     //adress = adress + memoryslots;
     bool * bool_array;
  
-    for(int i = 0; i != memoryslots; i++)
+    for(int i = 0; i != memoryslots; 
       {
           bool_array = (mem -> mem_array) + i;
           *bool_array = false;
@@ -36,6 +36,7 @@ bool memorymap_adress_is_taken(memorymap_t* mem, void* adress)
 }
 
 void memorymap_adress_change(memorymap_t * mem, void * adress)
+
 {//sizeof(uintptr_t)
     int offset = adress - mem->start_of_heap;
     if(mem-> mem_array[offset])
@@ -83,6 +84,7 @@ size_t memorymap_size()
 {
     return sizeof(memorymap_t);
 }
+
 /*
 int main(){
     void * p;
@@ -100,6 +102,6 @@ int main(){
     bool * pointi = calloc(1,sizeof(bool));
     printf("%d\n", *pointi);
     *(pointi+53465) = true;
-    printf("%d\n", *(pointi+53465));
+    printf("%d\n", *(pointi+53465))
 }*/
 

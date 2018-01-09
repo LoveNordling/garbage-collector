@@ -55,7 +55,6 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
     
     bv = bv << (SYS_BIT - SIZE_BIT_LENGTH - 1);
 
-
     while(*current && index > 0)
     {
         //How many of next char is going to be written in bv
@@ -94,7 +93,9 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
         current++;
     }
 
-    bv = set_msb(bv, 1);
+    //MSB shall be 1 if bv is a layout
+    bv = set_msb(bv,1);
+
     //Return it with lsbs set to 11 since it's a bitvector.
     bv = set_lsbs(bv, 3);
     return bv;

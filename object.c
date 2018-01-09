@@ -5,7 +5,6 @@
  * @date 1 January 2018
  * 
  */
-
 #include "object.h"
 #include "bits.h"
 
@@ -52,7 +51,6 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes)
     {
         object->header = new_bv_size(bytes);
     }
-
     return point_object(object);
 }
 
@@ -72,8 +70,8 @@ void object_copy(object_t *p, object_t *new_p)
 bool object_is_copied(void *p)
 {
     object_t *obj = point_header(p);
-    uintptr_t res = get_lsbs(obj->header);
-    return res == 2;
+    uintptr_t lsbs = get_lsbs(obj->header);
+    return lsbs == 2;
 }
 
 void set_forward_address(object_t *current, void *address)
@@ -83,7 +81,7 @@ void set_forward_address(object_t *current, void *address)
     obj->header = frw_address;
 }
 
-void* get_forward_address(object_t* object){
+void* get_forward_adress(object_t* object){
     //TODO
     //CHECK IF FORWARD ADRESS ?
     object_t* obj = point_header(object);

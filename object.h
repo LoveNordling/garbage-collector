@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
+
 /**
  * @brief Contains the header to the object that is placed in the allocated memory.
  *
@@ -58,7 +59,7 @@ void object_copy(object_t *p, object_t *new_p);
  * object struct.
  *
  * @param p Pointer to the object
- * @return void
+ * @return bool TRUE if object has been copied, else FALSE
  */
 bool object_is_copied(void *p);
 
@@ -92,6 +93,7 @@ void* get_forward_address(object_t *current);
  */
 size_t get_object_size(void *obj);
 
+//COMMENTS NEEDED
 size_t get_header_size();
 
 //COMMENTS NEEDED
