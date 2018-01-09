@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -I ../ -std=c99 -ggdb -Wall
-LDFLAGS = -lcunit
+CFLAGS = -I ../ -std=c99 -ggdb -Wall  -fprofile-arcs -ftest-coverage -pg -no-pie
+LDFLAGS = -lcunit  -fprofile-arcs -ftest-coverage -pg -no-pie
 TEST = test
 
 SRC_TEST := $(wildcard *.c)

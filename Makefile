@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -std=c99 -ggdb -Wall
-LDFLAGS = 
+CFLAGS = -std=c99 -ggdb -Wall  -fprofile-arcs -ftest-coverage -lgcov -pg -no-pie 
+LDFLAGS = -fprofile-arcs -ftest-coverage -lgcov -pg -no-pie
 NAME = gc
 
 SRC := $(wildcard *.c)
@@ -10,7 +10,9 @@ OBJ = $(SRC:.c=.o)
 all: gc test
 
 gc: $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS)
+	$(CC) $(LDFLAGS) $(OBJ) -o $(NAME) 
+
+
 
 run: gc
 	./$(NAME)
@@ -21,11 +23,13 @@ test:
 run_test: test
 	$(MAKE) -C tests run_test
 
+
 debug: gc
 	gdb ./gc
 
 debug_test: test
 	$(MAKE) -C tests debug	
+
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) $*.c $*.h -c
@@ -41,6 +45,8 @@ clean:
 	$(MAKE) -C tests clean
 	rm -f *#
 	rm -f *.gch
+	rm -f *.gcno
+	rm -f *.gcda
 
 docs:
 	doxygen Doxyfile
