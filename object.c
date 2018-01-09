@@ -19,7 +19,9 @@ struct object {
 //- comment made by dog, slamming her head on my keyboard
 
 //Get pointer from the object struct/header to the "object" aka the actual data.
+
 #define point_object(p) (((void *)p) + sizeof(object_t)) 
+
 
 //Get pointer from the actual data/the pointer the user handles to the actual object struct.
 #define point_header(p) (((void *)p) - sizeof(object_t))
@@ -98,6 +100,7 @@ void* get_forward_address(object_t* object){
 //aka the data-part the user has access to. 
 size_t get_object_size(void *obj){
     object_t *object = point_header(obj);
+
     return bv_size(object->header);
 }
 

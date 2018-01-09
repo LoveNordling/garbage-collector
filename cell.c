@@ -20,7 +20,14 @@ bool cell_is_active(cell_t* c)
 
 unsigned short cell_front_offset(cell_t* c)
 {
-	return c->front_offset;
+  if(c->is_active)
+    {
+      return c->front_offset;
+    }
+  else
+    {
+      return 0;
+    }
 }
 
 

@@ -22,6 +22,7 @@ void test_gc()
         }
     }
   puts("\n\n");
+  //h_gc(h);
   for(int i = 0; i < num_ints; i++)
     {
       printf("ints[%i] = %i, ", i, *(ints[i]));
