@@ -5,7 +5,6 @@
  * @date 1 January 2018
  * 
  */
-//TODO en funktion som returnernar storleken på hela datat + header.  
 #include "object.h"
 #include "bits.h"
 
@@ -19,7 +18,7 @@ struct object {
 //- comment made by dog, slamming her head on my keyboard
 
 //Get pointer from the object struct/header to the "object" aka the actual data.
-#define point_object(p) (((object_t *)p) + 1) 
+#define point_object(p) (((void *)p) + sizeof(object_t)) 
 
 //Get pointer from the actual data/the pointer the user handles to the actual object struct.
 #define point_header(p) (((void *)p) - sizeof(object_t))
@@ -34,10 +33,12 @@ const size_t MAX_OBJECT_SIZE = 240;//(SYS_BIT - SIZE_BIT_LENGTH - 3) * PTR_SIZE;
 *****************************************************************************
 */
 
+//får alltid in obj size
 void* new_object(void* memory_ptr, void* layout, size_t bytes)
 {
 
-    object_t *object = memory_ptr;
+  object_t *object = memory_ptr;
+ //vi får in obj EXKL header storlek
 
     //IF layout is not NULL the function is called from h_alloc_struct
     if(layout != NULL)
@@ -50,21 +51,18 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes)
     {
         object->header = new_bv_size(bytes);
     }
- 
     return point_object(object);
 }
 
 //Modified var-name on object_t "header" to "obj_struct"
-//TODO these should be void pointers (void*)
 void object_copy(object_t *p, object_t *new_p)
 {
     object_t *obj_struct = point_header(p);
-    uintptr_t obj_size = bv_size((uintptr_t)obj_struct->header);                          
-  
-    uintptr_t size = sizeof(obj_struct)+obj_size;
+    uintptr_t size = bv_size(obj_struct->header) + get_header_size();
+    
     memcpy(point_header(new_p), obj_struct, size);
     obj_struct = point_object(obj_struct);
-    set_forward_address(obj_struct, new_p );
+    set_forward_address(obj_struct, new_p);
  
 }
 
@@ -72,7 +70,8 @@ void object_copy(object_t *p, object_t *new_p)
 bool object_is_copied(void *p)
 {
     object_t *obj = point_header(p);
-    return(get_lsbs(obj->header) == 2);
+    uintptr_t lsbs = get_lsbs(obj->header);
+    return lsbs == 2;
 }
 
 void set_forward_address(object_t *current, void *address)
@@ -82,7 +81,7 @@ void set_forward_address(object_t *current, void *address)
     obj->header = frw_address;
 }
 
-void* get_forward_adress(void *object){
+void* get_forward_adress(object_t* object){
     //TODO
     //CHECK IF FORWARD ADRESS ?
     object_t* obj = point_header(object);
@@ -98,6 +97,10 @@ void* get_forward_adress(void *object){
 size_t get_object_size(void *obj){
     object_t *object = point_header(obj);
     return bv_size(object->header);
+}
+
+size_t get_header_size(){
+    return sizeof(object_t);
 }
 
 //DO WE NEED THIS?
@@ -183,7 +186,7 @@ size_t format_string_parser(char* layout)
           }
         current++;
       }
-    return sum + sizeof(object_t);
+    return sum;
 }
 
 /*

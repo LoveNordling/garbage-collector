@@ -16,6 +16,8 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdint.h>
+
 
 /**
  * @brief Contains the header to the object that is placed in the allocated memory.
@@ -92,6 +94,9 @@ void* get_forward_address(object_t *current);
 size_t get_object_size(void *obj);
 
 //COMMENTS NEEDED
+size_t get_header_size();
+
+//COMMENTS NEEDED
 bool object_is_layout(void *obj);
 
 //COMMENTS NEEDED
@@ -101,8 +106,10 @@ char* get_format_string(void *obj);
  * @brief Reads a format string and calculates the amount of byte the object requires 
  *
  * @param   layout The format string.
- * @return  unsigned int with the size required for the object plus the header.
+ * @return  unsigned int with the size required for the object.
  */
 size_t format_string_parser(char* layout);
+
+uintptr_t get_header(void *ptr);
 
 #endif /* OBJECT_H */

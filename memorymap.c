@@ -6,24 +6,21 @@
 
 struct memorymap {
     void* start_of_heap;
-    int heap_size;
-    int min_allocsize;
+    int memoryslots;
     bool* mem_array;
 };
 
-
-memorymap_t* memorymap_new(void* start_of_heap, int heap_size, int min_allocsize)
+memorymap_t* memorymap_new(void* start_of_heap, int memoryslots, void* address)
 {
 
-    memorymap_t* mem = (memorymap_t*) malloc(sizeof(memorymap_t));
+    memorymap_t* mem = address;//(memorymap_t*) malloc(sizeof(memorymap_t));
     mem -> start_of_heap = start_of_heap;
-    mem -> heap_size = heap_size;
-    mem -> min_allocsize = min_allocsize;
-    mem -> mem_array = malloc(sizeof(bool)* (heap_size/min_allocsize));//arrays are weird please fix if you know how they work ^_^
-
+    mem -> memoryslots = memoryslots;
+    mem -> mem_array = address + sizeof(memorymap_t);//malloc(sizeof(bool)* (heap_size/min_allocsize));
+    //address = address + memoryslots;
     bool * bool_array;
  
-    for(int i = 0; i != (heap_size/min_allocsize); i++)
+    for(int i = 0; i != memoryslots; 
       {
           bool_array = (mem -> mem_array) + i;
           *bool_array = false;
@@ -32,16 +29,16 @@ memorymap_t* memorymap_new(void* start_of_heap, int heap_size, int min_allocsize
   
 }
 
-bool memorymap_adress_is_taken(memorymap_t* mem, void* adress)
+bool memorymap_address_is_taken(memorymap_t* mem, void* address)
 {
-    int offset = adress - mem -> start_of_heap;
+    int offset = address - mem -> start_of_heap;
     return mem-> mem_array[offset];
 }
 
-void memorymap_adress_change(memorymap_t * mem, void * adress)
-{
-    int offset = adress - mem->start_of_heap;
-  
+void memorymap_address_change(memorymap_t * mem, void * address)
+
+{//sizeof(uintptr_t)
+    int offset = address - mem->start_of_heap;
     if(mem-> mem_array[offset])
     {
       
@@ -61,12 +58,17 @@ void memorymap_delete(memorymap_t *mem)
     free(mem); 
 }
 
-void memorymap_print(memorymap_t *mem){
-    int min_allocsize = mem -> min_allocsize;
-    int heap_size = mem->heap_size;
+memorymap_t* memorymap_set_startofheap(memorymap_t* mem, void* address)
+{
+    mem -> start_of_heap = address;
+    return mem;
+}
+    
+void memorymap_print(memorymap_t *mem)
+{
 
     bool* bool_array;
-    for(int i = 0; i != (heap_size/min_allocsize); i++){
+    for(int i = 0; i != (mem -> memoryslots); i++){
         bool_array = (mem -> mem_array) + i;
     
         if((*bool_array) ==true){
@@ -77,21 +79,29 @@ void memorymap_print(memorymap_t *mem){
             }
     }
 }
+
+size_t memorymap_size()
+{
+    return sizeof(memorymap_t);
+}
+
 /*
 int main(){
     void * p;
     int b = 2000;
+    void* memory;
+    
     posix_memalign(&p, pow(2, 16), b);
-  
-    char * hej = "hej";
-    memorymap_t *mem = memorymap_new(p, 10, 2);
 
-    memorymap_adress_change(mem, p+321);//Forgetting that I put this line here ruined 2h of my day.
+    posix_memalign(&memory, pow(2, 16), b);
+    char * hej = "hej";
+    memorymap_t *mem = memorymap_new(p, 3, memory);
+
+    memorymap_adress_change(mem, p+2);//Forgetting that I put this line here ruined 2h of my day.
     memorymap_print(mem);
     bool * pointi = calloc(1,sizeof(bool));
     printf("%d\n", *pointi);
     *(pointi+53465) = true;
-    printf("%d\n", *(pointi+53465));
-}
+    printf("%d\n", *(pointi+53465))
+}*/
 
-*/

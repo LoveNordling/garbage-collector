@@ -140,7 +140,6 @@ char *bv_to_str(uintptr_t bv)
     if(get_msb(bv) == 1)
     {
         int layout_bits = bv_size(bv) / PTR_SIZE; //TODO
-        
 
         char* str = calloc(layout_bits + 1, sizeof(char));
         uintptr_t comp = 1UL << (SYS_BIT - SIZE_BIT_LENGTH - 2);
