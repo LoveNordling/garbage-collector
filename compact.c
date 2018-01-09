@@ -41,7 +41,7 @@ size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer, m
           freed_memory += size;
           new_object = h_alloc_data(h, size);
         }
-      memorymap_adress_change(alloc_map, object_pointer);
+      memorymap_address_change(alloc_map, object_pointer);
       object_copy(object_pointer, new_object);
       set_forward_address(object_pointer, new_object);
     }
