@@ -1,5 +1,5 @@
 #include "test_memorymap.h"
-#include "memorymap.h"
+#include "../src/memorymap.h"
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
 #include <stdlib.h>

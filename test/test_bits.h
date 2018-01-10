@@ -4,7 +4,7 @@
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
 
-#include "../bits.h"
+#include "../src/bits.h"
 
 void test_print_bits();
 void test_new_bv_layout();

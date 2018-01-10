@@ -9,8 +9,8 @@
 
 typedef struct cell
 {
-  bool is_active;
-  unsigned short front_offset;
+    bool is_active;
+    unsigned short front_offset;
 } cell_t;
 
 void cell_initialize(cell_t* c);
