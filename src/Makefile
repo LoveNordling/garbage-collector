@@ -16,7 +16,7 @@ run: gc
 	./$(NAME)
 
 debug: gc
-	gdb ./gc
+	gdb ./$(NAME)
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) $*.c $*.h -c
