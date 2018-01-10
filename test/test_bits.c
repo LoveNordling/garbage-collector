@@ -98,27 +98,27 @@ void test_set_msb()
 
 void test_get_msb()
 {
-     uintptr_t test = 0;
+    uintptr_t test = 0;
 
-     CU_ASSERT_EQUAL(get_msb(test), 0);
+    CU_ASSERT_EQUAL(get_msb(test), 0);
      
     test = set_msb(test, 1);
 
-     CU_ASSERT_EQUAL(get_msb(test), 1);
+    CU_ASSERT_EQUAL(get_msb(test), 1);
 }
 
 void test_new_bv_layout()
 {
-  uintptr_t layout = new_bv_layout("**iif", 40);
-  uintptr_t layout_3_star = new_bv_layout("***", 24);
-  uintptr_t layout_3_r = new_bv_layout("fil", 24);
-  uintptr_t layout_empty = new_bv_layout("\0", 0);
-  //bv_to_str = **rrr
+    uintptr_t layout = new_bv_layout("**iif", 40);
+    uintptr_t layout_3_star = new_bv_layout("***", 24);
+    uintptr_t layout_3_r = new_bv_layout("fil", 24);
+    uintptr_t layout_empty = new_bv_layout("\0", 0);
+    //bv_to_str = **rrr
 
-  CU_ASSERT_STRING_EQUAL("***", bv_to_str(layout_3_star) );
-  CU_ASSERT_STRING_EQUAL("rrr", bv_to_str(layout_3_r));
-  CU_ASSERT_STRING_EQUAL("\0", bv_to_str(layout_empty));
-  CU_ASSERT_STRING_EQUAL("**rrr", bv_to_str(layout));
+    CU_ASSERT_STRING_EQUAL("***", bv_to_str(layout_3_star) );
+    CU_ASSERT_STRING_EQUAL("rrr", bv_to_str(layout_3_r));
+    CU_ASSERT_STRING_EQUAL("\0", bv_to_str(layout_empty));
+    CU_ASSERT_STRING_EQUAL("**rrr", bv_to_str(layout));
 }
 
 void test_new_bv_size()

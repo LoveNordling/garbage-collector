@@ -3,7 +3,7 @@
 
 #include <CUnit/CUnit.h>
 #include <CUnit/Basic.h>
-#include "../object.h"
+#include "../src/object.h"
 
 void test_new_object();
 void test_object_copy();

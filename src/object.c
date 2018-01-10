@@ -37,8 +37,8 @@ const size_t MAX_OBJECT_SIZE = 240;//(SYS_BIT - SIZE_BIT_LENGTH - 3) * PTR_SIZE;
 void* new_object(void* memory_ptr, void* layout, size_t bytes)
 {
 
-  object_t *object = memory_ptr;
- //vi får in obj EXKL header storlek
+    object_t *object = memory_ptr;
+    //vi får in obj EXKL header storlek
 
     //IF layout is not NULL the function is called from h_alloc_struct
     if(layout != NULL)
@@ -134,29 +134,29 @@ size_t char_value(char c)
 }
 
 /* size_t char_value(char c)
-{
-    switch(c)
-    {
-    case 'i':
-        return sizeof(int);
-    case 'l':
-        return sizeof(long);
-    case 'f':
-        return sizeof(float);
-    case 'c':
-        return sizeof(char);
-    case 'd':
-        return sizeof(double);
-    case '*':
-        return sizeof(void *);
-    default:
-        return 0;
-    }
-    } */
+   {
+   switch(c)
+   {
+   case 'i':
+   return sizeof(int);
+   case 'l':
+   return sizeof(long);
+   case 'f':
+   return sizeof(float);
+   case 'c':
+   return sizeof(char);
+   case 'd':
+   return sizeof(double);
+   case '*':
+   return sizeof(void *);
+   default:
+   return 0;
+   }
+   } */
 
 bool is_number(char c)
 {
-  return ('0' <= c && c <= '9');
+    return ('0' <= c && c <= '9');
 }
 
 //TODO OPTIMIZE IF STR IS EX "cc*" SHOULD ONLY NEED 16BYTES
@@ -166,10 +166,10 @@ size_t format_string_parser(char* layout)
     char* current = layout;
     size_t sum = 0;
     while(*current) //*current != '\0' 
-      {
-          if(is_number(*current)) //checks if *current is number
-          {
-              int repeats = atoi(current); //number at current pointer
+    {
+        if(is_number(*current)) //checks if *current is number
+        {
+            int repeats = atoi(current); //number at current pointer
             do // we have to move the ptr if number is more than 1 digit.
             {
                 current++;
@@ -179,22 +179,22 @@ size_t format_string_parser(char* layout)
             char c = *current != '\0' ? *current : 'c'; 
             sum += repeats * char_value(c);
             current++; 
-          }
-          else 
-          {
+        }
+        else 
+        {
             sum += char_value(*current);
-          }
+        }
         current++;
-      }
+    }
     return sum;
 }
 
 /*
 
-MAIN FILE TO TEST/CHECK SOME STUFFS WHILE IMPLEMENTING
+  MAIN FILE TO TEST/CHECK SOME STUFFS WHILE IMPLEMENTING
 
-int main()
-{
+  int main()
+  {
 
   char layout[] = "***";
   uintptr_t bigassbit = 1;
@@ -207,18 +207,18 @@ int main()
 
   // Sizeof operator is used to evaluate the size of a variable
   printf("Size of int: %lu bytes\n"
-         "Size of long: %lu bytes\n"
-         "Size of float: %lu bytes\n"
-         "Size of char: %lu bytes\n"
-         "Size of double: %lu bytes\n"
-         "Size of void *: %lu bytes\n"
-         "Size of object_t: %lu bytes\n",
-         sizeof(int),sizeof(long),sizeof(float),
-         sizeof(char), sizeof(double), sizeof(void *),
-         sizeof(object_t));
+  "Size of long: %lu bytes\n"
+  "Size of float: %lu bytes\n"
+  "Size of char: %lu bytes\n"
+  "Size of double: %lu bytes\n"
+  "Size of void *: %lu bytes\n"
+  "Size of object_t: %lu bytes\n",
+  sizeof(int),sizeof(long),sizeof(float),
+  sizeof(char), sizeof(double), sizeof(void *),
+  sizeof(object_t));
 
   printf("First byte is %d\n", layout_or_sizenumber(bigassbit));
 
   return 0;
-}
+  }
 */

@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <CUnit/CUnit.h>
 #include <string.h>
-#include "gc.h"
 #include "test_gc.h"
+#include "../src/gc.h"
 
 void test_gc_init_delete()
 {
