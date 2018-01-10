@@ -13,11 +13,14 @@ test:
 	$(MAKE) -C test tests 
 
 
-run_test: test
+run_test: 
 	$(MAKE) -C test run_test
 
+demo:
+	$(MAKE) -C demo
+
 debug: gc
-	gdb ./$(GC)
+	$(MAKE) -C src debug
 
 debug_test: test
 	$(MAKE) -C test debug
