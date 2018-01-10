@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	#ifdef __unix__
 	puts("unix");
 	#endif
-        heap_t* h = h_init(1000000, false, 0.5f);
+        heap_t* h = h_init(10000, false, 0.5f);
         test_t* obj = (test_t*)h_alloc_struct(h, "**i");
 
         // h_print_cells(h);
@@ -41,13 +41,14 @@ int main(int argc, char** argv)
         *z = 9;
         //xsprintf("\nZ=%d\n", *z);
         //z = obj->x;
+
         
         //printf("\nZ=%d\n", *z);
         //obj = NULL;
         //z = NULL;
-        size_t bytes = h_gc(h);
-        h_gc(h);
-        printf("released %lu bytes \n", bytes);
+        size_t bytes = h_gc(h); 
+        //h_gc(h);
+        printf("using %lu bytes \n", bytes);
         printf("x = %i, y = %i \n", *(obj->x), *(obj->y));
         printf("\nZ=%d\n", *z);
         h_delete(h);

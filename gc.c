@@ -67,27 +67,32 @@ void init_metadata(heap_t* hp, bool unsafe_stack, float gc_threshold, size_t byt
 	hp->unsafe_stack = unsafe_stack;
 	hp->gc_threshold = gc_threshold;
 
-	hp->size = (bytes-memorymap_size())*CELL_SIZE*sizeof(uintptr_t)/(CELL_SIZE*sizeof(uintptr_t) + sizeof(uintptr_t)+ CELL_SIZE);//Must change if bit vectors are used
+	hp->size = bytes-sizeof(heap_t);
+        size_t cell_size = CELL_SIZE;
+        hp->size = hp->size - hp->size%cell_size;
+        //(bytes-memorymap_size())*CELL_SIZE*sizeof(uintptr_t)/(CELL_SIZE*sizeof(uintptr_t) + sizeof(uintptr_t)+ CELL_SIZE);//Must change if bit vectors are used
 }
 
 void init_memmap_and_cellarray(heap_t* hp)
 {
   //Initialise memmap
-  hp -> mem = memorymap_new(NULL, ((hp -> size) /8), hp -> data);
+  size_t memmap_size = hp->size/8;
+  hp -> mem = memorymap_new(NULL, memmap_size, malloc(memorymap_size() + memmap_size));
+  /*
   size_t mem_size  = hp->size/sizeof(uintptr_t) + memorymap_size();
   hp -> data += mem_size;
-        
+  */
 
   //initialize cell array
   hp->cell_count = hp->size/CELL_SIZE;
-  hp->cell_array = hp->data;
+  hp->cell_array = malloc(sizeof(cell_t)*(hp->cell_count));
   for (int i = 0; i < hp->cell_count; ++i)
     {
       cell_initialize(&hp->cell_array[i]);
     }
 
   //move data pointer forward
-  hp->data += hp->cell_count * sizeof(cell_t);
+  //hp->data += hp->cell_count * sizeof(cell_t);
 
   memorymap_set_startofheap(hp -> mem, hp -> data);
 }
@@ -106,7 +111,6 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
 	//allocate memory for heap and its metadata
 	void* p = NULL;
 	int result = 0;
-        size_t heap_offset;
 	#ifdef _WIN32
 	p = __mingw_aligned_malloc(bytes, pow(2, 16));
 	#else
@@ -127,7 +131,6 @@ heap_t* h_init(size_t bytes, bool unsafe_stack, float gc_threshold)
         init_metadata(hp, unsafe_stack, gc_threshold, bytes);
 	
 
-        heap_offset = sizeof(heap_t);
 	//set data pointer
 	hp->data = (void*)hp + sizeof(heap_t);
 
@@ -156,7 +159,7 @@ void h_delete_dbg(heap_t* h, void* dbg_value)
 //Returns true if cell can fit an object of size size, flase otherwise
 bool cell_has_space(cell_t* cell, size_t size)
 {
-  return cell_front_offset(cell) + size < CELL_SIZE;
+  return cell_front_offset(cell) + size <= CELL_SIZE;
 }
 
 //Returns a pointer to the heap where an object of size size can be allocated
@@ -315,10 +318,10 @@ cell_t* h_get_cell(heap_t* h, void* ptr)
 void* h_get_cell_front_ptr(heap_t* h, cell_t* cell)
 {
 	int i;
-        i = h->cell_count - (((size_t)(h->data))-(size_t)cell)/sizeof(cell_t);
-        
-        
-	//for (i = 0; cell != &h->cell_array[i] && i < h->cell_count; ++i);
+        //i = (cell - h->cell_array)/sizeof(cell_t);
+        //i = h->cell_count - (((size_t)(h->data))-(size_t)cell)/sizeof(cell_t);
+                
+	for (i = 0; cell != &h->cell_array[i] && i < h->cell_count; ++i);
 
 	return cell_front_ptr(cell, ((char*) h->data) + i * CELL_SIZE);
 }

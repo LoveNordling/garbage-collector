@@ -88,6 +88,7 @@ size_t scan_stack(heap_t* h, memorymap_t* alloc_map)
 		//determine if the root is pointing inside the heap (most values will get filtered away here)
 		if(is_pointer_to_heap(h, root))
 		{
+                  //printf("found pointer\n");
 			//copy and traverse secure roots
 			if (is_secure_pointer(root, alloc_map))
 			{

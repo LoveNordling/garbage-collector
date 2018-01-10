@@ -1,6 +1,7 @@
 
 
 
+
 #include "compact.h"
 #include "object.h"
 #include "bits.h"
@@ -10,6 +11,7 @@
 
 size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer, memorymap_t* alloc_map)
 {
+  puts("found root");
   
   size_t freed_memory = 0;
   if(!object_is_copied(object_pointer))
