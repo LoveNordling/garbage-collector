@@ -11,7 +11,7 @@ ALL_SRCS := $(wildcard ../src/*.c)
 SRC := $(filter-out ../src/main%.c, $(ALL_SRCS))
 OBJ_SRC = $(SRC:.c=.o)
 
-tests:	$(OBJ_TEST) objsrc
+test:	$(OBJ_TEST) objsrc
 	$(CC) $(CFLAGS) -o $(TEST) $(OBJ_TEST) $(OBJ_SRC) $(LDFLAGS)
 
 objsrc:	
