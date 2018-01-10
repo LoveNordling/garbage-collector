@@ -29,13 +29,16 @@ memorymap_t* memorymap_new(void* start_of_heap, int memoryslots, void* adress)
         */
     }
   return mem;
-  
 }
 
 bool memorymap_adress_is_taken(memorymap_t* mem, void* adress)
 {
-    int offset = adress - mem -> start_of_heap;
-    return mem-> mem_array[offset/8];
+  int offset = (adress - mem -> start_of_heap)/8;
+    if(offset >=0 && offset <= mem->memoryslots)
+      {
+        return mem-> mem_array[offset];
+      }
+    return false;
 }
 
 void memorymap_adress_change(memorymap_t * mem, void * adress)
@@ -86,6 +89,23 @@ size_t memorymap_size()
 {
     return sizeof(memorymap_t);
 }
+
+
+void memorymap_update(memorymap_t* memmap, cell_t* cell_array, int cell_count)
+{
+  for (int i = 0; i < cell_count; i++) {
+    if(!cell_is_active(&cell_array[i]))
+      {
+        int cell_size = CELL_SIZE/8;
+        for (int j = i*cell_size; j < (i + 1)*cell_size; j++)
+          {
+            memmap->mem_array[j] = false;
+          }
+      }
+  }
+}
+
+
 /*
 int main(){
     void * p;

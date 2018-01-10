@@ -6,12 +6,10 @@
 #include "object.h"
 #include "bits.h"
 
-//TODO: traverse the heap starting from a root (sprint 3)
-
 
 size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer, memorymap_t* alloc_map)
 {
-  puts("found root");
+  //puts("found root");
   
   size_t freed_memory = 0;
   if(!object_is_copied(object_pointer))
@@ -30,10 +28,11 @@ size_t traverse_root(heap_t* h, void* object_pointer, uintptr_t* heap_pointer, m
             {
               if(*counter == '*')
                 {
-                    
-                  freed_memory += traverse_root(h,(void*)*(void**)traverse_pointer,
-                                                (uintptr_t*)traverse_pointer, alloc_map);
-                   
+                  if(memorymap_adress_is_taken(alloc_map, *(void**)traverse_pointer))
+                    {
+                      freed_memory += traverse_root(h,(void*)*(void**)traverse_pointer,
+                                                    (uintptr_t*)traverse_pointer, alloc_map);
+                    }
                 }
 
               traverse_pointer+=sizeof(uintptr_t);

@@ -20,7 +20,7 @@ struct list {
 
 list_t *list_new(element_copy_fun copy, element_free_fun l_free, element_comp_fun compare, heap_t* h) {
   list_t list = {.heap = h};
-  list_t *l = h_alloc_struct(list.heap, "****i*");//(list_t *) malloc(sizeof(list_t));
+  list_t *l = h_alloc_struct(list.heap, "rrr*i*");//(list_t *) malloc(sizeof(list_t));
   l->head = NULL;
   l->length = 0;
   l->elem_cp = copy;

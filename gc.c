@@ -261,6 +261,7 @@ size_t h_gc(heap_t* h)
   size_t uses = h_used(h);
   h_flip_cell_states(h);
   scan_roots(h, h->mem);
+  memorymap_update(h->mem, h->cell_array, h->cell_count);
   printf("Freed %lu bytes\n", uses - h_used(h));
   return uses - h_used(h);
 }
@@ -285,7 +286,12 @@ size_t h_used(heap_t* h)
   cell_t* cell_array = h->cell_array;
   for(int i = 0; i < h->cell_count; i++)
     {
-      sum += cell_front_offset(&(cell_array[i]));
+      size_t offset = cell_front_offset(&(cell_array[i]));
+      if(offset)
+        {
+        
+          sum += offset + 1;
+        }
     }
   return sum;
 }

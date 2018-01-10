@@ -80,7 +80,7 @@ size_t scan_stack(heap_t* h, memorymap_t* alloc_map)
 	for(int i = 0; sp < stack_start; ++i)
 	{
             //interpet the data at sp as a 4/8 byte pointer root
-		sp += sizeof(uintptr_t);
+          //sp += sizeof(uintptr_t);
 		void* p = (void *)*(uintptr_t*) sp;
 		
 		void* root = (void*) *(uintptr_t*) sp;

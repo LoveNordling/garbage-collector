@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <stdlib.h>
+#include "cell.h"
 typedef struct memorymap memorymap_t;
 
 /// Creates a new memorymap
@@ -40,6 +41,9 @@ memorymap_t* memorymap_set_startofheap(memorymap_t* mem, void* adress);
 ///
 /// \param mem the memorymap to be measured
 size_t memorymap_size();
+
+
+void memorymap_update(memorymap_t* memmap, cell_t* cell_array, int cell_count);
 
 void memorymap_print(memorymap_t* mem);
 #endif
