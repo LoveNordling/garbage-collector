@@ -21,9 +21,11 @@ Jag hamnar ofta i rollen att jag försöker lämna så mycket rum åt andra som 
 ##### Elwira Johansson
 
 Vill gärna påstå att jag är anpassningsbar i ett team beroende på människorna jag arbetar med, eller om jag bara innehar delar av många olika roller. Gillar att ha mycket att göra, och vill helst att det ska bli så bra som möjligt. Detta är både bra och dåligt, då jag gillar då att ha koll på allt och är nyfiken på vad alla pysslar med. Är nog mer den som är tyst men säger till om jag inte håller med om något och ifrågasätter ofta varför folk tänker som de gör. Detta kan uppfattas som dömande, men är oftast bara nyfiken på hur de tänker.
+
 Jobbar gärna i grupp men även ensam, föredrar en blandning av båda och helst inte bara det ena. Skönt att ha folk att bolla ideér med och jobba tillsammans med, men även skönt att själv kunna jobba på något själv.
 Jag har helt klart lärt mig mer på kursens övriga delar, men har även lärt mig grymt mycket på projektet. Dock lärt mig mycket mer effektivt under projektet, då man faktiskt har behövt lära sig det man ska implementera, till skillnad från målen där man ibland lärde sig "bara för att" utan att riktigt förstå hur man *använder* sig av kunskaperna.
 Har loggat arbetstid hyffsat okej, har en ungefärlig tidsrapport, dock tycker jag det är svårt då när jag jobbar i grupp är jag inte lika tidseffektiv som när jag jobbar själv. Därav kan det se ut som jag jobbat hur mycket som helst på projektet när jag egentligen inte gjort lika mycket.
+
 Mitt största problem under projektet var nog att jag inte tog mig lika mycket tid att verkligen förstå scrum, att det hade varit bättre att dela upp arbetet i ännu fler sprintar och att det skulle vara sjukt bra om vi skrev gränssnitten innan vi påbörjade alla moduler. Det bästa var nog objekt + bits modulerna, lärde mig galet mycket av att vara med och skriva/planera dem så det var grymt kul!
 
 ##### Love Nordling
