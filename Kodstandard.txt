@@ -55,3 +55,15 @@ struct foo
 void bar(void);
 
 #endif /* FILE_NAME_H */
+
+7) Indentering ska göras med fyra(4) stycken mellanslag.
+Kan göras genom att lägga till:
+(setq-default indent-tabs-mode nil)
+(setq c-default-style "linux"
+          c-basic-offset 4)
+i emacs init-fil. (källa: https://www.emacswiki.org/emacs/IndentingC )
+
+För sublime se https://www.sublimetext.com/docs/2/indentation.html
+
+Använder ni något annat så får ni googla eller skriva 4 mellanslag manuellt
+som en pleb.
