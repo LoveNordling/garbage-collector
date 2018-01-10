@@ -2,7 +2,7 @@
 #define __common_h__
 
 #include <stdbool.h>
-#include "../src/gc.h"
+#include "../srcx/gc.h"
 
 typedef union element elem_t;
 

@@ -393,8 +393,9 @@ int tree_to_array(node_t *tree, node_t *array, int index){
 
 tree_key_t *tree_keys(tree_t *tree){
    int size = tree_size(tree);
-   tree_key_t *keys = h_alloc_struct(tree->heap, "****");
-   //tree_key_t *keys = calloc(size,sizeof(node_t));
+   //TODO skapa tillräckligt många *:or == size*sizeof(node_t) 
+   //tree_key_t *keys = h_alloc_struct(tree->heap, "****");
+   tree_key_t *keys = calloc(size,sizeof(node_t));
    node_t array [size];
    tree_to_array(tree->rootnode, array, 0);
 

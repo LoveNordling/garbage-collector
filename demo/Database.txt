@@ -1,10 +1,10 @@
-7
+8
 Cat
 Catnip
 5000
 1
-J54
-14
+J53
+65
 Doggo
 asdfasfda
 4300
@@ -23,6 +23,14 @@ asdfasdf
 1
 R43
 32
+Kaffe
+Blaskigt
+76000
+2
+T12
+64
+H12
+43
 Macka
 Cucumber goodness
 1000

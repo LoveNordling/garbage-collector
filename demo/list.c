@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "list.h"
-#include "../gc.h"
+#include "../src/gc.h"
 
 struct node{
   node_t *next;
@@ -19,8 +19,8 @@ struct list{
 };
 
 list_t *list_new(element_copy_fun copy, element_comp_fun compare, heap_t* heap){
-  //list_t *list = h_alloc_struct(heap, "*****");
-  list_t *list = calloc(1, sizeof(list_t));
+  list_t *list = h_alloc_struct(heap, "*****");
+  //list_t *list = calloc(1, sizeof(list_t));
   list->heap = heap;
                                 
   if(copy){
@@ -36,8 +36,8 @@ list_t *list_new(element_copy_fun copy, element_comp_fun compare, heap_t* heap){
 }
 
 node_t *node_new(elem_t elem, node_t *node, heap_t* heap){
-  //node_t *n = h_alloc_struct(heap, "***");
-   node_t *n = calloc(1, sizeof(node_t));
+  node_t *n = h_alloc_struct(heap, "***");
+  // node_t *n = calloc(1, sizeof(node_t));
   n->next = node;
 
   n->elem = elem;

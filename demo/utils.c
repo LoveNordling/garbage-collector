@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool is_number(char *str) {
+bool is_number_utils(char *str) {
     int len = strlen(str);
     if (strncmp(str, "-", 1) == 0) {
         return false;

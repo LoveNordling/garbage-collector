@@ -7,7 +7,7 @@
 #include "list.h"
 #include "tree.h"
 #include "utils.h"
-#include "../gc.h"
+#include "../src/gc.h"
 
 struct goods {
     char *name;
@@ -587,8 +587,7 @@ void list_shelf_printer(elem_t elem, FILE *fPointer) {
 }
 
 void event_loop() {
-    heap_t * heap = calloc(1, sizeof(void*));
-      //h_init(40000, true, 0.5);
+    heap_t * heap =h_init(40000, true, 0.5);
     action_t *undo = malloc(sizeof(action_t));
     undo->type = NOTHING;
     tree_t *tree = tree_new(tree_copy_func, NULL /*tree_delete_key_func*/,tree_comp_func, heap);
