@@ -12,6 +12,12 @@ Inspiration: http://www.moberggolf.com/2010/12/roller-i-grupp/
 
 
 ##### Ricardo Danza
+Är inte helt säker vilken roll jag spelade i teamet. Kanske är jag statisten i gruppen, “the intern”, inte för att jag är rolig utan för att jag är ny. 
+Jag trivs mest av att jobba i grupp. Känner att man kan hålla varandra motiverade och att det är allmänt trevligare. Det är mycket mera effektivt också att kunna fråga sin kodpartner och dela med sig av kunskap än att läsa något vilseledande och gå runt i cirklar ett par timmar.
+Projektet var en riktig learning experience. Kände att inlärningskurvan har varit nästan lika skarp som under kursen när det gäller mängden ny kunskap man måste få i sig.  Lär mig bäst genom att jämföra före och efter för att se hur koden ändrar beteende. Måste förbättra hurförmågan att implementera teori. Bitoperationer, git, integrering, och minneshantering, ytterligare pekararitmetik är områden  jag har mest lärt mig om under projektet. 
+Att logga arbetstid har gått bra. Har inte varit extremt noga och har försökt att klippa bort prokrastineringstiden som uppstår ibland när man sitter länge på ITC, t.ex. När man har suttit 8 timmar vid universitetshuset räknar jag ungefär 6 timmar nettotimmar då man har jobbat. 
+Biggest win: För mig blev detta när jag insåg att jag gick från 0 kunskap om bitmanipulering till att kunna skriva nödvändiga bitmanipuleringsfunktioner i respektive modul. Under projektet var också första gången jag skrev tester “på riktigt”. Med detta menar jag att man har behövt resonera på vad som ska testas överhuvudtaget och avgöra hur man ska designa sina tester så att de testar rätta saker, jämför detta med när man på inluppar vet vad funktionerna bör returnera.  
+Biggest fail: Tycker att jag var inte bra på att ha bättre koll på andra modulernas innehåll. Haft bra kunskap på modulen och koden jag höll på med själv men var inte kapabel av att kunna lösa problem eller bidra med något vettigt till andra gruppmedlemmar. 
 
 
 ##### Pontus Eriksson
