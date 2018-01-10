@@ -87,7 +87,7 @@ void test_set_forwarding_address()
   object_copy((void*)test, (void*)test2);
 
   uintptr_t address = test2;
-  uintptr_t address_in_bv = get_forward_adress(test);
+  uintptr_t address_in_bv = (uintptr_t)get_forward_address(test);
     //*((test->first)-sizeof(void*));
   
   CU_ASSERT_EQUAL(address_in_bv, address);
@@ -115,7 +115,7 @@ void test_get_forwarding_address()
 
   object_copy((void*)test, (void*)test2);
 
-  uintptr_t fw_address = get_forward_adress(test);
+  uintptr_t fw_address = (uintptr_t)get_forward_address(test);
   
   CU_ASSERT_EQUAL(fw_address, test2); 
   
@@ -162,13 +162,13 @@ void test_format_string_parser()
   void *memory_start = calloc(10, sizeof(void *));
   test_t *test = new_object(memory_start+sizeof(void*), "**", 24);
 
-  uintptr_t layout_bv = new_bv_layout("**", 24);
+  uintptr_t layout_bv = new_bv_layout("**", 16);
   uintptr_t translated_format_string = format_string_parser("**");
   
   test->first = &x;
   
 
-  CU_ASSERT_EQUAL(24 ,translated_format_string);
+  CU_ASSERT_EQUAL(16 ,translated_format_string);
 
   
 }

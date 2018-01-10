@@ -20,7 +20,7 @@ memorymap_t* memorymap_new(void* start_of_heap, int memoryslots, void* address)
     //address = address + memoryslots;
     bool * bool_array;
  
-    for(int i = 0; i != memoryslots; 
+    for(int i = 0; i != memoryslots; i++)
       {
           bool_array = (mem -> mem_array) + i;
           *bool_array = false;

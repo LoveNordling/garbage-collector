@@ -4,6 +4,10 @@
 #include <math.h>
 #include <string.h>
 #include "test_root.h"
+#include "test_gc.h"
+#include "test_memorymap.h"
+#include "test_object.h"
+#include "test_bits.h"
 #include "test_integration.h"
 //Import your test functions here
 
