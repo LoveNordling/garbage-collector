@@ -75,7 +75,7 @@ size_t scan_stack(heap_t* h, memorymap_t* alloc_map)
     //get boundary addresses of the stack (sp = stack pointer)
 	char* sp = (char*) stack_get_end();
 	char* stack_start = (char*) stack_get_start();
-
+        int numroots = 0;
 	//loop through the stack (the stack is like a consecutive array of data)
 	for(int i = 0; sp < stack_start; ++i)
 	{
@@ -91,18 +91,20 @@ size_t scan_stack(heap_t* h, memorymap_t* alloc_map)
 			//copy and traverse secure roots
 			if (is_secure_pointer(root, alloc_map))
 			{
+                          numroots++;
                             freed_memory += traverse_root(h, p, (uintptr_t*) sp, alloc_map);
 			}
 			//otherwise deactivate their targeted cells
 			else
 			{
-				activate_cell(h, p);
+                          //activate_cell(h, p);
 			}
 		}
 
 		//increment the stack pointer by 4/8 bytes
 		sp += sizeof(uintptr_t);
 	}
+        printf("\n\n Number of roots: %i\n\n", numroots);
 
 	return freed_memory;
 }

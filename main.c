@@ -46,8 +46,9 @@ int main(int argc, char** argv)
         //obj = NULL;
         //z = NULL;
         size_t bytes = h_gc(h);
+        h_gc(h);
         printf("released %lu bytes \n", bytes);
-        //printf("x = %i, y = %i \n", *(obj->x), *(obj->y));
+        printf("x = %i, y = %i \n", *(obj->x), *(obj->y));
         printf("\nZ=%d\n", *z);
         h_delete(h);
         
