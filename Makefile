@@ -1,23 +1,25 @@
 GC: gc
 TEST: tests
 
-all: gc test
+all: gc test demo
 
 gc:
-	$(MAKE) -C src gc
+	$(MAKE) -C src all
 
-run: gc
+run: 	gc
 	$(MAKE) -C src run
 
 test:
-	$(MAKE) -C test tests 
+	$(MAKE) -C test all
 
+run_test: test
+	$(MAKE) -C test run
 
-run_test: 
-	$(MAKE) -C test run_test
-
-demo:
+demo:	
 	$(MAKE) -C demo all
+
+run_demo: demo
+	$(MAKE) -C demo run
 
 debug: gc
 	$(MAKE) -C src debug
@@ -33,4 +35,4 @@ clean:
 docs:
 	doxygen Doxyfile
 
-.PHONY = run run_test debug debug_test clean docs
+.PHONY : all test demo run run_test debug debug_test clean docs

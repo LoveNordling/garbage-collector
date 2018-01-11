@@ -7,15 +7,13 @@ SRC := $(wildcard *.c)
 HDR := $(wildcard *.h);
 OBJ = $(SRC:.c=.o)
 
-all: gc test
-
-gc: $(OBJ)
+all: $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS)
 
-run: gc
+run: all
 	./$(NAME)
 
-debug: gc
+debug: all
 	gdb ./$(NAME)
 
 %.o: %.c %.h
@@ -37,4 +35,4 @@ clean:
 docs:
 	doxygen Doxyfile
 
-.PHONY = valgrind clean run run_test
+.PHONY : valgrind clean run run_test
