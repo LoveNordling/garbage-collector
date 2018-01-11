@@ -5,7 +5,7 @@ I början av projektet så kom vi överens om en samling formateringsregler och 
 Vi bestämde oss för att all kod som ska mergas med vårt masterprogram måste uppfylla vissa krav. Bland annat ska all kod i pull requests vara välstrukturerade och innehålla både doxygen kommentarer och vanliga radkommentarer. 
 Alla variabler, funktioner och moduler ska också vara döpta på ett sätt som beskriver deras mening. Detta är viktigt för läsbarheten, eftersom att man kan få en överblick av vad ett kodblock gör bara genom att läsa den.
 
-Vårt mål har varit att skriva kod som är så robust och flexibelt som möjligt. Detta innebär att koden ska vara strukturerad på ett korrekt och läsbart vis och att programmet ska vara som en sammanslagning av självständiga komponenter som tillsammans skapar en helhet. Det gör så att det blir enkelt att utöka programmet med nya delar och iterera över det vi redan har utan att någonting kraschar i någon annan del av programmet.
+Vårt mål har varit att skriva kod som är så robust och flexibelt som möjligt. Detta innebär att koden ska vara strukturerad på ett korrekt och läsbart vis och att programmet ska vara som en sammanslagning av självständiga komponenter som tillsammans skapar en helhet. Det gör så att det blir enkelt att utöka programmet med nya delar och att iterera över det vi redan har utan att någonting kraschar i någon annan del av programmet.
 
 ## Formatering
 
@@ -16,11 +16,11 @@ Kodstandarden fungerar också som en stabil grund för programmets kodstruktur s
 
 ## Kodgranskning
 
-Vi har använt ett kodgranskningssystem där vi låter alla pull requests bli granskade av någon person i gruppen innan den kan bli mergad.
+Vi har använt ett kodgranskningssystem där vi låter alla pull requests bli granskade av någon frivillig person i gruppen som ska säkerställa att koden är av hög standard.
 
-Om en pull request inte uppfyller de krav vi har om kodkvalitet och formatering, så kommer kodgranskaren begära förändringar innan den kan mergas med huvudprogrammet. I praktiken så innebär detta att kodgranskaren skriver kommentarer i PR:en där han/hon inte känner sig nöjd, och så måste den ursprungliga utvecklaren ta hänsyn till detta när han/hon uppdaterar sin PR. När utvecklaren har korrigerat alla fel i commiten så kommer kodgranskaren att göra en merge på pullrequesten och huvudprogrammet.
+Om en pull request inte uppfyller de krav vi har om kodkvalitet och formatering, så kommer kodgranskaren att begära förändringar som måste göras innan den kan mergas med huvudprogrammet. I praktiken så innebär detta att kodgranskaren skriver kommentarer i PR:en där han/hon inte känner sig nöjd, och så måste den ursprungliga utvecklaren ta hänsyn till detta när han/hon uppdaterar sin PR. När utvecklaren har korrigerat alla fel i commiten så kommer kodgranskaren att göra en merge på pullrequesten och huvudprogrammet.
 
-Om man vet att ens kod kan bli avvisad så lägger man ner extra energi på att skriva korrekt och bra kod. En granskning och uppdatering av en pull request tar tid. Därför fungerar kodgranskningen som ett förebyggande medel mot dåligt skriven kod. Men ibland kan misstag dyka upp som den ursprungliga utvecklaren inte vetat om, då kan det vara bra att ha någon annan utvecklare att läsa igenom ens kod för att hitta eventuella fel man missat.
+Om man vet att ens kod kan bli avvisad så lägger man ner extra energi på att skriva bra och korrekt kod. En granskning och uppdatering av en pull request tar tid. Därför fungerar kodgranskningen som ett förebyggande medel mot dåligt skriven kod. Men ibland kan misstag dyka upp som den ursprungliga utvecklaren inte vetat om, då kan det vara bra att ha någon annan utvecklare att läsa igenom ens kod för att hitta eventuella fel man missat.
 
 ## Prestanda
 
