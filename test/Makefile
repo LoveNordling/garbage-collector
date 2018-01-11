@@ -11,16 +11,16 @@ ALL_SRCS := $(wildcard ../src/*.c)
 SRC := $(filter-out ../src/main%.c, $(ALL_SRCS))
 OBJ_SRC = $(SRC:.c=.o)
 
-test:	$(OBJ_TEST) objsrc
+all:	$(OBJ_TEST) objsrc
 	$(CC) $(CFLAGS) -o $(TEST) $(OBJ_TEST) $(OBJ_SRC) $(LDFLAGS)
 
 objsrc:	
-	$(MAKE) -C ../ gc
+	$(MAKE) -C ../ all
 
-run_test: test
+run_test: all
 	./$(TEST)
 
-debug: test
+debug: all
 	gdb ./$(TEST)
 
 %.o: %.c %.h
@@ -29,7 +29,7 @@ debug: test
 %.o: %.c
 	$(CC) $(CFLAGS) $< -c
 
-valgrind: test
+valgrind: all
 	valgrind --leak-check=yes ./$(TEST)
 
 clean:
