@@ -11,19 +11,17 @@ GC_SRC := $(filter-out ../src/main%.c, $(GC_SRCS))
 GC_HDR := $(wildcard ../src/*.h);                                              
 GC_OBJ = $(GC_SRC:.c=.o)
 
-all: demo
-
-demo: $(OBJ) objsrc
+all: $(OBJ) objsrc
 	$(CC) $(CFLAGS) $(OBJ) $(GC_OBJ) -o $(NAME) $(LDFLAGS)
 
-run: demo                                                                       
+run: demo
 	./$(NAME)    
 
 debug: demo                                                                     
-	gdb ./gc
+	gdb ./$(NAME)
 
 objsrc: 
-	$(MAKE) -C ../src gc
+	$(MAKE) -C ../src all
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) $*.c $*.h -c         
@@ -34,7 +32,6 @@ valgrind: all
 	valgrind --leak-check=yes ./$(NAME)                                     
 
 clean:                                                                          
-	#$(MAKE) -C ../ clean
 	rm -f $(OBJ) $(NAME)
 	rm -f *#*                                                               
 	rm -f *.gch
@@ -44,5 +41,5 @@ clean:
 docs:                                                                           
 	doxygen Doxyfile                                                        
 
-.PHONY = valgrind clean run run_test                                          
+.PHONY : valgrind clean run run_test                                          
 
