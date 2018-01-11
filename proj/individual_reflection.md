@@ -1,14 +1,20 @@
 Individuella reflektioner
 =========================
 
-+ Hur fungerar du i ett team? Faller du in i ett särskilt mönster, eller tar du återkommande en särskild roll? 
-Inspiration: http://www.moberggolf.com/2010/12/roller-i-grupp/
-+ Får du ut något av att jobba i en grupp, eller jobbar du helst ensam?
-+ Jämför hur mycket du lärt dig under projektarbetet kontra kursens övriga delar, och fundera över hur du bäst lär dig saker.
-+ Hur har det gått att logga arbetstid?
-+ “Biggest fail” och “biggest win”, dvs. det största problem som du stötte på och det smartaste eller bästa du gjorde.
-
 ##### Manuel Alexan
+Jag vet inte riktigt vilka roller jag brukar ha i grupparbeten. Men jag är väl den tyste som inte säger så mycket men ändå bryr sig om att få saker och ting gjort. Om andra är motiverade så blir jag själv också motiverad och det gör ett grupparbete mer meningsfullt och lärorikt än en inlämningsuppgift som man bara vill göra klart.
+
+Jag tycker om att både jobba ensam och i grupp. Det är roligt att jobba med andra när man känner att samarbetet går bra och att det ökar effektiviteten för ett projekt. Men det kan vara svårt att hitta den där optimala punkten där alla jobbar parallellt och tillsammans får projektet att gå framåt, annars kan det kännas som att det finns för många kockar i köket eller att det uppstår en bottleneck nånstans som andra måste vänta på. 
+
+Min styrka är att jag är bra på att producera kod när jag vet vad som ska implementeras. Min svaghet är att jag är dålig på att kommunicera med andra och att grundligt läsa igenom och förstå hur deras kod fungerar. Jag har bara svårt att läsa igenom kod utan föredrar att läsa beskrivande artiklar eller böcker istället.
+
+Jag tycker att jag lär mig bäst när jag är intresserad av någonting och har ett behov av att förstå det. Men under projektet så har jag känt en stor motivation till att förstå saker när jag vet att jag måste göra det för att bli klar med en viss sprint. Det är också viktigt att förstå hur hela programmet ska fungera som en helhet om man ska kunna göra en bra planering. Jag tycker dock att det är roligast att lära sig nånting när man verkligen är engagerad i det och inte gör det bara för att göra färdigt en skoluppgift.
+
+Jag har inte varit särskilt noga med att logga tid men det har väl gått bra. Man är ju nästan alltid aktiv på Discord chatten och då kan det dyka upp PR:s eller små buggar nästan varje dag och tiden det tar för att kolla igenom dem adderas ihop. Sen har jag också spenderat ganska många timmar på att läsa och försöka förstå mig på de olika delarna av projektspecifikationen.
+
+Min biggest fail var nog hur jag hanterade uppkommande problem i projektet. Det är viktigt att inse sina misstag och ta ansvar för vad som gått fel men samtidigt måste alla komma på en  lösning för hur man ska gå framåt. För senare i projektet så kändes det som att alla grävde in sig i sina respektiva moduler och optimeringar och det gjorde det svårare och svårare att förstå hur programmets olika komponenter fungerade.
+
+Min biggest win var att jag försökt arbeta med alla medlemmar i gruppen även om vi inte är helt eniga om hur någonting ska implementeras. Det tycker jag har lett till att programmet har blivit bättre eftersom att vi kan tillsammans diskutera fram den mest korrekta lösnigen som ska implementeras.
 
 
 ##### Ricardo Danza
@@ -35,6 +41,7 @@ Har loggat arbetstid hyffsat okej, har en ungefärlig tidsrapport, dock tycker j
 Mitt största problem under projektet var nog att jag inte tog mig lika mycket tid att verkligen förstå scrum, att det hade varit bättre att dela upp arbetet i ännu fler sprintar och att det skulle vara sjukt bra om vi skrev gränssnitten innan vi påbörjade alla moduler. Det bästa var nog objekt + bits modulerna, lärde mig galet mycket av att vara med och skriva/planera dem så det var grymt kul!
 
 ##### Love Nordling
+
 Att arbeta i grupp har överlag gått väldigt bra tycker jag. Jag trivs med att kunna diskutera alla delar av programmet kontinuerligt och att känna att vi är alla i samma båt. Dock när jag blir stressad, vilket jag blev i slutet, faller jag lätt in i en "Nu jävlar ska koden köra"-mode och tappar lite av kommunikationen med resten av teamet. Detta ledde till slut till min biggest fail nedan.
 
 
@@ -48,4 +55,3 @@ Den största vinsten för mig har varit att programmera saker långt utanför mi
 
 Biggest Fail: 
 I slutet av projektet så hamnade jag för mycket på min egna branch och kunde sen inte merga enkelt med master då min kod skillde sig ganska mycket från masterbranchen. Jag borde ha varit mer rigorös med att arbeta utifrån master istället.
-
