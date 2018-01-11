@@ -7,7 +7,7 @@ Testerna automatiserades genom bra använding av Makefile som tillät oss att k�
 
 
 Integrationstestning:
-integrationstestningen började med att allokera stora mängder int:ar och spara endast ett fåtal av dessa. Detta för att trigga skräpsamlaren under testets gång. Många buggar visade sig 
+Integrationstestningen började med att allokera stora mängder int:ar och spara endast ett fåtal av dessa. Detta för att trigga skräpsamlaren under testets gång. Många buggar visade sig redan från start och i och med att dessa fixades så framkom många nya. Det står nu klart att allokeringen av data på heapen fungerar som den ska. Problemet ligger någonstans i skräpsamlingsalgoritmen eller i någon av de moduler som den använder. På grund av dessa många problem 
 
 
 
