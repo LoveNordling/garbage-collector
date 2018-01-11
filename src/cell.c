@@ -7,6 +7,7 @@ void cell_initialize(cell_t* c)
     cell_set_front_offset(c, 0);
 }
 
+//front pointer = cell_start + byte_offset
 void* cell_front_ptr(cell_t* c, void* start)
 {
     return (void*) (((char*)start) + c->front_offset);
