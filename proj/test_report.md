@@ -1,0 +1,29 @@
+Unit testing,
+
+Vi hade som mål från början att det skulle finas tester till alla modulerna. Vi lyckades skriva tester till de flesta modulerna där
+de viktigaste funktionerna testades. 
+Testerna automatiserades genom bra använding av Makefile som tillät oss att köra alla tester som fanns i test-mappen via ett enda kommando. 
+
+
+
+Integrationstestning:
+Integrationstestningen började med att allokera stora mängder int:ar och spara endast ett fåtal av dessa. Detta för att trigga skräpsamlaren under testets gång. Många buggar visade sig redan från start och i och med att dessa fixades så framkom många nya. Det står nu klart att allokeringen av data på heapen fungerar som den ska. Problemet ligger någonstans i skräpsamlingsalgoritmen eller i någon av de moduler som den använder. På grund av att detta första test aldrig gick igenom på ett tillfredställande vis så skapades, förutom demo, endast ett till integrationstest för allokering av en lista. 
+
+
+
+
+Regressionstestning:
+Lagerhanteraren kördes utan gh interfacet för att se till att allt funkar som det skulle. Andra steget i regressionstestningen var 
+att ta bort alla "frees" och funktioner och logik som frigör noder, listor och träd och såg till att lagerhanteraren funkade som 
+den skulle utan att krascha. Tredje steget var att byta ut alla callocs i list.c mot h_alloc_struct och sedan testa operationer 
+som är beroende på listor som "Add shelf", "remove shelf", "edit shelf" etc. Nästa steg var att byta ut callocs i tree.c och köra
+lagerhanteraren. Sista steget var att byta ut calloc funktionerna i goods.c självaste lagerhanteraren. Testerna gick igenom och
+lagerhanterrarens funktionalitet inte påverkades. Det finns ett undantag av calloc som inte kunde bytas ut nämligen 
+calloc(length,sizeof(node_t)). Vi behöver en funtion som kan ta in ett int och en sträng och upprepa strängen lika många gånger som
+int:en anger för att sedan kunna skicka denna formatsträng till h_alloc_struct. Implementationen är enkel med hann inte göra det.
+
+Issues:
+Vi har inte varit konsekventa med användingen av issues på github, men såklart hade vi buggar. 
+Under testning av object.c uppmärksammades att man hade förstått fel hur man hanterar pekare och hur man kan skapa en pekare i 
+minnet som har pre-allokerats. Vid testning av object_copy-funktionen insåg man att man jämförde data som låg på stacken och inte 
+på heapen som vi hade allokerat. Det var viktigt att åtgärda detta under testning än att försöka debugga detta sedan.

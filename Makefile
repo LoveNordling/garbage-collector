@@ -1,42 +1,36 @@
-CC = gcc
-CFLAGS = -std=c99 -ggdb -Wall
-LDFLAGS = 
-NAME = gc
+GC: gc
+TEST: tests
 
-SRC := $(wildcard *.c)
-HDR := $(wildcard *.h);
-OBJ = $(SRC:.c=.o)
+all: gc test
 
-all:	 gc test
+gc:
+	$(MAKE) -C src gc
 
-gc: 	$(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS)
+run: gc
+	$(MAKE) -C src run
 
-run: 	gc
-	./$(NAME)
+test:
+	$(MAKE) -C test tests 
 
-test:	$(OBJ)
-	$(MAKE) -C tests test
 
-run_test: test
-	$(MAKE) -C tests run_test
+run_test: 
+	$(MAKE) -C test run_test
 
-%.o: 	%.c %.h
-	$(CC) $(CFLAGS) $*.c $*.h -c
+demo:
+	$(MAKE) -C demo all
 
-%.o: 	%.c
-	$(CC) $(CFLAGS) $< -c
+debug: gc
+	$(MAKE) -C src debug
 
-valgrind: all
-	valgrind --leak-check=yes ./$(NAME)
+debug_test: test
+	$(MAKE) -C test debug
 
 clean:
-	rm -f $(OBJ) $(NAME) *~
-	$(MAKE) -C tests clean
-	rm -f *#
-	rm -f *.gch
+	$(MAKE) -C src clean
+	$(MAKE) -C test clean
+	$(MAKE) -C demo clean
 
 docs:
 	doxygen Doxyfile
 
-.PHONY = valgrind clean run run_test
+.PHONY = run run_test debug debug_test clean docs
