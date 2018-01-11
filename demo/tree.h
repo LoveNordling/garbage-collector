@@ -130,5 +130,7 @@ void sort_tree(tree_t **tree);
 void sort_balance(tree_t **tree);
 bool check_sort(tree_t *tree);
 
+heap_t* tree_heap(tree_t* t);
+
 #endif
 

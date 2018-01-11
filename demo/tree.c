@@ -170,7 +170,7 @@ void tree_insert2(node_t *node, tree_key_t key, elem_t elem, element_comp_fun cm
       tree_insert2(node->left, key, elem, cmp_f, cpy_f, heap);
     }
     else{
-      elem = (cpy_f) ? cpy_f(elem) : elem;
+      elem = (cpy_f) ? cpy_f(elem, heap) : elem;
       node->left =  make_node(p_new_node, key, elem, heap);
     }
   }
@@ -179,7 +179,7 @@ void tree_insert2(node_t *node, tree_key_t key, elem_t elem, element_comp_fun cm
       tree_insert2(node->right, key, elem, cmp_f, cpy_f, heap);
     }
     else{
-      elem = (cpy_f) ? cpy_f(elem) : elem;
+      elem = (cpy_f) ? cpy_f(elem, heap) : elem;
       node->right = make_node(p_new_node, key, elem, heap);
     }
   }
@@ -635,6 +635,12 @@ int int_comp(elem_t x, elem_t y){
     return 0;
   }
 } 
+
+heap_t* tree_heap(tree_t* t)
+{
+  return t->heap;
+}
+
 
 /*
 void elem_free_f(elem_t elem){

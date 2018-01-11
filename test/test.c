@@ -9,6 +9,8 @@
 #include "test_object.h"
 #include "test_bits.h"
 #include "test_integration.h"
+#include "test_list.h"
+
 //Import your test functions here
 
 
@@ -51,6 +53,10 @@ int main(int argc, char **argv) {
     CU_add_test(obj_tests, "Testing get_object_size", test_get_object_size);
     CU_add_test(obj_tests, "Testing get_object_size_layout", test_get_object_size_layout);
     CU_add_test(obj_tests, "Testing format_string_parser", test_format_string_parser);
+
+    CU_pSuite integration_tests = CU_add_suite("Integration", NULL, NULL);
+    CU_add_test(integration_tests, "Testing int allocation and gc", test_gc);
+    CU_add_test(integration_tests, "Testing int allocation and gc", test_linked_list);
     //Add your test suits and unit tests here.
     //The test functions should be placed in separate file the best thing would be one per module. Each module can have a seperate test suit to ease debugging.
 

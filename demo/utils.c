@@ -58,7 +58,7 @@ int read_string(char *buffer, size_t buffer_size) {
     return read;
 }
 bool valid_index(char *index) {
-    if (!is_number(index)) {
+    if (!is_number_utils(index)) {
       if (strchr("CPN", toupper(index[0])) != NULL) {
             return true;
         }
@@ -118,7 +118,7 @@ char ask_question_char(char *question){
     return ask_question(question, is_char, (convert_func)convert_char).c;
 }
 int ask_question_int(char *question) {
-    return ask_question(question, is_number, (convert_func)atoi).i;
+    return ask_question(question, is_number_utils, (convert_func)atoi).i;
 }
 char *ask_question_string(char *question) {
     return ask_question(question, not_empty, (convert_func)strdup).s;

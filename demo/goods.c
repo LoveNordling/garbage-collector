@@ -40,8 +40,8 @@ void list_delete_func(elem_t elem){
 
 }
 */
-elem_t list_copy_func(elem_t elem){
-  shelf_t *shelf = calloc(1, sizeof(shelf_t));
+elem_t list_copy_func(elem_t elem, heap_t* h){
+  shelf_t *shelf = h_alloc_struct(h, "*i");//calloc(1, sizeof(shelf_t));
   shelf->name = strdup(((shelf_t *)(elem.p))->name);
   shelf->qty = ((shelf_t *)(elem.p))->qty;
   return (elem_t) {.p = shelf};
@@ -57,7 +57,7 @@ void list_delete_taken_func(elem_t elem){
   }
 */
 
-elem_t list_copy_taken_func(elem_t elem){
+elem_t list_copy_taken_func(elem_t elem, heap_t* h){
     char *new = strdup(elem.p);
     return (elem_t) {.p = new};
 }
@@ -79,15 +79,15 @@ void tree_delete_elem_func(elem_t elem){
 }
 */
 
-bool tree_copy_func_aux(elem_t elem, void *data){
-  elem_t new_elem = list_copy_func(elem);
+bool tree_copy_func_aux(elem_t elem, void *data, heap_t* h){
+  elem_t new_elem = list_copy_func(elem, h);
   //printf("The shelf is %s, new is %s\n", ((shelf_t*)(elem.p))->name, ((shelf_t*)(new_elem.p))->name);
   list_append(data, new_elem);  
   //list_delete_func(new_elem);
   return true;
 }
 
-elem_t tree_copy_func(elem_t elem){
+elem_t tree_copy_func(elem_t elem, heap_t* h){
  //goods_t *goods = calloc(1, sizeof(goods_t));
   //goods->name = strdup(((goods_t *)(elem.p))->name);
   //goods->desc = strdup(((goods_t *)(elem.p))->desc);
@@ -100,7 +100,7 @@ elem_t tree_copy_func(elem_t elem){
 }
 
 elem_t tree_copy_complete_func(elem_t elem, heap_t* heap){
-    goods_t *goods = calloc(1, sizeof(goods_t));
+  goods_t *goods = h_alloc_struct(heap, "***i");//calloc(1, sizeof(goods_t));
     goods->name = strdup(((goods_t *)(elem.p))->name);
     goods->desc = strdup(((goods_t *)(elem.p))->desc);
     goods->price = ((goods_t *)(elem.p))->price;
@@ -159,7 +159,7 @@ int choose_shelf(list_t *list) {
 
 shelf_t *make_shelf(list_t *taken, char *shelf, int amount) {
     //shelf_t new = {.name = shelf, .qty = amount};
-    shelf_t *new = calloc(1, sizeof(shelf_t));
+  shelf_t *new = h_alloc_struct(list_heap(taken), "*i");//calloc(1, sizeof(shelf_t));
     new->name = shelf;
     new->qty = amount;
     list_append(taken, (elem_t) {.p = shelf});
@@ -186,7 +186,7 @@ goods_t *input_goods(tree_t *tree, list_t *taken, char *name, char *desc, int pr
         //fattar inte exakt vad dessa frees gör.
     }
 
-    goods_t *goods = calloc(1, sizeof(goods_t));
+    goods_t *goods = h_alloc_struct(tree_heap(tree), "***i");//calloc(1, sizeof(goods_t));
     goods->name = name;
     goods->desc = desc;
     goods->price = price;
@@ -212,7 +212,7 @@ goods_t *input_goods_ui(tree_t *tree, list_t *taken, heap_t* heap) {
         //list_delete_func((elem_t) {.p = newsh});
         //free(newsh);
         // Updating the item
-        goods_t *goods = malloc(sizeof(goods_t));
+        goods_t *goods = h_alloc_struct(heap, "***i");//malloc(sizeof(goods_t));
         goods->name = ((goods_t *)temp.p)->name;
         goods->desc = ((goods_t *)temp.p)->desc;
         goods->price = ((goods_t *)temp.p)->price;
@@ -368,7 +368,7 @@ goods_t *choose_goods(tree_t *tree, char *question) {
         puts("You're already at page 1!");
       }
     } else if (choice == -1) {  // C
-        free(keys);
+      //free(keys);
       return NULL;
     } else if (choice > noitems) {
       puts("That's an invalid index");
@@ -538,29 +538,33 @@ void list_shelf_printer(elem_t elem, FILE *fPointer) {
     getline(&amount, &size, fPointer);
     size = 0; 
     int limit = atoi(amount);
+    free(amount);
     for(int i = 1; i <= limit; i++) {
-      
       getline(&item, &size, fPointer);
       char *t= item;
       strtok(t, "\n");
       char *name = strdup(t);
       size = 0;
-
+      free(item);
       getline(&item, &size, fPointer);
       t= item;
       strtok(t, "\n");
       char *desc = strdup(t);
+      free(t);
       size=0;
-
+      
       getline(&item, &size, fPointer);
       int price = atoi(item);
       size = 0;
-
+      
+      free(item);
       getline(&item, &size, fPointer);
       int s_amount = atoi(item);
       size = 0;
-
+      free(item);
       goods_t *temp = input_goods(tree, taken, name, desc, price);
+      
+      //free(desc);
       list_t *list = list_new(list_copy_func, list_comp_func, heap);
       for(int s = 1; s <= s_amount; s++){
          char *var = NULL;
@@ -569,17 +573,23 @@ void list_shelf_printer(elem_t elem, FILE *fPointer) {
          char *name = strdup(var);
          
          size = 0;
+         
          getline(&item, &size, fPointer);
          int qty = atoi(item);
-        
+         free(item);
          size = 0;
         shelf_t *new = make_shelf(taken, name, qty);
         list_insert(list, 0, (elem_t) {.p = new});
         //list_delete_func((elem_t) {.p = new});
-        //free((char *)var);
+        free((char *)var);
+
+        free(name);
       }
+
+      //free(item);
       temp->shelves = list;
       tree_insert(tree, (elem_t) {.p = temp->name}, (elem_t) {.p = temp});
+      //free(name);
       //tree_delete_elem_func((elem_t) {.p = temp});
     }
     //tree_delete(tree, true, true);
@@ -588,7 +598,7 @@ void list_shelf_printer(elem_t elem, FILE *fPointer) {
 
 void event_loop() {
     heap_t * heap =h_init(40000, true, 0.5);
-    action_t *undo = malloc(sizeof(action_t));
+    action_t *undo = h_alloc_struct(heap, "i*");//malloc(sizeof(action_t));
     undo->type = NOTHING;
     tree_t *tree = tree_new(tree_copy_func, NULL /*tree_delete_key_func*/,tree_comp_func, heap);
     list_t *taken = list_new(list_copy_taken_func, list_comp_taken_func, heap);
@@ -645,6 +655,7 @@ void event_loop() {
               //free(undo->data);
               //tree_delete_elem_func((elem_t) {.p = undo->data});
             }
+            h_delete(heap);
             //free(undo);
             //free(tree);
             //free(taken);

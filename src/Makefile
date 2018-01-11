@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -std=c99 -ggdb -Wall
-LDFLAGS = 
+CFLAGS = -std=c99 -ggdb -Wall -fprofile-arcs -ftest-coverage -lgcov -pg -no-pie
+LDFLAGS = -fprofile-arcs -ftest-coverage -lgcov -pg -no-pie 
 NAME = gc
 
 SRC := $(wildcard *.c)
@@ -31,6 +31,8 @@ clean:
 	rm -f $(OBJ) $(NAME) *~
 	rm -f *#*
 	rm -f *.gch
+	rm -f *.gcda
+	rm -f *.gcno
 
 docs:
 	doxygen Doxyfile
