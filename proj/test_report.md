@@ -7,7 +7,7 @@ Testerna automatiserades genom bra använding av Makefile som tillät oss att k�
 
 
 Integrationstestning:
-integrationstestningen började med att allokera stora mängder int:ar och spara endast ett fåtal av dessa. Detta för att trigga skräpsamlaren under testets gång. Många buggar visade sig 
+Integrationstestningen började med att allokera stora mängder int:ar och spara endast ett fåtal av dessa. Detta för att trigga skräpsamlaren under testets gång. Många buggar visade sig redan från start och i och med att dessa fixades så framkom många nya. Det står nu klart att allokeringen av data på heapen fungerar som den ska. Problemet ligger någonstans i skräpsamlingsalgoritmen eller i någon av de moduler som den använder. På grund av att detta första test aldrig gick igenom på ett tillfredställande vis så skapades, förutom demo, endast ett till integrationstest för allokering av en lista. 
 
 
 
@@ -15,7 +15,12 @@ integrationstestningen började med att allokera stora mängder int:ar och spara
 Regressionstestning:
 Lagerhanteraren kördes utan gh interfacet för att se till att allt funkar som det skulle. Andra steget i regressionstestningen var 
 att ta bort alla "frees" och funktioner och logik som frigör noder, listor och träd och såg till att lagerhanteraren funkade som 
-den skulle utan att krascha. Tredje steget var att byta ut alla callocs i list.c mot h_alloc_struct och sedan testa operationer som är beroende på listor som "Add shelf", "remove shelf", "edit shelf" etc. Nästa steg var att byta ut callocs i tree.c och köra lagerhanteraren. Sista steget var att byta ut calloc funktionerna i goods.c självaste lagerhanteraren. 
+den skulle utan att krascha. Tredje steget var att byta ut alla callocs i list.c mot h_alloc_struct och sedan testa operationer 
+som är beroende på listor som "Add shelf", "remove shelf", "edit shelf" etc. Nästa steg var att byta ut callocs i tree.c och köra
+lagerhanteraren. Sista steget var att byta ut calloc funktionerna i goods.c självaste lagerhanteraren. Testerna gick igenom och
+lagerhanterrarens funktionalitet inte påverkades. Det finns ett undantag av calloc som inte kunde bytas ut nämligen 
+calloc(length,sizeof(node_t)). Vi behöver en funtion som kan ta in ett int och en sträng och upprepa strängen lika många gånger som
+int:en anger för att sedan kunna skicka denna formatsträng till h_alloc_struct. Implementationen är enkel med hann inte göra det.
 
 Issues:
 Vi har inte varit konsekventa med användingen av issues på github, men såklart hade vi buggar. 
