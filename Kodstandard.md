@@ -6,14 +6,14 @@ Om vi alla följer den så kan vi leverera ett bibliotek som är skriven på ett
 ## 1) Konstanter ska vara i caps:
 
 ```c
-##define MAX_HEAP_SIZE 2^24
+#define MAX_HEAP_SIZE 2^24
 const double PI = 3.14159265359f;
 ```
 
 ## 2) Filnamn, variabelnamn och funktionsnamn ska ha understreck mellan orden:
 
 ```c
-quad_tree.c
+quad_tree.c;
 int variable_name;
 void function_that_does_something()
 {
