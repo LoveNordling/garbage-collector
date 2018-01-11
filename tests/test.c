@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
   CU_pSuite tests = CU_add_suite("Unit tests sample", NULL, NULL); //Creats a bundle of tests (test suit) called tests.
   //CU_add_test(tests, "First unit test", test_test); // Adds a test to tests
   //CU_add_test(tests, "testing safe pointer check", test_is_pointer_to_heap);
-  //CU_add_test(tests, "Integration test", test_gc);
+  CU_add_test(tests, "Integration test", test_gc);
   CU_add_test(tests, "List Integration test", test_linked_list);
   
   //Add your test suits and unit tests here.
