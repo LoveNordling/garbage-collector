@@ -42,4 +42,4 @@ clean:
 docs:
 	doxygen Doxyfile
 
-.PHONY = valgrind clean run
+.PHONY : valgrind clean run

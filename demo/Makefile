@@ -14,10 +14,10 @@ GC_OBJ = $(GC_SRC:.c=.o)
 all: $(OBJ) objsrc
 	$(CC) $(CFLAGS) $(OBJ) $(GC_OBJ) -o $(NAME) $(LDFLAGS)
 
-run: demo
+run: all
 	./$(NAME)    
 
-debug: demo                                                                     
+debug: all                                                                    
 	gdb ./$(NAME)
 
 objsrc: 
