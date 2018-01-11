@@ -2,6 +2,7 @@ Unit testing,
 
 Vi hade som mål från början att det skulle finas tester till alla modulerna. Vi lyckades skriva tester till de flesta modulerna där
 de viktigaste funktionerna testades. 
+Testerna automatiserades genom bra använding av Makefile som tillät oss att köra alla tester som fanns i test-mappen via ett enda kommando. 
 
 
 
