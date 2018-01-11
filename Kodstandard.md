@@ -1,16 +1,16 @@
-## Kodstandard
+# Kodstandard
 
 Det här är en kodstandard och samling formateringsregler som har utgått från officiella konventioner användna i K&R, GNU C och GTK+.
 Om vi alla följer den så kan vi leverera ett bibliotek som är skriven på ett tydligt och sammanhängande vis.
 
-# 1) Konstanter ska vara i caps:
+## 1) Konstanter ska vara i caps:
 
 ```c
-#define MAX_HEAP_SIZE 2^24
+##define MAX_HEAP_SIZE 2^24
 const double PI = 3.14159265359f;
 ```
 
-# 2) Filnamn, variabelnamn och funktionsnamn ska ha understreck mellan orden:
+## 2) Filnamn, variabelnamn och funktionsnamn ska ha understreck mellan orden:
 
 ```c
 quad_tree.c
@@ -22,7 +22,7 @@ void function_that_does_something()
 ```
 
 
-# 3) Klammerparenteser ska ligga på sina egna rader:
+## 3) Klammerparenteser ska ligga på sina egna rader:
 
 ```c
 int foo()
@@ -35,7 +35,7 @@ int foo()
 ```
 
 
-# 4) Pekare ska se ut på följande sätt:
+## 4) Pekare ska se ut på följande sätt:
 
 ```c
 int* p;
@@ -43,7 +43,7 @@ void read_file(char* buf, int size);
 ```
 
 
-# 5) Typedefs till struktar och unioner ska separeras med understreck och sluta med 't':
+## 5) Typedefs till struktar och unioner ska separeras med understreck och sluta med 't':
 
 ```c
 typedef struct
@@ -60,7 +60,7 @@ typedef union
 ```
 
 
-# 6) Include guards ska se ut på följande vis:
+## 6) Include guards ska se ut på följande vis:
 
 ```c
 #ifndef FILE_NAME_H
@@ -76,7 +76,7 @@ void bar(void);
 #endif /* FILE_NAME_H */
 ```
 
-# 7) Indentering ska göras med fyra(4) stycken mellanslag.
+## 7) Indentering ska göras med fyra(4) stycken mellanslag
 Kan göras genom att lägga till:
 (setq-default indent-tabs-mode nil)
 (setq c-default-style "linux"
