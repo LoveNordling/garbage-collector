@@ -17,7 +17,7 @@ run_test:
 	$(MAKE) -C test run_test
 
 demo:
-	$(MAKE) -C demo
+	$(MAKE) -C demo all
 
 debug: gc
 	$(MAKE) -C src debug
@@ -28,6 +28,7 @@ debug_test: test
 clean:
 	$(MAKE) -C src clean
 	$(MAKE) -C test clean
+	$(MAKE) -C demo clean
 
 docs:
 	doxygen Doxyfile

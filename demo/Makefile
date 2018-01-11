@@ -1,6 +1,6 @@
 CC = gcc                                                                        
-CFLAGS = -std=c99 -ggdb -Wall                                                   
-LDFLAGS =                                                                       
+CFLAGS = -std=c99 -ggdb -Wall -fprofile-arcs -ftest-coverage -lgcov -pg -no-pie                                      
+LDFLAGS = -fprofile-arcs -ftest-coverage -lgcov -pg -no-pie                                                                        
 NAME = demo                                                              
 SRC := $(wildcard *.c)                                                          
 HDR := $(wildcard *.h);                                                         
@@ -14,7 +14,8 @@ GC_OBJ = $(GC_SRC:.c=.o)
 all: demo
 
 demo: $(OBJ) objsrc
-	$(CC) $(CFLAGS) $(OBJ) $(GC_OBJ) -o $(NAME) $(LDFLAGS)                            
+	$(CC) $(CFLAGS) $(OBJ) $(GC_OBJ) -o $(NAME) $(LDFLAGS)
+
 run: demo                                                                       
 	./$(NAME)    
 
@@ -24,17 +25,21 @@ debug: demo
 objsrc: 
 	$(MAKE) -C ../src gc
 
-%.o: %.c %.h                                                                  		$(CC) $(CFLAGS) $*.c $*.h -c         
+%.o: %.c %.h
+	$(CC) $(CFLAGS) $*.c $*.h -c         
 %.o: %.c                                                                        
-	$(CC) $(CFLAGS) $< -c                                                   
+	$(CC) $(CFLAGS) $< -c
+
 valgrind: all                                                                   
 	valgrind --leak-check=yes ./$(NAME)                                     
 
 clean:                                                                          
-	$(MAKE) -C ../ clean
+	#$(MAKE) -C ../ clean
 	rm -f $(OBJ) $(NAME)
 	rm -f *#*                                                               
-	rm -f *.gch                                                             
+	rm -f *.gch
+	rm -f *.gcno
+	rm -f *.gcda
 
 docs:                                                                           
 	doxygen Doxyfile                                                        

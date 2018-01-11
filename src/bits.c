@@ -55,6 +55,7 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
     
     bv = bv << (SYS_BIT - SIZE_BIT_LENGTH - 1);
 
+
     while(*current && index > 0)
     {
         //How many of next char is going to be written in bv
@@ -75,7 +76,7 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
             } while('0' <= *current && *current <= '9');
         }
 
-        //If it's a '*' we have to add 'repeats' nr of 1's in bv
+         //If it's a '*' we have to add 'repeats' nr of 1's in bv
         if(*current == '*'){
             do
             {
@@ -93,9 +94,7 @@ uintptr_t new_bv_layout(char *layout, size_t bytes)
         current++;
     }
 
-    //MSB shall be 1 if bv is a layout
-    bv = set_msb(bv,1);
-
+    bv = set_msb(bv, 1);
     //Return it with lsbs set to 11 since it's a bitvector.
     bv = set_lsbs(bv, 3);
     return bv;
@@ -108,7 +107,7 @@ uintptr_t new_bv_size(size_t bytes)
     //Shift it to left by 2 so we can fits 2 lsbs as metadata.
     uintptr_t leftshifted = bytes << 2;
     
-    //Return it with lsbs set to 11 since it's a bitvector.
+     //Return it with lsbs set to 11 since it's a bitvector.
     return set_lsbs(leftshifted, 3);
 }
 
@@ -136,7 +135,7 @@ uintptr_t bv_size(uintptr_t bv)
 char *bv_to_str(uintptr_t bv)
 {
 
-    char* str;
+  char* str;
     if(get_msb(bv) == 1)
     {
         int layout_bits = bv_size(bv) / PTR_SIZE; //TODO
@@ -202,8 +201,8 @@ uintptr_t set_bit(uintptr_t num, int bit_index, int bit)
 // - (size_t) 3 (sets lsbs to bits 11)
 uintptr_t set_lsbs(uintptr_t pointer, size_t bits)
 {
-    uintptr_t ptr = lsbs_to_zero(pointer);
-    return ptr | bits;
+  uintptr_t ptr = lsbs_to_zero(pointer);
+  return ptr | bits;
 }
 
 //returns the value of the last two bits in a pointer
@@ -214,15 +213,15 @@ int get_lsbs(uintptr_t pointer)
     {
         return 0;
     }
-    else if((pointer & (size_t)3) == (size_t)1)
+  else if((pointer & (size_t)3) == (size_t)1)
     {
         return 1;
     }
-    else if((pointer & (size_t)3) == (size_t)2)
+  else if((pointer & (size_t)3) == (size_t)2)
     {
         return 2;
     }
-    else
+  else
     {
         return 3;
     }
@@ -231,13 +230,13 @@ int get_lsbs(uintptr_t pointer)
 // Function to set lsbs to zero
 uintptr_t lsbs_to_zero(uintptr_t pointer)
 {
-    return pointer & ~((size_t)3);
+  return pointer & ~((size_t)3);
 }
 
 //Function to check if lsbs are zero
 bool lsbs_are_zero(uintptr_t pointer)
 {
-    return !(pointer & (size_t)3);
+  return !(pointer & (size_t)3);
 }
 
 //Function to set msb to bit (IF 1, SETS TO 0, ELSE SETS TO 0)
@@ -275,28 +274,28 @@ bool is_frw_adress(uintptr_t header)
 //TODO ASK
 uintptr_t pointer_or_not(uintptr_t vector, char c)
 {
-    switch(c)
+  switch(c)
     {
     case '*':
-        vector = vector << 2;
-        return set_lsbs(vector, 3);
+      vector = vector << 2;
+      return set_lsbs(vector, 3);
     case 'i':
-        vector = vector << 2;
-        return set_lsbs(vector,1);
+      vector = vector << 2;
+      return set_lsbs(vector,1);
     case 'l':
-        vector = vector << 2;
-        return set_lsbs(vector,1);
+      vector = vector << 2;
+      return set_lsbs(vector,1);
     case 'f':
-        vector = vector << 2;
-        return set_lsbs(vector,1);
+      vector = vector << 2;
+      return set_lsbs(vector,1);
     case 'c':
-        vector = vector << 2;
-        return set_lsbs(vector,1);
+      vector = vector << 2;
+      return set_lsbs(vector,1);
     case 'd':
-        vector = vector << 2;
-        return set_lsbs(vector,1);
+      vector = vector << 2;
+      return set_lsbs(vector,1);
     default:
-        return vector;
+      return vector;
     }
 }
 

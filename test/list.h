@@ -1,11 +1,14 @@
 #ifndef __list_h__
 #define __list_h__
 
+/// \file list.h
+///
+/// A linked list
+
 #include <stdbool.h>
 #include "common.h"
-
+#include "../src/gc.h"
 typedef struct list list_t;
-typedef struct node node_t;
 
 /// Creates a new list 
 ///
@@ -13,7 +16,8 @@ typedef struct node node_t;
 /// \param free (may be NULL) used to free elements in list_delete
 /// \param compare (may be NULL) used to compare elements in list_contains
 /// \returns: empty list
-list_t *list_new(element_copy_fun copy, element_comp_fun compare, heap_t* heap);
+list_t *list_new(element_copy_fun copy, element_free_fun free, element_comp_fun compare, heap_t* h);
+
 
 /// Inserts a new element at a given index. 
 ///
@@ -27,7 +31,8 @@ list_t *list_new(element_copy_fun copy, element_comp_fun compare, heap_t* heap);
 /// \param list  pointer to the list
 /// \param index the index for elem to be inserted at
 /// \param elem  the element to be inserted
-void list_insert(list_t *list, int index, elem_t elem);
+/// \returns true if succeeded, else false
+bool list_insert(list_t *list, int index, elem_t elem);
 
 /// Inserts a new element at the end of the list.
 ///
@@ -55,7 +60,8 @@ void list_prepend(list_t *list, elem_t elem);
 /// 
 /// \param list  pointer to the list
 /// \param index the index to be removed
-/// \param delete if true, run list's free function on the removed element
+/// \param delete if true, run list's free function on all elements
+/// \returns true if succeeded, else false
 void list_remove(list_t *list, int index, bool delete);
 
 /// Returns the element at a given index
@@ -101,7 +107,5 @@ bool list_apply(list_t *list, elem_apply_fun fun, void *data);
 /// \param elem the element to search for
 /// \returns the index of elem in list, or -1 if not found
 int list_contains(list_t *list, elem_t elem);
-
-heap_t* list_heap(list_t* list);
 
 #endif

@@ -63,7 +63,7 @@ void list_insert(list_t *list, int index, elem_t elem){
     c = &((*c)->next);
     i++;
   }
-  elem = (list->cpy_f) ? list->cpy_f(elem) : elem;
+  elem = (list->cpy_f) ? list->cpy_f(elem, list->heap) : elem;
   *c = node_new(elem,*c, list->heap);
 }
 
@@ -162,7 +162,7 @@ bool list_apply(list_t *list, elem_apply_fun fun, void *data){
   if(list){
     node_t *c = list->first;
     while(c){
-      bool result = fun(c->elem,data);
+      bool result = fun(c->elem,data, list->heap);
       success = result ? result : success;
       c = c->next;
     }
@@ -192,3 +192,6 @@ void free_elem_func(elem_t elem){
   free(elem.p);
 }
 
+heap_t* list_heap(list_t* list){
+  return list->heap;
+}

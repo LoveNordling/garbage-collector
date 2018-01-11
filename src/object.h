@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include <stdint.h>
 
-
 /**
  * @brief Contains the header to the object that is placed in the allocated memory.
  *
@@ -48,7 +47,6 @@ void* new_object(void* memory_ptr, void* layout, size_t bytes);
  * @param new_p Pointer to the location in memory where the object should be moved to.
  * @return void
  */
-
 void object_copy(object_t *p, object_t *new_p);
 
 /**
@@ -59,7 +57,7 @@ void object_copy(object_t *p, object_t *new_p);
  * object struct.
  *
  * @param p Pointer to the object
- * @return bool TRUE if object has been copied, else FALSE
+ * @return void
  */
 bool object_is_copied(void *p);
 
@@ -81,7 +79,7 @@ void set_forward_address(object_t *current, void *address);
  * @param new_p Pointer to the location in memory where the object should be moved to.
  * @return void
  */
-void* get_forward_address(void *object);
+void* get_forward_address(object_t *current);
 
 /**
  * @brief Gets the size of an object
@@ -93,7 +91,6 @@ void* get_forward_address(void *object);
  */
 size_t get_object_size(void *obj);
 
-//COMMENTS NEEDED
 size_t get_header_size();
 
 //COMMENTS NEEDED
@@ -109,6 +106,7 @@ char* get_format_string(void *obj);
  * @return  unsigned int with the size required for the object.
  */
 size_t format_string_parser(char* layout);
+
 
 uintptr_t get_header(void *ptr);
 
