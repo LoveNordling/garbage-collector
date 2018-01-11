@@ -6,7 +6,8 @@ Testerna automatiserades genom bra använding av Makefile som tillät oss att k�
 
 
 
-
+Integrationstestning:
+integrationstestningen började med att allokera stora mängder int:ar och spara endast ett fåtal av dessa. Detta för att trigga skräpsamlaren under testets gång. Många buggar visade sig 
 
 
 
