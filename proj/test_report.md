@@ -15,7 +15,12 @@ Integrationstestningen började med att allokera stora mängder int:ar och spara
 Regressionstestning:
 Lagerhanteraren kördes utan gh interfacet för att se till att allt funkar som det skulle. Andra steget i regressionstestningen var 
 att ta bort alla "frees" och funktioner och logik som frigör noder, listor och träd och såg till att lagerhanteraren funkade som 
-den skulle utan att krascha. Tredje steget var att byta ut alla callocs i list.c mot h_alloc_struct och sedan testa operationer som är beroende på listor som "Add shelf", "remove shelf", "edit shelf" etc. Nästa steg var att byta ut callocs i tree.c och köra lagerhanteraren. Sista steget var att byta ut calloc funktionerna i goods.c självaste lagerhanteraren. 
+den skulle utan att krascha. Tredje steget var att byta ut alla callocs i list.c mot h_alloc_struct och sedan testa operationer 
+som är beroende på listor som "Add shelf", "remove shelf", "edit shelf" etc. Nästa steg var att byta ut callocs i tree.c och köra
+lagerhanteraren. Sista steget var att byta ut calloc funktionerna i goods.c självaste lagerhanteraren. Testerna gick igenom och
+lagerhanterrarens funktionalitet inte påverkades. Det finns ett undantag av calloc som inte kunde bytas ut nämligen 
+calloc(length,sizeof(node_t)). Vi behöver en funtion som kan ta in ett int och en sträng och upprepa strängen lika många gånger som
+int:en anger för att sedan kunna skicka denna formatsträng till h_alloc_struct. Implementationen är enkel med hann inte göra det.
 
 Issues:
 Vi har inte varit konsekventa med användingen av issues på github, men såklart hade vi buggar. 
