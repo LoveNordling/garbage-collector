@@ -33,6 +33,6 @@ clean:
 	$(MAKE) -C demo clean
 
 docs:
-	doxygen Doxyfile
+	$(MAKE) -C src docs
 
 .PHONY : all test demo run run_test debug debug_test clean docs
