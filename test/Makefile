@@ -15,9 +15,9 @@ all:	$(OBJ_TEST) objsrc
 	$(CC) $(CFLAGS) -o $(TEST) $(OBJ_TEST) $(OBJ_SRC) $(LDFLAGS)
 
 objsrc:	
-	$(MAKE) -C ../ all
+	$(MAKE) -C ../src all
 
-run_test: all
+run: all
 	./$(TEST)
 
 debug: all

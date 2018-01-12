@@ -8,10 +8,11 @@ HDR := $(wildcard *.h);
 OBJ = $(SRC:.c=.o)
 
 all: $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS)
+#$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS)
 
 run: all
-	./$(NAME)
+#./$(NAME)
+	@echo "No main-file in src-map"
 
 debug: all
 	gdb ./$(NAME)
@@ -35,4 +36,4 @@ clean:
 docs:
 	doxygen Doxyfile
 
-.PHONY : valgrind clean run run_test
+.PHONY : valgrind clean run run_test all
