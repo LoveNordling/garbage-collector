@@ -22,7 +22,7 @@ void test_new_object()
 
     CU_ASSERT_EQUAL(x, *(test->first));
     printf("X is %d, *(test->first) %d\n", x, *(test->first));
-    
+    free(memory_start);
 }
 
 
@@ -47,6 +47,8 @@ void test_object_copy()
     CU_ASSERT_EQUAL(*(test->first), *(test2->first));
     CU_ASSERT_NOT_EQUAL(&(test->first), &(test2->first));
 
+    free(cpy_memory_start);
+    free(memory_start);
 }
 
 
@@ -67,6 +69,9 @@ void test_object_is_copied()
 
     CU_ASSERT_TRUE(object_is_copied(test));
     //klolla fv på första struktens pekares bvs layout
+
+    free(cpy_memory_start);
+    free(memory_start);
 }
 
 
@@ -91,7 +96,9 @@ void test_set_forwarding_address()
     //*((test->first)-sizeof(void*));
   
     CU_ASSERT_EQUAL(address_in_bv, address);
-  
+
+    free(cpy_memory_start);
+    free(memory_start);
     //compare the address contained in the bv and the actual one
 
 
@@ -116,9 +123,11 @@ void test_get_forwarding_address()
     object_copy((void*)test, (void*)test2);
 
     uintptr_t fw_address = (uintptr_t)get_forward_address(test);
-  
+    
     CU_ASSERT_EQUAL(fw_address, test2); 
-  
+
+    free(cpy_memory_start);
+    free(memory_start);
 }
 
 
@@ -134,7 +143,8 @@ void test_get_object_size()
     size_t test_size = get_object_size(test);
 
     CU_ASSERT_EQUAL(test_size, 24);
-  
+
+    free(memory_start);
 }
 
 
@@ -151,7 +161,8 @@ void test_get_object_size_layout()
     size_t test_size = get_object_size(test);
 
     CU_ASSERT_EQUAL(test_size, 24);
-  
+
+    free(memory_start);
 }
 
 void test_format_string_parser()
@@ -170,6 +181,7 @@ void test_format_string_parser()
 
     CU_ASSERT_EQUAL(16 ,translated_format_string);
 
+    free(memory_start);
   
 }
 

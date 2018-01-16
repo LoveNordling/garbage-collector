@@ -27,7 +27,7 @@ void test_gc()
         printf("ints[%i] = %i, ", i, *(ints[i]));
       
     }
-
+    
     h_delete(h);
-
+    free(ints);
 }
