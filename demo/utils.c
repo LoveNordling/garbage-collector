@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../src/gc.h";
 
 bool is_number_utils(char *str) {
     int len = strlen(str);
@@ -96,6 +97,13 @@ char *ask_question_shelf(char *question) {
     return shelf;
 }
 
+char *h_ask_question_shelf(heap_t *h, char *question) {
+    char *shelf = ask_question_shelf(question);
+    char *h_shelf = h_strdup(h,shelf);
+    free(shelf);
+    return h_shelf;
+}
+
 int ask_question_list(char *question) {
     char *index = ask_question(question, valid_index, (convert_func)strdup).s;
     if (toupper(index[0]) == 'N') {
@@ -122,4 +130,13 @@ int ask_question_int(char *question) {
 }
 char *ask_question_string(char *question) {
     return ask_question(question, not_empty, (convert_func)strdup).s;
+}
+
+char *h_ask_question_string(heap_t *h, char *question) {
+    char *str = ask_question(question, not_empty, (convert_func)strdup).s;
+    char *h_str = h_strdup(h, str);
+
+    free(str);
+
+    return h_str;
 }

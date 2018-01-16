@@ -61,6 +61,15 @@ void* h_alloc_struct(heap_t* h, char* layout);
 /// \return the newly allocated object
 void* h_alloc_data(heap_t* h, size_t bytes);
 
+/// Allocate and put a string in the heap
+///
+/// All strings must end with '\0'
+///
+/// \param h the heap
+/// \param str the string to be duplicated
+/// \return the newly allocated string
+char *h_strdup(heap_t *h, const char *str);
+
 
 /// Manually trigger garbage collection.
 ///

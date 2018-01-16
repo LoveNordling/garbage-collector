@@ -42,7 +42,7 @@ void list_delete_func(elem_t elem){
 */
 elem_t list_copy_func(elem_t elem, heap_t* h){
   shelf_t *shelf = h_alloc_struct(h, "*i");//calloc(1, sizeof(shelf_t));
-  shelf->name = strdup(((shelf_t *)(elem.p))->name);
+  shelf->name = h_strdup(h,((shelf_t *)(elem.p))->name);
   shelf->qty = ((shelf_t *)(elem.p))->qty;
   return (elem_t) {.p = shelf};
 }
@@ -58,7 +58,7 @@ void list_delete_taken_func(elem_t elem){
 */
 
 elem_t list_copy_taken_func(elem_t elem, heap_t* h){
-    char *new = strdup(elem.p);
+    char *new = h_strdup(h,elem.p);
     return (elem_t) {.p = new};
 }
   
@@ -168,11 +168,10 @@ shelf_t *make_shelf(list_t *taken, char *shelf, int amount) {
     return new;
 }
 
-shelf_t *make_shelf_ui(list_t *taken) {
+shelf_t *make_shelf_ui(heap_t *heap, list_t *taken) {
     char *shelf = NULL;
     do {
-        if(shelf != NULL) free((char *)shelf);
-        shelf = ask_question_shelf("Please input the shelf of the goods:");
+        shelf = h_ask_question_shelf(heap,"Please input the shelf of the goods:");
     } while (shelf_taken(taken, shelf, false));
     int amount = ask_question_int("Please input the amount of goods:");
 return make_shelf(taken, shelf, amount);
@@ -198,7 +197,7 @@ goods_t *input_goods(tree_t *tree, list_t *taken, char *name, char *desc, int pr
 
 
 goods_t *input_goods_ui(tree_t *tree, list_t *taken, heap_t* heap) {
-    char *name = ask_question_string("Please input the name of the goods:");
+    char *name = h_ask_question_string(heap,"Please input the name of the goods:");
     if (tree_has_key(tree, (elem_t) {.p = name})) {
         printf(
             "%s exists in the database. Using current description and price.\n",
@@ -207,7 +206,7 @@ goods_t *input_goods_ui(tree_t *tree, list_t *taken, heap_t* heap) {
         //goods_t *exist =
         tree_get(tree, (elem_t) {.p = name}, &temp);
         puts("Please make a new shelf.");
-        shelf_t *newsh = make_shelf_ui(taken);
+        shelf_t *newsh = make_shelf_ui(heap,taken);
         list_append(((goods_t *)temp.p)->shelves, (elem_t) {.p = newsh});
         //list_delete_func((elem_t) {.p = newsh});
         //free(newsh);
@@ -221,21 +220,21 @@ goods_t *input_goods_ui(tree_t *tree, list_t *taken, heap_t* heap) {
         return goods;
     }
     char *desc =
-        ask_question_string("Please input the description of the goods:");
+        h_ask_question_string(heap,"Please input the description of the goods:");
     int price =
         ask_question_int("Please input the price of the goods in cents (SEK):");
 
     goods_t *temp = input_goods(tree, taken, name, desc, price);
 
     list_t *list = list_new(list_copy_func, list_comp_func, heap);
-    shelf_t *new = make_shelf_ui(taken);
+    shelf_t *new = make_shelf_ui(heap,taken);
     list_insert(list, 0, (elem_t) {.p = new});
     //list_delete_func((elem_t) {.p = new});
     temp->shelves = list;
     return temp;
 }
 
-goods_t *edit_item(goods_t *goods, list_t *taken) {
+goods_t *edit_item(heap_t *heap, goods_t *goods, list_t *taken) {
     char choice;
     choice = ask_question_char(
         "What would you like to edit? [D]esc, [P]rice, [S]helf, [A]mount");
@@ -243,7 +242,7 @@ goods_t *edit_item(goods_t *goods, list_t *taken) {
         printf("Old desc is: %s\n", goods->desc);
         //TODO: utökning att skriva_ask_question function som använder vår heap.
         free((char *) goods->desc);
-        goods->desc = ask_question_string("Please input new description:");
+        goods->desc = h_ask_question_string(heap,"Please input new description:");
     }
 
     if (choice == 'P') {
@@ -271,7 +270,7 @@ goods_t *edit_item(goods_t *goods, list_t *taken) {
         
         //free(r);
         if (choice == 'S') {
-            shelf_t *newsh = make_shelf_ui(taken);
+            shelf_t *newsh = make_shelf_ui(heap,taken);
             int index = list_contains(taken, (elem_t) {.p = newsh->name});
             if(index >= 0){
                 list_remove(taken, index, true);
@@ -313,7 +312,7 @@ void add_goods(tree_t *tree, list_t *taken, action_t *undo, heap_t* heap) {
             //tree_delete_elem_func((elem_t) {.p = new});
             return;
         } else if (choice == 'E') {
-            new = edit_item(new, taken);
+            new = edit_item(heap,new, taken);
             tree_insert(tree, (elem_t) {.p = new->name}, (elem_t) {.p = new});
 
             if(undo->type != NOTHING){
@@ -430,7 +429,7 @@ void edit_goods(tree_t *tree, list_t *taken, action_t *undo, heap_t* heap) {
     }
     goods_t *removed = tree_copy_complete_func((elem_t) {.p = choice}, heap).p;//problem-källa kanske? 
     //goods_t *updated = tree_copy_complete_func((elem_t) {.p = edit_item(choice, taken)}).p; 
-    goods_t * updated = edit_item(choice, taken);
+    goods_t * updated = edit_item(heap,choice, taken);
     list_shelf(updated->shelves);
     printf("The goods %p %p\n", choice, updated);
     
@@ -543,13 +542,13 @@ void list_shelf_printer(elem_t elem, FILE *fPointer) {
       getline(&item, &size, fPointer);
       char *t= item;
       strtok(t, "\n");
-      char *name = strdup(t);
+      char *name = h_strdup(heap,t);
       size = 0;
       free(item);
       getline(&item, &size, fPointer);
       t= item;
       strtok(t, "\n");
-      char *desc = strdup(t);
+      char *desc = h_strdup(heap,t);
       free(t);
       size=0;
       

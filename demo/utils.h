@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include "../src/gc.h";
 extern char *strdup(const char *);
 typedef union {
     int i;
@@ -22,7 +23,9 @@ bool is_emtpy(char *str);
 answer_t ask_question(char *question, check_func check, convert_func convert);
 int ask_question_int(char *question);
 char *ask_question_string(char *question);
+char *h_ask_question_string(heap_t *h, char *question);
 char *ask_question_shelf(char *question);
+char *h_ask_question_shelf(heap_t *h,char *question);
 float ask_question_float(char *question);
 bool valid_option(char *str);
 char convert_char(char *str);

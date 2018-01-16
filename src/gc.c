@@ -239,6 +239,26 @@ void* h_alloc_data(heap_t* h, size_t bytes)
     }
 }
 
+char *h_strdup(heap_t *h, const char* str)
+{
+    int len = 0;
+    const char *current = str;
+
+    while(*current)
+    {
+        len++;
+        current++;
+    }
+
+    char *duped_str = h_alloc_data(h, (size_t)(len+1));
+
+   for (int i = 0; i <= len; i++) {
+       duped_str[i] = str[i];
+   }
+
+   return duped_str;
+}
+
 
 //Flips the state of every cell and moves the front offset to zero for deactivated cells. 
 void h_flip_cell_states(heap_t* h)
