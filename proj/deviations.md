@@ -1,10 +1,11 @@
 Deviations
 ==========
+Funktionalitet för osäkra pekare finns i koden men har dels knappt testats och dels gick det enda testet vi hade för detta inte igenom. 
 
-I allmännhet så har vi implementerat allt enligt specen.
+I gc modulen har inte h_delete_dbg och h_gc_dbg implementerats. Funktionalitet för detta i koden samt unsafe_stack och  threashold har inte implementerats.
 
-Vi har en skräpsamlare, men problemet som uppstod för oss var att vi inte riktigt fick allt att fungera ihop. Detta kan ha berott på brist på testning av moduler, eller bara missuppfattningar hur modulerna ska samarbeta.
+Vi har integrerat med en lagerhanterare vilket fungerar under enklare användartester men vi är inte särskilt säkra på om det skulle fungera under en längre testning. 
 
-Det som följde då var att vi inte kunde göra prestandamätningar då vi inte har ett fullt fungerande program.
 
-Vi har integrerat med en lagerhanterare vilket fungerar, men är osäkra på om det fungerar korrekt.
+
+
