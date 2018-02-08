@@ -1,7 +1,6 @@
 Unit testing,
 
-Vi hade som mål från början att det skulle finas tester till alla modulerna.
-Testerna automatiserades genom bra använding av Makefile som tillät oss att köra alla tester som fanns i test-mappen via ett enda kommando. 
+Vi hade som mål från början att det skulle finas tester till alla modulerna. Modulerna cell, memorymap och compact saknar enhetstestning helt. De är dock integrerade i projektet och har inte skapat problem i integrationstesterna. Modulerna gc och root har minimala tester och skulle därför behöva uttökas. gc, root och compact täcks ganska bra dock av integrationstesterna. 
 
 
 Integrationstestning:
