@@ -25,3 +25,45 @@ Vi har inte varit konsekventa med användingen av issues på github, men såklar
 Under testning av object.c uppmärksammades att man hade förstått fel hur man hanterar pekare och hur man kan skapa en pekare i 
 minnet som har pre-allokerats. Vid testning av object_copy-funktionen insåg man att man jämförde data som låg på stacken och inte 
 på heapen som vi hade allokerat. Det var viktigt att åtgärda detta under testning än att försöka debugga detta sedan.
+
+
+
+
+Code coverage
+
+
+File 'src/bits.c'
+Lines executed:67.00% of 100
+Creating 'bits.c.gcov'
+
+File 'src/cell.c'
+Lines executed:100.00% of 23
+Creating 'cell.c.gcov'
+
+File 'src/compact.c'
+Lines executed:79.17% of 24
+Creating 'compact.c.gcov'
+
+File 'src/gc.c'
+Lines executed:67.11% of 152
+Creating 'gc.c.gcov'
+
+File 'src/main.c'
+No executable lines
+Removing 'main.c.gcov'
+
+File 'src/memorymap.c'
+Lines executed:72.09% of 43
+Creating 'memorymap.c.gcov'
+
+File 'src/object.c'
+Lines executed:89.66% of 58
+Creating 'object.c.gcov'
+
+File 'src/root.c'
+Lines executed:89.19% of 37
+Creating 'root.c.gcov'
+
+File 'test/test.c'
+Lines executed:100.00% of 32
+Creating 'test.c.gcov'
