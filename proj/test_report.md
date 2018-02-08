@@ -67,3 +67,6 @@ Creating 'root.c.gcov'
 File 'test/test.c'
 Lines executed:100.00% of 32
 Creating 'test.c.gcov'
+
+
+Den enda modul som vi fick 100% coverage på var cell vilket är rimligt då det är en väldigt enkel modul. För resten av modulerna fick vi mellan 67 och 89%. Även detta finner vi ganska rimligt då vi använt defensiv programmering och därmed har vi flera rader som aldrig körs under normala omständigheter. Dock vore det optimalt om vi hade försökt köra tester som täckte även dessa kodbitar. Det finns även rester av gamla main/test-funktioner i vissa av modulerna vilket påverkar resultatet.
